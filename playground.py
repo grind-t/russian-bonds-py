@@ -40,7 +40,14 @@ async def main():
     print("XIRR:", xirr([row.date for row in rows], [row.value for row in rows]))
 
     for row in sorted(rows, key=lambda row: (row.ticker, row.date)):
-        print(row.date.date(), row.ticker, row.type, round(row.value, 2), row.face_unit, row.virtual)
+        print(
+            row.date.date(),
+            row.ticker,
+            row.type,
+            round(row.value, 2),
+            row.face_unit,
+            row.virtual,
+        )
 
 
 asyncio.run(main())

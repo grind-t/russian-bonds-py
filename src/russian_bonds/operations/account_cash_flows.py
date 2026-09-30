@@ -58,7 +58,11 @@ async def get_account_bond_cash_flows(
     now = datetime.now(timezone.utc)
 
     async with httpx.AsyncClient() as moex_client:
-        executed_operations, virtual_operations, nominal_by_ticker = await asyncio.gather(
+        (
+            executed_operations,
+            virtual_operations,
+            nominal_by_ticker,
+        ) = await asyncio.gather(
             _get_executed_operations(client, account_id, from_, to),
             _get_virtual_operations(client, account_id, now),
             _get_nominal_by_ticker(moex_client),
@@ -66,7 +70,9 @@ async def get_account_bond_cash_flows(
 
         operations = [*executed_operations, *virtual_operations]
 
-        repayment_operations = [op for op in operations if op.type == BOND_REPAYMENT_FULL]
+        repayment_operations = [
+            op for op in operations if op.type == BOND_REPAYMENT_FULL
+        ]
         rest_operations = [op for op in operations if op.type != BOND_REPAYMENT_FULL]
 
         for op in repayment_operations:
@@ -78,7 +84,9 @@ async def get_account_bond_cash_flows(
             )
             # full repayment comes with zero quantity, so derive it from the payment,
             # which is in rubles even for currency bonds
-            op.quantity_done = get_quantity_by_payment(op.payment, amortization.value_rub)
+            op.quantity_done = get_quantity_by_payment(
+                op.payment, amortization.value_rub
+            )
 
         for op in rest_operations:
             if op.ticker in nominal_by_ticker:
