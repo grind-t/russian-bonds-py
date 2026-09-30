@@ -3,7 +3,7 @@ SELL_TYPES = frozenset({3, 7, 18, 22})  # OUTPUT_SECURITIES, SELL_CARD, SELL_MAR
 BOND_REPAYMENT_FULL = 6
 
 
-def quantity_delta(type: int, quantity: float) -> float:
+def quantity_delta(type: int, quantity: int) -> int:
     if type in BUY_TYPES:
         return quantity
     if type in SELL_TYPES or type == BOND_REPAYMENT_FULL:

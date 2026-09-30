@@ -7,7 +7,7 @@ from russian_bonds.operations.net_quantities import get_net_quantities_by_ticker
 class Op:
     ticker: str
     type: int
-    quantity_done: float
+    quantity_done: int
 
 
 def test_sums_quantities_by_ticker():
