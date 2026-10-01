@@ -76,6 +76,7 @@ async def get_account_bond_cash_flows(
         rest_operations = [op for op in operations if op.type != BOND_REPAYMENT_FULL]
 
         for op in repayment_operations:
+            # the last amortization is the final repayment
             amortization = await get_last_amortization(op.ticker, client=moex_client)
             if amortization is None or amortization.value_rub is None:
                 raise ValueError(f"No final amortization for {op.ticker}")
