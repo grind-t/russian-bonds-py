@@ -72,7 +72,7 @@ asyncio.run(main())
 
 | Function | Description |
 | --- | --- |
-| `get_account_bond_cash_flows(client, account_id, from_=, to=)` | Bond cash flows of an account, closed with a virtual sell at market price |
+| `get_account_bond_cash_flows(client, account_id, from_=)` | Bond cash flows of an account, closed with a virtual sell at market price; only the bonds bought since `from_` are counted |
 | `get_account_bond_operations(client, account_id, from_=, to=)` | All bond operations of an account as `BondOperationItem` (SDK `OperationItem` + `ticker`) |
 | `get_account_bonds(client, account_id)` | Bond positions of an account's portfolio |
 

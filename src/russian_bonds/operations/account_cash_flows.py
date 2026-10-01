@@ -11,7 +11,7 @@ from t_tech.invest.utils import money_to_decimal, quotation_to_decimal
 from ..account_bonds import get_account_bonds
 from .account_operations import BondOperationItem, get_account_bond_operations
 from .last_amortization import get_last_amortization
-from .net_quantities import get_net_quantities_by_ticker
+from .payment_ratios import get_payment_ratios
 from .quantity_by_payment import get_quantity_by_payment
 from .quantity_delta import BOND_REPAYMENT_FULL
 
@@ -30,6 +30,8 @@ class BondCashFlow:
 
 @dataclass
 class _Operation:
+    id: str
+    parent_operation_id: str
     ticker: str
     name: str
     description: str
@@ -53,7 +55,6 @@ async def get_account_bond_cash_flows(
     client: AsyncServices,
     account_id: str,
     from_: datetime | None = None,
-    to: datetime | None = None,
 ) -> list[BondCashFlow]:
     now = datetime.now(timezone.utc)
 
@@ -63,7 +64,7 @@ async def get_account_bond_cash_flows(
             virtual_operations,
             nominal_by_ticker,
         ) = await asyncio.gather(
-            _get_executed_operations(client, account_id, from_, to),
+            _get_executed_operations(client, account_id, from_),
             _get_virtual_operations(client, account_id, now),
             _get_nominal_by_ticker(moex_client),
         )
@@ -99,9 +100,8 @@ async def get_account_bond_cash_flows(
                 amortization.facevalue, amortization.faceunit
             )
 
-    # history always ends at zero (virtual sell or full repayment), so a nonzero sum
-    # means the ticker was held before the operations window
-    net_quantities = get_net_quantities_by_ticker(operations)
+    # only the bonds bought in the window are counted
+    ratio_by_operation_id = get_payment_ratios(operations)
 
     return [
         BondCashFlow(
@@ -109,13 +109,13 @@ async def get_account_bond_cash_flows(
             name=op.name,
             description=op.description,
             type=op.type,
-            value=op.payment,
+            value=op.payment * ratio_by_operation_id[op.id],
             face_unit=nominal_by_ticker[op.ticker].unit,
             date=op.date,
             virtual=op.virtual,
         )
         for op in operations
-        if net_quantities[op.ticker] == 0
+        if ratio_by_operation_id[op.id] != 0
     ]
 
 
@@ -123,17 +123,18 @@ async def _get_executed_operations(
     client: AsyncServices,
     account_id: str,
     from_: datetime | None,
-    to: datetime | None,
 ) -> list[_Operation]:
     return [
         _to_operation(op)
-        for op in await get_account_bond_operations(client, account_id, from_, to)
+        for op in await get_account_bond_operations(client, account_id, from_)
         if op.state == OperationState.OPERATION_STATE_EXECUTED
     ]
 
 
 def _to_operation(op: BondOperationItem) -> _Operation:
     return _Operation(
+        id=op.id,
+        parent_operation_id=op.parent_operation_id,
         ticker=op.ticker,
         name=op.name,
         description=op.description,
@@ -158,6 +159,8 @@ async def _get_virtual_operations(
         current_nkd = float(money_to_decimal(pos.current_nkd))
         operations.append(
             _Operation(
+                id=f"virtual:{pos.ticker}",
+                parent_operation_id="",
                 ticker=pos.ticker,
                 name="Продажа",
                 description="Виртуальная продажа по рыночной цене",
