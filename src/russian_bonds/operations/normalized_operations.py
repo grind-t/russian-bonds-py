@@ -1,0 +1,75 @@
+from datetime import datetime
+from typing import Self
+
+import httpx
+from pydantic import AwareDatetime, BaseModel, Field, model_validator
+from t_tech.invest import OperationState, OperationType
+from t_tech.invest.async_services import AsyncServices
+from t_tech.invest.utils import money_to_decimal
+
+from .account_operations import BondOperationItem, get_account_bond_operations
+from .last_amortization import get_last_amortization
+from .quantity_by_payment import get_quantity_by_payment
+from .quantity_delta import BOND_REPAYMENT_FULL
+
+
+class NormalizedOperation(BaseModel):
+    id: str = Field(min_length=1)
+    parent_operation_id: str
+    ticker: str = Field(min_length=1)
+    name: str = Field(min_length=1)
+    description: str = Field(min_length=1)
+    type: OperationType
+    payment: float = Field(allow_inf_nan=False)
+    quantity_done: int = Field(ge=0)
+    date: AwareDatetime
+    virtual: bool
+
+    @model_validator(mode="after")
+    def _check_fee_parent(self) -> Self:
+        if (
+            self.type == OperationType.OPERATION_TYPE_BROKER_FEE
+            and not self.parent_operation_id
+        ):
+            raise ValueError(f"No parent operation for fee {self.id} of {self.ticker}")
+        return self
+
+
+async def get_normalized_operations(
+    client: AsyncServices,
+    account_id: str,
+    from_: datetime | None = None,
+    moex_client: httpx.AsyncClient | None = None,
+) -> list[NormalizedOperation]:
+    return [
+        await _normalize(op, moex_client)
+        for op in await get_account_bond_operations(client, account_id, from_)
+        if op.state == OperationState.OPERATION_STATE_EXECUTED
+    ]
+
+
+async def _normalize(
+    op: BondOperationItem, moex_client: httpx.AsyncClient | None
+) -> NormalizedOperation:
+    payment = float(money_to_decimal(op.payment))
+    quantity_done = op.quantity_done
+    if op.type == BOND_REPAYMENT_FULL:
+        # the last amortization is the final repayment
+        amortization = await get_last_amortization(op.ticker, client=moex_client)
+        if amortization is None or amortization.value_rub is None:
+            raise ValueError(f"No final amortization for {op.ticker}")
+        # full repayment comes with zero quantity, so derive it from the payment,
+        # which is in rubles even for currency bonds
+        quantity_done = get_quantity_by_payment(payment, amortization.value_rub)
+    return NormalizedOperation(
+        id=op.id,
+        parent_operation_id=op.parent_operation_id,
+        ticker=op.ticker,
+        name=op.name,
+        description=op.description,
+        type=op.type,
+        payment=payment,
+        quantity_done=quantity_done,
+        date=op.date,
+        virtual=False,
+    )

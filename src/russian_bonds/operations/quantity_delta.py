@@ -71,7 +71,7 @@ NEUTRAL_TYPES = frozenset(
 )
 
 
-def quantity_delta(type: int, quantity: int) -> int:
+def quantity_delta(type: OperationType, quantity: int) -> int:
     if type in BUY_TYPES:
         return quantity
     if type in SELL_TYPES or type == BOND_REPAYMENT_FULL:

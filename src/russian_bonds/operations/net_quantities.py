@@ -1,12 +1,14 @@
 from collections.abc import Iterable
 from typing import Protocol
 
+from t_tech.invest import OperationType
+
 from .quantity_delta import quantity_delta
 
 
 class _Operation(Protocol):
     ticker: str
-    type: int
+    type: OperationType
     quantity_done: int
 
 

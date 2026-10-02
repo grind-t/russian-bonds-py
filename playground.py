@@ -2,21 +2,18 @@ import asyncio
 import os
 import pickle
 from collections.abc import Awaitable, Callable
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import TypeVar
 
 from pyxirr import xirr
 from t_tech.invest import AsyncClient
 
 from russian_bonds import get_account_bond_cash_flows
 
-T = TypeVar("T")
-
 CACHE_DIR = Path.cwd() / ".analytics"
 
 
-async def cache(key: str, fn: Callable[[], Awaitable[T]]) -> T:
+async def cache[T](key: str, fn: Callable[[], Awaitable[T]]) -> T:
     path = CACHE_DIR / f"{key}.pkl"
     if path.exists():
         return pickle.loads(path.read_bytes())
@@ -27,7 +24,7 @@ async def cache(key: str, fn: Callable[[], Awaitable[T]]) -> T:
 
 
 async def fetch_cash_flows():
-    from_ = datetime.now(timezone.utc) - timedelta(days=365 * 2)
+    from_ = datetime.now(UTC) - timedelta(days=365 * 2)
     async with AsyncClient(os.environ["T_INVEST_READONLY_TOKEN"]) as client:
         return await get_account_bond_cash_flows(
             client, os.environ["T_INVEST_ACCOUNT_ID"], from_

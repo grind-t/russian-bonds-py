@@ -1,19 +1,16 @@
 import asyncio
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import httpx
 from moex import get_moex_bonds
-from t_tech.invest import OperationState
+from t_tech.invest import OperationType
 from t_tech.invest.async_services import AsyncServices
-from t_tech.invest.utils import money_to_decimal, quotation_to_decimal
 
-from ..account_bonds import get_account_bonds
-from .account_operations import BondOperationItem, get_account_bond_operations
 from .last_amortization import get_last_amortization
+from .normalized_operations import get_normalized_operations
 from .payment_ratios import get_payment_ratios
-from .quantity_by_payment import get_quantity_by_payment
-from .quantity_delta import BOND_REPAYMENT_FULL
+from .virtual_operations import get_virtual_operations
 
 
 @dataclass(frozen=True)
@@ -21,23 +18,9 @@ class BondCashFlow:
     ticker: str
     name: str
     description: str
-    type: int
+    type: OperationType
     value: float
     face_unit: str
-    date: datetime
-    virtual: bool
-
-
-@dataclass
-class _Operation:
-    id: str
-    parent_operation_id: str
-    ticker: str
-    name: str
-    description: str
-    type: int
-    payment: float
-    quantity_done: int
     date: datetime
     virtual: bool
 
@@ -48,49 +31,29 @@ class _Nominal:
     unit: str
 
 
-OPERATION_TYPE_SELL = 22
-
-
 async def get_account_bond_cash_flows(
     client: AsyncServices,
     account_id: str,
     from_: datetime | None = None,
 ) -> list[BondCashFlow]:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     async with httpx.AsyncClient() as moex_client:
         (
-            executed_operations,
+            normalized_operations,
             virtual_operations,
             nominal_by_ticker,
         ) = await asyncio.gather(
-            _get_executed_operations(client, account_id, from_),
-            _get_virtual_operations(client, account_id, now),
+            get_normalized_operations(
+                client, account_id, from_, moex_client=moex_client
+            ),
+            get_virtual_operations(client, account_id, now),
             _get_nominal_by_ticker(moex_client),
         )
 
-        operations = [*executed_operations, *virtual_operations]
+        operations = [*normalized_operations, *virtual_operations]
 
-        repayment_operations = [
-            op for op in operations if op.type == BOND_REPAYMENT_FULL
-        ]
-        rest_operations = [op for op in operations if op.type != BOND_REPAYMENT_FULL]
-
-        for op in repayment_operations:
-            # the last amortization is the final repayment
-            amortization = await get_last_amortization(op.ticker, client=moex_client)
-            if amortization is None or amortization.value_rub is None:
-                raise ValueError(f"No final amortization for {op.ticker}")
-            nominal_by_ticker[op.ticker] = _Nominal(
-                amortization.facevalue, amortization.faceunit
-            )
-            # full repayment comes with zero quantity, so derive it from the payment,
-            # which is in rubles even for currency bonds
-            op.quantity_done = get_quantity_by_payment(
-                op.payment, amortization.value_rub
-            )
-
-        for op in rest_operations:
+        for op in operations:
             if op.ticker in nominal_by_ticker:
                 continue
             amortization = await get_last_amortization(op.ticker, client=moex_client)
@@ -117,61 +80,6 @@ async def get_account_bond_cash_flows(
         for op in operations
         if ratio_by_operation_id[op.id] != 0
     ]
-
-
-async def _get_executed_operations(
-    client: AsyncServices,
-    account_id: str,
-    from_: datetime | None,
-) -> list[_Operation]:
-    return [
-        _to_operation(op)
-        for op in await get_account_bond_operations(client, account_id, from_)
-        if op.state == OperationState.OPERATION_STATE_EXECUTED
-    ]
-
-
-def _to_operation(op: BondOperationItem) -> _Operation:
-    return _Operation(
-        id=op.id,
-        parent_operation_id=op.parent_operation_id,
-        ticker=op.ticker,
-        name=op.name,
-        description=op.description,
-        type=int(op.type),
-        payment=float(money_to_decimal(op.payment)),
-        quantity_done=op.quantity_done,
-        date=op.date,
-        virtual=False,
-    )
-
-
-async def _get_virtual_operations(
-    client: AsyncServices, account_id: str, now: datetime
-) -> list[_Operation]:
-    operations = []
-    for pos in await get_account_bonds(client, account_id):
-        quantity_decimal = quotation_to_decimal(pos.quantity)
-        if quantity_decimal != quantity_decimal.to_integral_value():
-            raise ValueError(f"Fractional position quantity for {pos.ticker}")
-        quantity = int(quantity_decimal)
-        current_price = float(money_to_decimal(pos.current_price))
-        current_nkd = float(money_to_decimal(pos.current_nkd))
-        operations.append(
-            _Operation(
-                id=f"virtual:{pos.ticker}",
-                parent_operation_id="",
-                ticker=pos.ticker,
-                name="Продажа",
-                description="Виртуальная продажа по рыночной цене",
-                type=OPERATION_TYPE_SELL,
-                payment=(current_price + current_nkd) * quantity,
-                quantity_done=quantity,
-                date=now,
-                virtual=True,
-            )
-        )
-    return operations
 
 
 async def _get_nominal_by_ticker(moex_client: httpx.AsyncClient) -> dict[str, _Nominal]:

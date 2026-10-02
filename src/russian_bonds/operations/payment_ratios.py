@@ -2,19 +2,20 @@ from collections.abc import Sequence
 from datetime import datetime
 from typing import Protocol
 
+from t_tech.invest import OperationType
 from toolkit.boolean import ensure
 
 from .initial_positions import get_initial_positions
 from .quantity_delta import BUY_TYPES, quantity_delta
 
-BROKER_FEE = 19
+BROKER_FEE = OperationType.OPERATION_TYPE_BROKER_FEE
 
 
 class _Operation(Protocol):
     id: str
     parent_operation_id: str
     ticker: str
-    type: int
+    type: OperationType
     quantity_done: int
     date: datetime
 
@@ -51,10 +52,6 @@ def get_payment_ratios(operations: Sequence[_Operation]) -> dict[str, float]:
             window_positions[ticker] = 0.0
 
     for op in fees:
-        ensure(
-            op.parent_operation_id,
-            f"No parent operation for fee {op.id} of {op.ticker}",
-        )
         # a fee whose deal is outside the window is dropped
         ratios[op.id] = ratios.get(op.parent_operation_id, 0.0)
 

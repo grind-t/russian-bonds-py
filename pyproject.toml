@@ -6,11 +6,12 @@ readme = "README.md"
 authors = [
     { name = "grind-t", email = "grindt.gd@gmail.com" }
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.14"
 dependencies = [
     "grind-t-moex>=0.1.0",
     "grind-t-toolkit>=0.1.0",
     "httpx>=0.28.1",
+    "pydantic>=2.13.5",
     "t-tech-investments>=1.51.0",
 ]
 
