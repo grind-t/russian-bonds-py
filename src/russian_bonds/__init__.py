@@ -1,5 +1,4 @@
 from .account_bonds import get_account_bonds
-from .clients import Clients
 from .operations.account_cash_flows import BondCashFlow, get_account_bond_cash_flows
 from .operations.account_operations import (
     BondOperationItem,
@@ -12,7 +11,6 @@ __all__ = [
     "SELL_TYPES",
     "BondCashFlow",
     "BondOperationItem",
-    "Clients",
     "get_account_bond_cash_flows",
     "get_account_bond_operations",
     "get_account_bonds",

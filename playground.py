@@ -9,7 +9,7 @@ import httpx
 from pyxirr import xirr
 from t_tech.invest import AsyncClient
 
-from russian_bonds import Clients, get_account_bond_cash_flows
+from russian_bonds import get_account_bond_cash_flows
 
 CACHE_DIR = Path.cwd() / ".analytics"
 
@@ -27,11 +27,14 @@ async def cache[T](key: str, fn: Callable[[], Awaitable[T]]) -> T:
 async def fetch_cash_flows():
     from_ = datetime.now(UTC) - timedelta(days=365 * 2)
     async with (
-        AsyncClient(os.environ["T_INVEST_READONLY_TOKEN"]) as t_invest,
-        httpx.AsyncClient() as moex,
+        AsyncClient(os.environ["T_INVEST_READONLY_TOKEN"]) as t_invest_client,
+        httpx.AsyncClient() as moex_client,
     ):
         return await get_account_bond_cash_flows(
-            Clients(t_invest, moex), os.environ["T_INVEST_ACCOUNT_ID"], from_
+            t_invest_client=t_invest_client,
+            moex_client=moex_client,
+            account_id=os.environ["T_INVEST_ACCOUNT_ID"],
+            from_=from_,
         )
 
 

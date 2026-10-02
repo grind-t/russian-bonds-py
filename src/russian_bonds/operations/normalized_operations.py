@@ -5,9 +5,9 @@ from typing import Self
 import httpx
 from pydantic import AwareDatetime, BaseModel, Field, RootModel, model_validator
 from t_tech.invest import OperationState, OperationType
+from t_tech.invest.async_services import AsyncServices
 from t_tech.invest.utils import money_to_decimal
 
-from ..clients import Clients
 from .account_operations import BondOperationItem, get_account_bond_operations
 from .last_amortization import get_last_amortization
 from .quantity_by_payment import get_quantity_by_payment
@@ -54,15 +54,16 @@ class NormalizedOperations(RootModel[list[NormalizedOperation]]):
 
 
 async def get_normalized_operations(
-    clients: Clients,
+    t_invest_client: AsyncServices,
+    moex_client: httpx.AsyncClient,
     account_id: str,
     from_: datetime | None = None,
 ) -> NormalizedOperations:
     return NormalizedOperations(
         [
-            await _normalize(op, clients.moex)
+            await _normalize(op, moex_client)
             for op in await get_account_bond_operations(
-                clients.t_invest, account_id, from_
+                t_invest_client, account_id, from_
             )
             if op.state == OperationState.OPERATION_STATE_EXECUTED
         ]
