@@ -64,7 +64,7 @@ async def get_account_bond_cash_flows(
             )
 
     # only the bonds bought in the window are counted
-    ratio_by_operation_id = get_payment_ratios(operations)
+    ratio_by_operation_id = get_payment_ratios(operations.root)
 
     return [
         BondCashFlow(
