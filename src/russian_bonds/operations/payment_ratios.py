@@ -4,7 +4,7 @@ from typing import Protocol
 
 from toolkit.boolean import ensure
 
-from .initial_quantities import get_initial_quantities_by_ticker
+from .initial_positions import get_initial_positions
 from .quantity_delta import BUY_TYPES, quantity_delta
 
 BROKER_FEE = 19
@@ -28,9 +28,9 @@ def _validate_ids(operations: Sequence[_Operation]) -> None:
 def get_payment_ratios(operations: Sequence[_Operation]) -> dict[str, float]:
     _validate_ids(operations)
 
-    held = get_initial_quantities_by_ticker(operations)
-    window = dict.fromkeys(held, 0.0)
-    ratio = dict.fromkeys(held, 0.0)
+    total_positions = get_initial_positions(operations)
+    window_positions = dict.fromkeys(total_positions, 0.0)
+    window_shares = dict.fromkeys(total_positions, 0.0)
 
     fees = [op for op in operations if op.type == BROKER_FEE]
     rest = [op for op in operations if op.type != BROKER_FEE]
@@ -39,16 +39,16 @@ def get_payment_ratios(operations: Sequence[_Operation]) -> dict[str, float]:
     # the API returns operations newest first
     for op in sorted(rest, key=lambda op: op.date):
         ticker = op.ticker
-        ratios[op.id] = 1.0 if op.type in BUY_TYPES else ratio[ticker]
+        ratios[op.id] = 1.0 if op.type in BUY_TYPES else window_shares[ticker]
         delta = quantity_delta(op.type, op.quantity_done)
-        held[ticker] += delta
-        window[ticker] += delta * ratios[op.id]
-        # sells keep the ratio, so it carries over to payments after the position
+        total_positions[ticker] += delta
+        window_positions[ticker] += delta * ratios[op.id]
+        # sells keep the share, so it carries over to payments after the position
         # is closed
-        if held[ticker] > 0:
-            ratio[ticker] = window[ticker] / held[ticker]
+        if total_positions[ticker] > 0:
+            window_shares[ticker] = window_positions[ticker] / total_positions[ticker]
         else:
-            window[ticker] = 0.0
+            window_positions[ticker] = 0.0
 
     for op in fees:
         ensure(
