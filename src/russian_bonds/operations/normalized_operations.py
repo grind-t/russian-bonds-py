@@ -46,7 +46,7 @@ class NormalizedOperations(RootModel[list[NormalizedOperation]]):
             seen.add(op.id)
         return self
 
-    def __iter__(self) -> Iterator[NormalizedOperation]:  # type: ignore[override]
+    def __iter__(self) -> Iterator[NormalizedOperation]:  # ty: ignore[invalid-method-override]
         return iter(self.root)
 
     def __len__(self) -> int:
