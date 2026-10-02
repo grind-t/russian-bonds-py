@@ -5,8 +5,8 @@ from datetime import UTC, datetime
 import httpx
 from moex import get_moex_bonds
 from t_tech.invest import OperationType
-from t_tech.invest.async_services import AsyncServices
 
+from ..clients import Clients
 from .last_amortization import get_last_amortization
 from .normalized_operations import NormalizedOperations, get_normalized_operations
 from .payment_ratios import get_payment_ratios
@@ -32,36 +32,33 @@ class _Nominal:
 
 
 async def get_account_bond_cash_flows(
-    client: AsyncServices,
+    clients: Clients,
     account_id: str,
     from_: datetime | None = None,
 ) -> list[BondCashFlow]:
     now = datetime.now(UTC)
 
-    async with httpx.AsyncClient() as moex_client:
-        (
-            normalized_operations,
-            virtual_operations,
-            nominal_by_ticker,
-        ) = await asyncio.gather(
-            get_normalized_operations(
-                client, account_id, from_, moex_client=moex_client
-            ),
-            get_virtual_operations(client, account_id, now),
-            _get_nominal_by_ticker(moex_client),
+    (
+        normalized_operations,
+        virtual_operations,
+        nominal_by_ticker,
+    ) = await asyncio.gather(
+        get_normalized_operations(clients, account_id, from_),
+        get_virtual_operations(clients.t_invest, account_id, now),
+        _get_nominal_by_ticker(clients.moex),
+    )
+
+    operations = NormalizedOperations([*normalized_operations, *virtual_operations])
+
+    for op in operations:
+        if op.ticker in nominal_by_ticker:
+            continue
+        amortization = await get_last_amortization(op.ticker, client=clients.moex)
+        if amortization is None:
+            raise ValueError(f"No final amortization for {op.ticker}")
+        nominal_by_ticker[op.ticker] = _Nominal(
+            amortization.facevalue, amortization.faceunit
         )
-
-        operations = NormalizedOperations([*normalized_operations, *virtual_operations])
-
-        for op in operations:
-            if op.ticker in nominal_by_ticker:
-                continue
-            amortization = await get_last_amortization(op.ticker, client=moex_client)
-            if amortization is None:
-                raise ValueError(f"No final amortization for {op.ticker}")
-            nominal_by_ticker[op.ticker] = _Nominal(
-                amortization.facevalue, amortization.faceunit
-            )
 
     # only the bonds bought in the window are counted
     ratio_by_operation_id = get_payment_ratios(operations.root)

@@ -1,10 +1,11 @@
 import os
 from datetime import UTC, datetime, timedelta
 
+import httpx
 import pytest
 from t_tech.invest import AsyncClient
 
-from russian_bonds import get_account_bond_cash_flows
+from russian_bonds import Clients, get_account_bond_cash_flows
 
 pytestmark = [
     pytest.mark.e2e,
@@ -18,9 +19,12 @@ pytestmark = [
 
 async def test_cash_flows_net_to_zero_per_ticker():
     from_ = datetime.now(UTC) - timedelta(days=365 * 2)
-    async with AsyncClient(os.environ["T_INVEST_READONLY_TOKEN"]) as client:
+    async with (
+        AsyncClient(os.environ["T_INVEST_READONLY_TOKEN"]) as t_invest,
+        httpx.AsyncClient() as moex,
+    ):
         rows = await get_account_bond_cash_flows(
-            client, os.environ["T_INVEST_ACCOUNT_ID"], from_
+            Clients(t_invest, moex), os.environ["T_INVEST_ACCOUNT_ID"], from_
         )
     assert rows
     assert all(row.ticker and row.face_unit for row in rows)
