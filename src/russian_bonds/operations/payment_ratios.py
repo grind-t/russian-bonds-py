@@ -2,6 +2,8 @@ from collections.abc import Sequence
 from datetime import datetime
 from typing import Protocol
 
+from toolkit.boolean import ensure
+
 from .initial_quantities import get_initial_quantities_by_ticker
 from .quantity_delta import BUY_TYPES, quantity_delta
 
@@ -17,11 +19,14 @@ class _Operation(Protocol):
     date: datetime
 
 
-def get_payment_ratios(operations: Sequence[_Operation]) -> dict[str, float]:
-    """Share of each operation that belongs to the bonds bought in the window, by id."""
+def _validate_ids(operations: Sequence[_Operation]) -> None:
     ids = [op.id for op in operations]
-    if "" in ids or len(set(ids)) != len(ids):
-        raise ValueError("Operation ids must be nonempty and unique")
+    ensure("" not in ids, "Operation ids must be nonempty")
+    ensure(len(set(ids)) == len(ids), "Operation ids must be unique")
+
+
+def get_payment_ratios(operations: Sequence[_Operation]) -> dict[str, float]:
+    _validate_ids(operations)
 
     held = get_initial_quantities_by_ticker(operations)
     window = dict.fromkeys(held, 0.0)
@@ -46,8 +51,10 @@ def get_payment_ratios(operations: Sequence[_Operation]) -> dict[str, float]:
             window[ticker] = 0.0
 
     for op in fees:
-        if not op.parent_operation_id:
-            raise ValueError(f"No parent operation for fee {op.id} of {op.ticker}")
+        ensure(
+            op.parent_operation_id,
+            f"No parent operation for fee {op.id} of {op.ticker}",
+        )
         # a fee whose deal is outside the window is dropped
         ratios[op.id] = ratios.get(op.parent_operation_id, 0.0)
 

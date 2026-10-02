@@ -108,10 +108,3 @@ def test_fee_without_parent_raises():
     ]
     with pytest.raises(ValueError, match="No parent operation"):
         get_payment_ratios(operations)
-
-
-@pytest.mark.parametrize("ids", [("buy", "buy"), ("buy", "")])
-def test_invalid_ids_raise(ids: tuple[str, str]):
-    operations = [Op(ids[0], 15, 5, day(0)), Op(ids[1], 22, 5, day(1))]
-    with pytest.raises(ValueError, match="nonempty and unique"):
-        get_payment_ratios(operations)

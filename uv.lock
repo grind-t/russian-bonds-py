@@ -298,6 +298,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "grind-t-moex" },
+    { name = "grind-t-toolkit" },
     { name = "httpx" },
     { name = "t-tech-investments" },
 ]
@@ -314,6 +315,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "grind-t-moex", specifier = ">=0.1.0" },
+    { name = "grind-t-toolkit", specifier = ">=0.1.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "t-tech-investments", specifier = ">=1.51.0", index = "https://opensource.tbank.ru/api/v4/projects/238/packages/pypi/simple" },
 ]
@@ -325,6 +327,15 @@ dev = [
     { name = "pyxirr", specifier = ">=0.10.8" },
     { name = "ruff", specifier = ">=0.16.9" },
     { name = "ty", specifier = ">=0.0.84" },
+]
+
+[[package]]
+name = "grind-t-toolkit"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b1/5d/2ce1ba41ae946585c41532922a9ad135c7a07d5739acd8a69eaae9c13556/grind_t_toolkit-0.1.0.tar.gz", hash = "sha256:00dbd87b8cb8a02784afeb7790f2f5c1daa5fe9e759a2b4eeca890d990c5b595", size = 1542, upload-time = "2026-10-02T17:34:24.708Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3a/7f/e72a7e407631ecdfeb7ddcc1f1062b607db564b03162058a2b4aedf6f53b/grind_t_toolkit-0.1.0-py3-none-any.whl", hash = "sha256:9b8f1f90fc9fc26d85b3fbf8adbdf4de8db6d466ed513b7607e4121ff81ebbc4", size = 2601, upload-time = "2026-10-02T17:34:23.497Z" },
 ]
 
 [[package]]
