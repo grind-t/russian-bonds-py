@@ -1,8 +1,9 @@
+from collections.abc import Iterator
 from datetime import datetime
 from typing import Self
 
 import httpx
-from pydantic import AwareDatetime, BaseModel, Field, model_validator
+from pydantic import AwareDatetime, BaseModel, Field, RootModel, model_validator
 from t_tech.invest import OperationState, OperationType
 from t_tech.invest.async_services import AsyncServices
 from t_tech.invest.utils import money_to_decimal
@@ -35,17 +36,36 @@ class NormalizedOperation(BaseModel):
         return self
 
 
+class NormalizedOperations(RootModel[list[NormalizedOperation]]):
+    @model_validator(mode="after")
+    def _check_unique_ids(self) -> Self:
+        seen: set[str] = set()
+        for op in self.root:
+            if op.id in seen:
+                raise ValueError(f"Duplicate operation id {op.id}")
+            seen.add(op.id)
+        return self
+
+    def __iter__(self) -> Iterator[NormalizedOperation]:  # type: ignore[override]
+        return iter(self.root)
+
+    def __len__(self) -> int:
+        return len(self.root)
+
+
 async def get_normalized_operations(
     client: AsyncServices,
     account_id: str,
     from_: datetime | None = None,
     moex_client: httpx.AsyncClient | None = None,
-) -> list[NormalizedOperation]:
-    return [
-        await _normalize(op, moex_client)
-        for op in await get_account_bond_operations(client, account_id, from_)
-        if op.state == OperationState.OPERATION_STATE_EXECUTED
-    ]
+) -> NormalizedOperations:
+    return NormalizedOperations(
+        [
+            await _normalize(op, moex_client)
+            for op in await get_account_bond_operations(client, account_id, from_)
+            if op.state == OperationState.OPERATION_STATE_EXECUTED
+        ]
+    )
 
 
 async def _normalize(

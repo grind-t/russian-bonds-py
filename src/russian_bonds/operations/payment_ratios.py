@@ -3,7 +3,6 @@ from datetime import datetime
 from typing import Protocol
 
 from t_tech.invest import OperationType
-from toolkit.boolean import ensure
 
 from .initial_positions import get_initial_positions
 from .quantity_delta import BUY_TYPES, quantity_delta
@@ -20,15 +19,7 @@ class _Operation(Protocol):
     date: datetime
 
 
-def _validate_ids(operations: Sequence[_Operation]) -> None:
-    ids = [op.id for op in operations]
-    ensure("" not in ids, "Operation ids must be nonempty")
-    ensure(len(set(ids)) == len(ids), "Operation ids must be unique")
-
-
 def get_payment_ratios(operations: Sequence[_Operation]) -> dict[str, float]:
-    _validate_ids(operations)
-
     total_positions = get_initial_positions(operations)
     window_positions = dict.fromkeys(total_positions, 0.0)
     window_shares = dict.fromkeys(total_positions, 0.0)

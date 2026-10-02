@@ -8,7 +8,7 @@ from t_tech.invest import OperationType
 from t_tech.invest.async_services import AsyncServices
 
 from .last_amortization import get_last_amortization
-from .normalized_operations import get_normalized_operations
+from .normalized_operations import NormalizedOperations, get_normalized_operations
 from .payment_ratios import get_payment_ratios
 from .virtual_operations import get_virtual_operations
 
@@ -51,7 +51,7 @@ async def get_account_bond_cash_flows(
             _get_nominal_by_ticker(moex_client),
         )
 
-        operations = [*normalized_operations, *virtual_operations]
+        operations = NormalizedOperations([*normalized_operations, *virtual_operations])
 
         for op in operations:
             if op.ticker in nominal_by_ticker:
