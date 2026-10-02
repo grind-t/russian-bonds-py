@@ -13,7 +13,6 @@ class _Operation(Protocol):
 def get_initial_quantities_by_ticker(
     operations: Iterable[_Operation],
 ) -> dict[str, int]:
-    """Quantity held before the operations, given that every position is closed."""
     # history always ends at zero (virtual sell or full repayment), so a negative sum
     # is the quantity held before the operations
     initial_quantities: dict[str, int] = {}
