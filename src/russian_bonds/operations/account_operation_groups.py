@@ -16,13 +16,6 @@ class AccountOperationGroup(BaseModel):
     def net_quantity(self) -> int:
         return sum(op.quantity_delta for op in self.operations)
 
-    @model_validator(mode="after")
-    def _check_single_ticker(self) -> Self:
-        tickers = {op.ticker for op in self.operations}
-        if len(tickers) > 1:
-            raise ValueError(f"Operations of different tickers in group: {tickers}")
-        return self
-
 
 def group_account_operations_by_ticker(
     operations: Iterable[AccountOperation],
