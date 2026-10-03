@@ -20,7 +20,7 @@ def test_fee_without_parent_raises():
             description="Удержание комиссии",
             type=OperationType.OPERATION_TYPE_BROKER_FEE,
             payment=-1.0,
-            quantity=0,
+            quantity_delta=0,
             date=datetime(2026, 1, 1, tzinfo=UTC),
             virtual=False,
         )
@@ -35,7 +35,7 @@ def _buy(id_: str) -> NormalizedOperation:
         description="Покупка ценных бумаг",
         type=OperationType.OPERATION_TYPE_BUY,
         payment=-1000.0,
-        quantity=1,
+        quantity_delta=1,
         date=datetime(2026, 1, 1, tzinfo=UTC),
         virtual=False,
     )
@@ -50,7 +50,7 @@ def test_unique_ids_pass():
     assert [op.id for op in NormalizedOperations([_buy("a"), _buy("b")])] == ["a", "b"]
 
 
-def test_quantity_delta_follows_type():
-    buy = _buy("buy")
-    sell = buy.model_copy(update={"type": OperationType.OPERATION_TYPE_SELL})
-    assert (buy.quantity_delta, sell.quantity_delta) == (1, -1)
+def test_quantity_delta_sign_mismatch_raises():
+    data = _buy("buy").model_dump() | {"type": OperationType.OPERATION_TYPE_SELL}
+    with pytest.raises(ValidationError, match="does not match type"):
+        NormalizedOperation(**data)

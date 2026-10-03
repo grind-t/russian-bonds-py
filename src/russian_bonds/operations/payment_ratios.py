@@ -5,7 +5,7 @@ from typing import Protocol
 from t_tech.invest import OperationType
 
 from .initial_positions import get_initial_positions
-from .quantity_delta import BUY_TYPES, quantity_delta
+from .quantity_delta import BUY_TYPES
 
 BROKER_FEE = OperationType.OPERATION_TYPE_BROKER_FEE
 
@@ -15,7 +15,7 @@ class _Operation(Protocol):
     parent_operation_id: str
     ticker: str
     type: OperationType
-    quantity: int
+    quantity_delta: int
     date: datetime
 
 
@@ -32,7 +32,7 @@ def get_payment_ratios(operations: Sequence[_Operation]) -> dict[str, float]:
     for op in sorted(rest, key=lambda op: op.date):
         ticker = op.ticker
         ratios[op.id] = 1.0 if op.type in BUY_TYPES else window_shares[ticker]
-        delta = quantity_delta(op.type, op.quantity)
+        delta = op.quantity_delta
         total_positions[ticker] += delta
         window_positions[ticker] += delta * ratios[op.id]
         # sells keep the share, so it carries over to payments after the position

@@ -14,15 +14,15 @@ SELL = OperationType.OPERATION_TYPE_SELL
 class Op:
     ticker: str
     type: OperationType
-    quantity: int
+    quantity_delta: int
 
 
 def test_returns_quantities_held_before_operations():
     operations = [
         Op("A", BUY, 10),
-        Op("A", SELL, 10),
+        Op("A", SELL, -10),
         Op("B", BUY, 5),
-        Op("B", BOND_REPAYMENT_FULL, 8),
+        Op("B", BOND_REPAYMENT_FULL, -8),
     ]
     assert get_initial_positions(operations) == {"A": 0, "B": 3}
 

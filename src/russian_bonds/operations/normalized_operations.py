@@ -8,7 +8,6 @@ from pydantic import (
     BaseModel,
     Field,
     RootModel,
-    computed_field,
     model_validator,
 )
 from t_tech.invest import OperationState, OperationType
@@ -29,14 +28,9 @@ class NormalizedOperation(BaseModel):
     description: str = Field(min_length=1)
     type: OperationType
     payment: float = Field(allow_inf_nan=False)
-    quantity: int = Field(ge=0)
+    quantity_delta: int
     date: AwareDatetime
     virtual: bool
-
-    @computed_field
-    @property
-    def quantity_delta(self) -> int:
-        return quantity_delta(self.type, self.quantity)
 
     @model_validator(mode="after")
     def _check_fee_parent(self) -> Self:
@@ -45,6 +39,15 @@ class NormalizedOperation(BaseModel):
             and not self.parent_operation_id
         ):
             raise ValueError(f"No parent operation for fee {self.id} of {self.ticker}")
+        return self
+
+    @model_validator(mode="after")
+    def _check_quantity_delta_sign(self) -> Self:
+        if quantity_delta(self.type, abs(self.quantity_delta)) != self.quantity_delta:
+            raise ValueError(
+                f"Quantity delta {self.quantity_delta} does not match type {self.type}"
+                f" of {self.id}"
+            )
         return self
 
 
@@ -103,7 +106,7 @@ async def _normalize(
         description=op.description,
         type=op.type,
         payment=payment,
-        quantity=quantity,
+        quantity_delta=quantity_delta(op.type, quantity),
         date=op.date,
         virtual=False,
     )

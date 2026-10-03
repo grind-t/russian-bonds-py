@@ -14,7 +14,7 @@ COUPON = OperationType.OPERATION_TYPE_COUPON
 
 
 def _op(
-    id_: str, ticker: str, type_: OperationType = BUY, quantity: int = 1
+    id_: str, ticker: str, type_: OperationType = BUY, quantity_delta: int = 1
 ) -> NormalizedOperation:
     return NormalizedOperation(
         id=id_,
@@ -24,7 +24,7 @@ def _op(
         description="Операция с ценными бумагами",
         type=type_,
         payment=-1000.0,
-        quantity=quantity,
+        quantity_delta=quantity_delta,
         date=datetime(2026, 1, 1, tzinfo=UTC),
         virtual=False,
     )
@@ -46,9 +46,9 @@ def test_sums_quantity_deltas_per_ticker():
         [
             _op("a1", "A", BUY, 10),
             _op("a2", "A", COUPON, 0),
-            _op("a3", "A", SELL, 4),
+            _op("a3", "A", SELL, -4),
             _op("b1", "B", BUY, 5),
-            _op("b2", "B", SELL, 5),
+            _op("b2", "B", SELL, -5),
         ]
     )
     grouped = group_operations_by_ticker(operations)

@@ -13,14 +13,14 @@ COUPON = OperationType.OPERATION_TYPE_COUPON
 class Op:
     ticker: str
     type: OperationType
-    quantity: int
+    quantity_delta: int
 
 
 def test_sums_quantities_by_ticker():
     operations = [
         Op("A", BUY, 10),
         Op("A", COUPON, 0),
-        Op("A", SELL, 10),
+        Op("A", SELL, -10),
         Op("B", BUY, 5),
     ]
     assert get_net_quantities_by_ticker(operations) == {"A": 0, "B": 5}

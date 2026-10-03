@@ -1,15 +1,12 @@
 from collections.abc import Iterable
 from typing import Protocol
 
-from t_tech.invest import OperationType
-
 from .net_quantities import get_net_quantities_by_ticker
 
 
 class _Operation(Protocol):
     ticker: str
-    type: OperationType
-    quantity: int
+    quantity_delta: int
 
 
 def get_initial_positions(
