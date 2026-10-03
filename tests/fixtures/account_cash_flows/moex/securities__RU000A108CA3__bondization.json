@@ -1,0 +1,1 @@
+{"amortizations": {"columns": ["isin", "name", "issuevalue", "amortdate", "facevalue", "initialfacevalue", "faceunit", "valueprc", "value", "value_rub", "data_source", "secid", "primary_boardid"], "data": [["RU000A108CA3", "НоваБев Групп 002P БО-П06", 3000000000, "2026-04-16", 1000, 1000, "RUB", 100, 1000, 1000, "maturity", "RU000A108CA3", "TQCB"]]}}

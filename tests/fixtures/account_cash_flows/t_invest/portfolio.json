@@ -1,0 +1,1294 @@
+{
+ "accountId": "test-account",
+ "positions": [
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "17"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "6",
+    "nano": 370000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "999",
+    "nano": 900000000
+   },
+   "ticker": "RU000A10C6W2"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "40"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "12",
+    "nano": 160000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1010"
+   },
+   "ticker": "RU000A10DTA2"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "80"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "7",
+    "nano": 890000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "995",
+    "nano": 600000000
+   },
+   "ticker": "RU000A10FWZ8"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "5"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "8",
+    "nano": 380000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1014",
+    "nano": 100000000
+   },
+   "ticker": "RU000A108KU4"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "38"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "4",
+    "nano": 750000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1006",
+    "nano": 200000000
+   },
+   "ticker": "RU000A10CWF7"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "2"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "38",
+    "nano": 840000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "955",
+    "nano": 900000000
+   },
+   "ticker": "RU000A105KR6"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "16"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "7",
+    "nano": 380000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1116",
+    "nano": 900000000
+   },
+   "ticker": "RU000A10B7W1"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "22"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "7",
+    "nano": 890000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1051"
+   },
+   "ticker": "RU000A10BWC6"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "1"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "5",
+    "nano": 660000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "465",
+    "nano": 450000000
+   },
+   "ticker": "RU000A1033B9"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "81"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "6",
+    "nano": 220000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1098",
+    "nano": 999800000
+   },
+   "ticker": "RU000A10CTH9"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "2"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "12",
+    "nano": 570000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1043",
+    "nano": 500000000
+   },
+   "ticker": "RU000A109VK0"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "10"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "9",
+    "nano": 60000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1020",
+    "nano": 900000000
+   },
+   "ticker": "RU000A10DHX9"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "111"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "28",
+    "nano": 740000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "719",
+    "nano": 670000000
+   },
+   "ticker": "RU000A10BTJ7"
+  },
+  {
+   "instrumentType": "currency",
+   "quantity": {
+    "units": "28"
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "11118"
+   },
+   "ticker": "GLDRUB_TOM"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "42"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "37",
+    "nano": 10000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "999",
+    "nano": 300000000
+   },
+   "ticker": "RU000A1070L0"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "41"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "15",
+    "nano": 230000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "998",
+    "nano": 900000000
+   },
+   "ticker": "RU000A107W48"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "100"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "10",
+    "nano": 70000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "980",
+    "nano": 700000000
+   },
+   "ticker": "RU000A10EJQ7"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "21"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "9",
+    "nano": 590000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "994"
+   },
+   "ticker": "RU000A10FG84"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "30"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "20",
+    "nano": 290000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "731",
+    "nano": 250000000
+   },
+   "ticker": "RU000A104Y15"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "5"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "3",
+    "nano": 770000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "382",
+    "nano": 40000000
+   },
+   "ticker": "RU000A102CT6"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "203"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "17",
+    "nano": 300000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "504",
+    "nano": 400000000
+   },
+   "ticker": "RU000A108CC9"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "21"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "22",
+    "nano": 920000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "968",
+    "nano": 300000000
+   },
+   "ticker": "RU000A104Z48"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "13"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "90",
+    "nano": 900000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1039",
+    "nano": 600000000
+   },
+   "ticker": "RU000A0JWYQ5"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "122"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "4",
+    "nano": 630000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "980",
+    "nano": 100000000
+   },
+   "ticker": "RU000A10EYY0"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "2"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "5",
+    "nano": 340000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1027",
+    "nano": 700000000
+   },
+   "ticker": "RU000A10BQC8"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "44"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "3",
+    "nano": 590000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "931",
+    "nano": 100000000
+   },
+   "ticker": "RU000A101RV2"
+  },
+  {
+   "instrumentType": "etf",
+   "quantity": {
+    "units": "3757"
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "165",
+    "nano": 370000000
+   },
+   "ticker": "TMON@"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "121"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "7",
+    "nano": 890000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1008",
+    "nano": 900000000
+   },
+   "ticker": "RU000A10DJ18"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "27"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "36",
+    "nano": 630000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "995",
+    "nano": 500000000
+   },
+   "ticker": "RU000A104362"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "1"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "2140",
+    "nano": 530000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "84315",
+    "nano": 817000000
+   },
+   "ticker": "RU000A0JX2M2"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "99"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "12",
+    "nano": 720000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1020"
+   },
+   "ticker": "RU000A10D3J5"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "65"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "5",
+    "nano": 420000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1001",
+    "nano": 700000000
+   },
+   "ticker": "RU000A107HR8"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "12"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "26",
+    "nano": 710000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "8378",
+    "nano": 444200000
+   },
+   "ticker": "RU000A10B008"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "58"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "3",
+    "nano": 820000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1063",
+    "nano": 900000000
+   },
+   "ticker": "RU000A10B933"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "136"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "6",
+    "nano": 180000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "926",
+    "nano": 100000000
+   },
+   "ticker": "RU000A102556"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "101"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "6",
+    "nano": 980000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "998",
+    "nano": 100000000
+   },
+   "ticker": "RU000A10FEB7"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "10"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "10",
+    "nano": 850000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "983",
+    "nano": 900000000
+   },
+   "ticker": "RU000A10EK06"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "94"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "6",
+    "nano": 520000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1012",
+    "nano": 400000000
+   },
+   "ticker": "RU000A10DZU7"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "52"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "32",
+    "nano": 580000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "991"
+   },
+   "ticker": "RU000A104A39"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "4"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "147",
+    "nano": 770000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "8441",
+    "nano": 574700000
+   },
+   "ticker": "RU000A1094G0"
+  },
+  {
+   "instrumentType": "share",
+   "quantity": {
+    "units": "327"
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "128",
+    "nano": 80000000
+   },
+   "ticker": "BTBR"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "25"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "6",
+    "nano": 150000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "908",
+    "nano": 700000000
+   },
+   "ticker": "RU000A107GX8"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "65"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "6",
+    "nano": 480000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1018",
+    "nano": 900000000
+   },
+   "ticker": "RU000A10BY94"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "65"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "2",
+    "nano": 360000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "973",
+    "nano": 900000000
+   },
+   "ticker": "RU000A10C8F3"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "7"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "5",
+    "nano": 670000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1033",
+    "nano": 100000000
+   },
+   "ticker": "RU000A10B0U0"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "1"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "429",
+    "nano": 110000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "81650",
+    "nano": 927400000
+   },
+   "ticker": "RU000A10D483"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "70"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "8",
+    "nano": 170000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "998"
+   },
+   "ticker": "RU000A109DT9"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "22"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "4",
+    "nano": 860000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "741",
+    "nano": 650000000
+   },
+   "ticker": "RU000A10AST0"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "121"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "8",
+    "nano": 230000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "671",
+    "nano": 400000000
+   },
+   "ticker": "RU000A10CQE2"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "80"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "7",
+    "nano": 170000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1007"
+   },
+   "ticker": "RU000A10DYC8"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "123"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "3",
+    "nano": 400000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "988",
+    "nano": 900000000
+   },
+   "ticker": "RU000A10B0Z9"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "110"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "6",
+    "nano": 840000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "858"
+   },
+   "ticker": "RU000A10ASC6"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "151"
+   },
+   "currentNkd": {
+    "currency": "rub"
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "999"
+   },
+   "ticker": "RU000A10F397"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "10"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "58",
+    "nano": 440000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "8355",
+    "nano": 903500000
+   },
+   "ticker": "RU000A10B3Z3"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "41"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "7",
+    "nano": 550000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "987",
+    "nano": 600000000
+   },
+   "ticker": "RU000A10CSQ2"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "45"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "23",
+    "nano": 10000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "948",
+    "nano": 900000000
+   },
+   "ticker": "RU000A102952"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "20"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "37",
+    "nano": 170000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1023",
+    "nano": 500000000
+   },
+   "ticker": "RU000A10D4D6"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "51"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "3",
+    "nano": 740000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "502",
+    "nano": 600000000
+   },
+   "ticker": "RU000A107UU5"
+  },
+  {
+   "instrumentType": "currency",
+   "quantity": {
+    "units": "1207",
+    "nano": 740000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1"
+   },
+   "ticker": "RUB000UTSTOM"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "20"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "10",
+    "nano": 640000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1019",
+    "nano": 300000000
+   },
+   "ticker": "RU000A10BG13"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "180"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "14",
+    "nano": 20000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "607",
+    "nano": 180000000
+   },
+   "ticker": "RU000A105CM4"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "3"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "2",
+    "nano": 630000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1042",
+    "nano": 200000000
+   },
+   "ticker": "RU000A10B1X2"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "132"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "6",
+    "nano": 330000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "997"
+   },
+   "ticker": "RU000A10CU89"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "37"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "6",
+    "nano": 390000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1012",
+    "nano": 500000000
+   },
+   "ticker": "RU000A10D9K0"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "42"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "1",
+    "nano": 500000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1016"
+   },
+   "ticker": "RU000A10BBD8"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "43"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "10",
+    "nano": 70000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1012",
+    "nano": 500000000
+   },
+   "ticker": "RU000A109VJ2"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "450"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "2",
+    "nano": 240000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "231",
+    "nano": 220000000
+   },
+   "ticker": "RU000A101GD3"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "1"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "674",
+    "nano": 550000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "80470",
+    "nano": 131200000
+   },
+   "ticker": "RU000A105JH9"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "101"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "2",
+    "nano": 360000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1014",
+    "nano": 900000000
+   },
+   "ticker": "RU000A10DQ68"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "41"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "19",
+    "nano": 970000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "956",
+    "nano": 700000000
+   },
+   "ticker": "RU000A1068S9"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "124"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "9"
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1029",
+    "nano": 200000000
+   },
+   "ticker": "RU000A10BW70"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "118"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "14",
+    "nano": 500000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1001",
+    "nano": 400000000
+   },
+   "ticker": "RU000A109JX8"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "17"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "36",
+    "nano": 730000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "7899",
+    "nano": 747500000
+   },
+   "ticker": "RU000A10CRC4"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "58"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "nano": 150000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "340",
+    "nano": 440000000
+   },
+   "ticker": "RU000A108AL4"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "10"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "30",
+    "nano": 890000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "8168",
+    "nano": 949700000
+   },
+   "ticker": "RU000A10ECK5"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "41"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "7",
+    "nano": 100000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "1002",
+    "nano": 400000000
+   },
+   "ticker": "RU000A108VW7"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "133"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "4",
+    "nano": 20000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "713",
+    "nano": 110000000
+   },
+   "ticker": "RU000A10B0J3"
+  },
+  {
+   "instrumentType": "bond",
+   "quantity": {
+    "units": "62"
+   },
+   "currentNkd": {
+    "currency": "rub",
+    "units": "6",
+    "nano": 110000000
+   },
+   "currentPrice": {
+    "currency": "rub",
+    "units": "989"
+   },
+   "ticker": "RU000A109KX6"
+  }
+ ]
+}

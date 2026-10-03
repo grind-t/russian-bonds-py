@@ -1,0 +1,1 @@
+{"amortizations": {"columns": ["isin", "name", "issuevalue", "amortdate", "facevalue", "initialfacevalue", "faceunit", "valueprc", "value", "value_rub", "data_source", "secid", "primary_boardid"], "data": [["RU000A105HN1", "АО Авто Финанс Банк БО-001Р-10", 7000000000, "2025-12-01", 1000, 1000, "RUB", 100, 1000, 1000, "maturity", "RU000A105HN1", "TQCB"]]}}

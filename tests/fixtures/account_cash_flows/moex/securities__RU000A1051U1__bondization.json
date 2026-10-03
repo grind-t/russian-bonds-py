@@ -1,0 +1,1 @@
+{"amortizations": {"columns": ["isin", "name", "issuevalue", "amortdate", "facevalue", "initialfacevalue", "faceunit", "valueprc", "value", "value_rub", "data_source", "secid", "primary_boardid"], "data": [["RU000A1051U1", "МТС-Банк ПАО 001P-02", 7000000000, "2025-08-01", 1000, 1000, "RUB", 100, 1000, 1000, "maturity", "RU000A1051U1", "TQCB"]]}}

@@ -1,0 +1,1 @@
+{"amortizations": {"columns": ["isin", "name", "issuevalue", "amortdate", "facevalue", "initialfacevalue", "faceunit", "valueprc", "value", "value_rub", "data_source", "secid", "primary_boardid"], "data": [["RU000A0JWDN6", "РУСАЛ Братский алюм. з-д БО-01", 10000000000, "2026-04-07", 1000, 1000, "RUB", 100, 1000, 1000, "maturity", "RU000A0JWDN6", "TQCB"]]}}

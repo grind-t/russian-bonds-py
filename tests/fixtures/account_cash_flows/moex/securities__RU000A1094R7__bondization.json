@@ -1,0 +1,1 @@
+{"amortizations": {"columns": ["isin", "name", "issuevalue", "amortdate", "facevalue", "initialfacevalue", "faceunit", "valueprc", "value", "value_rub", "data_source", "secid", "primary_boardid"], "data": [["RU000A1094R7", "Банк ВТБ (ПАО) Б-1-356", 515996000, "2025-07-31", 1000, 1000, "RUB", 100, 1000, 1000, "maturity", "RU000A1094R7", "TQCB"]]}}

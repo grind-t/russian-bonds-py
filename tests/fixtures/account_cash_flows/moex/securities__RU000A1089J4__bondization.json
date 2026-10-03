@@ -1,0 +1,1 @@
+{"amortizations": {"columns": ["isin", "name", "issuevalue", "amortdate", "facevalue", "initialfacevalue", "faceunit", "valueprc", "value", "value_rub", "data_source", "secid", "primary_boardid"], "data": [["RU000A1089J4", "Селектел 001P-04R", 4000000000, "2026-04-02", 1000, 1000, "RUB", 100, 1000, 1000, "maturity", "RU000A1089J4", "TQCB"]]}}
