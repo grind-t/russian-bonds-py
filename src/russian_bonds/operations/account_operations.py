@@ -6,7 +6,6 @@ import httpx
 from pydantic import (
     AwareDatetime,
     BaseModel,
-    ConfigDict,
     Field,
     model_validator,
 )
@@ -33,8 +32,6 @@ class _TInvestOperationItem(OperationItem):
 
 
 class AccountOperation(BaseModel):
-    model_config = ConfigDict(frozen=True)
-
     id: str = Field(min_length=1)
     parent_operation_id: str
     ticker: str = Field(min_length=1)

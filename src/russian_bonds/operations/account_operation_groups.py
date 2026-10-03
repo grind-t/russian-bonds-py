@@ -1,13 +1,11 @@
 from collections.abc import Iterable
 
-from pydantic import BaseModel, ConfigDict, computed_field
+from pydantic import BaseModel, computed_field
 
 from .account_operations import AccountOperation
 
 
 class AccountOperationGroup(BaseModel):
-    model_config = ConfigDict(frozen=True)
-
     operations: list[AccountOperation]
 
     @computed_field
