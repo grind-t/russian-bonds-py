@@ -4,7 +4,12 @@ import pytest
 from pydantic import ValidationError
 from t_tech.invest import OperationType
 
-from russian_bonds.operations.account_operations import AccountOperation
+from russian_bonds.operations.account_operations import (
+    AccountOperation,
+    group_account_operations_by_ticker,
+)
+
+BUY = OperationType.OPERATION_TYPE_BUY
 
 
 def test_fee_without_parent_raises():
@@ -21,3 +26,31 @@ def test_fee_without_parent_raises():
             date=datetime(2026, 1, 1, tzinfo=UTC),
             virtual=False,
         )
+
+
+def _op(id_: str, ticker: str) -> AccountOperation:
+    return AccountOperation(
+        id=id_,
+        parent_operation_id="",
+        ticker=ticker,
+        name="Операция",
+        description="Операция с ценными бумагами",
+        type=BUY,
+        payment=-1000.0,
+        quantity_delta=1,
+        date=datetime(2026, 1, 1, tzinfo=UTC),
+        virtual=False,
+    )
+
+
+def test_groups_by_ticker_preserving_order():
+    operations = (_op("a1", "A"), _op("b1", "B"), _op("a2", "A"))
+    grouped = group_account_operations_by_ticker(operations)
+    assert {ticker: [op.id for op in ops] for ticker, ops in grouped.items()} == {
+        "A": ["a1", "a2"],
+        "B": ["b1"],
+    }
+
+
+def test_empty_operations():
+    assert group_account_operations_by_ticker(()) == {}

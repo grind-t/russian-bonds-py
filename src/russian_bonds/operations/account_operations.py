@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Self
@@ -18,7 +19,8 @@ from t_tech.invest import (
 )
 from t_tech.invest.async_services import AsyncServices
 from t_tech.invest.grpc import operations_pb2
-from t_tech.invest.utils import money_to_decimal
+from t_tech.invest.utils import money_to_decimal, quotation_to_decimal
+from toolkit.boolean import ensure
 
 from .last_amortization import get_last_amortization
 from .quantity_by_payment import get_quantity_by_payment
@@ -118,3 +120,45 @@ async def fetch_account_operations_from_t_invest(
             continue
         operations.append(await AccountOperation.from_t_invest_item(item, moex_client))
     return operations
+
+
+async def fetch_virtual_operations_from_t_invest(
+    t_invest_client: AsyncServices, account_id: str, now: datetime
+) -> list[AccountOperation]:
+    portfolio = await t_invest_client.operations.get_portfolio(account_id=account_id)
+    operations: list[AccountOperation] = []
+    for pos in portfolio.positions:
+        if pos.instrument_type != "bond":
+            continue
+        quantity_decimal = quotation_to_decimal(pos.quantity)
+        ensure(
+            quantity_decimal == quantity_decimal.to_integral_value(),
+            f"Fractional position quantity for {pos.ticker}",
+        )
+        quantity = int(quantity_decimal)
+        current_price = float(money_to_decimal(pos.current_price))
+        current_nkd = float(money_to_decimal(pos.current_nkd))
+        operations.append(
+            AccountOperation(
+                id=f"virtual:{pos.ticker}",
+                parent_operation_id="",
+                ticker=pos.ticker,
+                name="Продажа",
+                description="Виртуальная продажа по рыночной цене",
+                type=OperationType.OPERATION_TYPE_SELL,
+                payment=(current_price + current_nkd) * quantity,
+                quantity_delta=-quantity,
+                date=now,
+                virtual=True,
+            )
+        )
+    return operations
+
+
+def group_account_operations_by_ticker(
+    operations: Iterable[AccountOperation],
+) -> dict[str, list[AccountOperation]]:
+    operations_by_ticker: dict[str, list[AccountOperation]] = {}
+    for op in operations:
+        operations_by_ticker.setdefault(op.ticker, []).append(op)
+    return operations_by_ticker

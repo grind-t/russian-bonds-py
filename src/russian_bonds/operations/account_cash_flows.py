@@ -8,10 +8,12 @@ from t_tech.invest import OperationType
 from t_tech.invest.async_services import AsyncServices
 from toolkit.boolean import ensure
 
-from .account_operation_groups import group_account_operations_by_ticker
-from .account_operations import fetch_account_operations_from_t_invest
+from .account_operations import (
+    fetch_account_operations_from_t_invest,
+    fetch_virtual_operations_from_t_invest,
+    group_account_operations_by_ticker,
+)
 from .payment_ratios import get_payment_ratios
-from .virtual_operations import get_virtual_operations
 
 
 @dataclass(frozen=True)
@@ -48,7 +50,7 @@ async def get_account_bond_cash_flows(
         fetch_account_operations_from_t_invest(
             t_invest_client, moex_client, account_id, from_
         ),
-        get_virtual_operations(t_invest_client, account_id, now),
+        fetch_virtual_operations_from_t_invest(t_invest_client, account_id, now),
         _get_nominal_by_ticker(moex_client),
     )
 
@@ -64,9 +66,9 @@ async def get_account_bond_cash_flows(
         )
 
     cash_flows: list[BondCashFlow] = []
-    for ticker, group in groups.items():
+    for ticker, operations in groups.items():
         # only the bonds bought in the window are counted
-        ratio_by_operation_id = get_payment_ratios(group.operations)
+        ratio_by_operation_id = get_payment_ratios(operations)
         nominal = nominal_by_ticker[ticker]
         cash_flows.extend(
             BondCashFlow(
@@ -79,7 +81,7 @@ async def get_account_bond_cash_flows(
                 date=op.date,
                 virtual=op.virtual,
             )
-            for op in group.operations
+            for op in operations
             if ratio_by_operation_id[op.id] != 0
         )
     return cash_flows
