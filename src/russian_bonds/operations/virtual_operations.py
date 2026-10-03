@@ -36,4 +36,4 @@ async def get_virtual_operations(
                 virtual=True,
             )
         )
-    return AccountOperations(tuple(operations))
+    return AccountOperations(operations)

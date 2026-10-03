@@ -139,4 +139,4 @@ class AccountOperations(RootModel[tuple[AccountOperation, ...]]):
             operations.append(
                 await AccountOperation.from_t_invest_item(item, moex_client)
             )
-        return cls(tuple(operations))
+        return cls(operations)
