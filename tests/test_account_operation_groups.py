@@ -5,9 +5,9 @@ from pydantic import ValidationError
 from t_tech.invest import OperationType
 
 from russian_bonds.operations.account_operations import AccountOperation
-from russian_bonds.operations.group_by_ticker import (
+from russian_bonds.operations.account_operation_groups import (
     AccountOperationGroup,
-    group_operations_by_ticker,
+    group_account_operations_by_ticker,
 )
 
 BUY = OperationType.OPERATION_TYPE_BUY
@@ -34,7 +34,7 @@ def _op(
 
 def test_groups_by_ticker_preserving_order():
     operations = (_op("a1", "A"), _op("b1", "B"), _op("a2", "A"))
-    grouped = group_operations_by_ticker(operations)
+    grouped = group_account_operations_by_ticker(operations)
     assert {
         ticker: [op.id for op in group.operations] for ticker, group in grouped.items()
     } == {
@@ -51,7 +51,7 @@ def test_sums_quantity_deltas_per_ticker():
         _op("b1", "B", BUY, 5),
         _op("b2", "B", SELL, -5),
     )
-    grouped = group_operations_by_ticker(operations)
+    grouped = group_account_operations_by_ticker(operations)
     assert {ticker: group.net_quantity for ticker, group in grouped.items()} == {
         "A": 6,
         "B": 0,
@@ -59,7 +59,7 @@ def test_sums_quantity_deltas_per_ticker():
 
 
 def test_empty_operations():
-    assert group_operations_by_ticker(()) == {}
+    assert group_account_operations_by_ticker(()) == {}
 
 
 def test_group_rejects_mixed_tickers():

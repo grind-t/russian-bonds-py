@@ -24,7 +24,7 @@ class AccountOperationGroup(BaseModel):
         return self
 
 
-def group_operations_by_ticker(
+def group_account_operations_by_ticker(
     operations: Iterable[AccountOperation],
 ) -> dict[str, AccountOperationGroup]:
     operations_by_ticker: dict[str, list[AccountOperation]] = {}
