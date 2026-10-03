@@ -14,7 +14,7 @@ SELL = OperationType.OPERATION_TYPE_SELL
 class Op:
     ticker: str
     type: OperationType
-    quantity_done: int
+    quantity: int
 
 
 def test_returns_quantities_held_before_operations():

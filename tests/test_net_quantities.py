@@ -13,7 +13,7 @@ COUPON = OperationType.OPERATION_TYPE_COUPON
 class Op:
     ticker: str
     type: OperationType
-    quantity_done: int
+    quantity: int
 
 
 def test_sums_quantities_by_ticker():

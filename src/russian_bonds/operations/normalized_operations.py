@@ -22,7 +22,7 @@ class NormalizedOperation(BaseModel):
     description: str = Field(min_length=1)
     type: OperationType
     payment: float = Field(allow_inf_nan=False)
-    quantity_done: int = Field(ge=0)
+    quantity: int = Field(ge=0)
     date: AwareDatetime
     virtual: bool
 
@@ -74,7 +74,7 @@ async def _normalize(
     op: BondOperationItem, moex_client: httpx.AsyncClient
 ) -> NormalizedOperation:
     payment = float(money_to_decimal(op.payment))
-    quantity_done = op.quantity_done
+    quantity = op.quantity_done
     if op.type == BOND_REPAYMENT_FULL:
         # the last amortization is the final repayment
         amortization = await get_last_amortization(op.ticker, client=moex_client)
@@ -82,7 +82,7 @@ async def _normalize(
             raise ValueError(f"No final amortization for {op.ticker}")
         # full repayment comes with zero quantity, so derive it from the payment,
         # which is in rubles even for currency bonds
-        quantity_done = get_quantity_by_payment(payment, amortization.value_rub)
+        quantity = get_quantity_by_payment(payment, amortization.value_rub)
     return NormalizedOperation(
         id=op.id,
         parent_operation_id=op.parent_operation_id,
@@ -91,7 +91,7 @@ async def _normalize(
         description=op.description,
         type=op.type,
         payment=payment,
-        quantity_done=quantity_done,
+        quantity=quantity,
         date=op.date,
         virtual=False,
     )

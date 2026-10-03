@@ -15,7 +15,7 @@ class _Operation(Protocol):
     parent_operation_id: str
     ticker: str
     type: OperationType
-    quantity_done: int
+    quantity: int
     date: datetime
 
 
@@ -32,7 +32,7 @@ def get_payment_ratios(operations: Sequence[_Operation]) -> dict[str, float]:
     for op in sorted(rest, key=lambda op: op.date):
         ticker = op.ticker
         ratios[op.id] = 1.0 if op.type in BUY_TYPES else window_shares[ticker]
-        delta = quantity_delta(op.type, op.quantity_done)
+        delta = quantity_delta(op.type, op.quantity)
         total_positions[ticker] += delta
         window_positions[ticker] += delta * ratios[op.id]
         # sells keep the share, so it carries over to payments after the position

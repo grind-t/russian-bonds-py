@@ -9,7 +9,7 @@ from .net_quantities import get_net_quantities_by_ticker
 class _Operation(Protocol):
     ticker: str
     type: OperationType
-    quantity_done: int
+    quantity: int
 
 
 def get_initial_positions(

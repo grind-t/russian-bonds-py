@@ -20,7 +20,7 @@ def test_fee_without_parent_raises():
             description="Удержание комиссии",
             type=OperationType.OPERATION_TYPE_BROKER_FEE,
             payment=-1.0,
-            quantity_done=0,
+            quantity=0,
             date=datetime(2026, 1, 1, tzinfo=UTC),
             virtual=False,
         )
@@ -35,7 +35,7 @@ def _buy(id_: str) -> NormalizedOperation:
         description="Покупка ценных бумаг",
         type=OperationType.OPERATION_TYPE_BUY,
         payment=-1000.0,
-        quantity_done=1,
+        quantity=1,
         date=datetime(2026, 1, 1, tzinfo=UTC),
         virtual=False,
     )

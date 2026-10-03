@@ -18,7 +18,7 @@ T0 = datetime(2026, 1, 1, tzinfo=UTC)
 class Op:
     id: str
     type: OperationType
-    quantity_done: int
+    quantity: int
     date: datetime
     parent_operation_id: str = ""
     ticker: str = "A"

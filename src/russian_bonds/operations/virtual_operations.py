@@ -28,7 +28,7 @@ async def get_virtual_operations(
                 description="Виртуальная продажа по рыночной цене",
                 type=OperationType.OPERATION_TYPE_SELL,
                 payment=(current_price + current_nkd) * quantity,
-                quantity_done=quantity,
+                quantity=quantity,
                 date=now,
                 virtual=True,
             )
