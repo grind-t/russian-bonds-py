@@ -48,3 +48,9 @@ def test_duplicate_ids_raise():
 
 def test_unique_ids_pass():
     assert [op.id for op in NormalizedOperations([_buy("a"), _buy("b")])] == ["a", "b"]
+
+
+def test_quantity_delta_follows_type():
+    buy = _buy("buy")
+    sell = buy.model_copy(update={"type": OperationType.OPERATION_TYPE_SELL})
+    assert (buy.quantity_delta, sell.quantity_delta) == (1, -1)

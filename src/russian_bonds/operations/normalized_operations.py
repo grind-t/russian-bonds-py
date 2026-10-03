@@ -3,7 +3,14 @@ from datetime import datetime
 from typing import Self
 
 import httpx
-from pydantic import AwareDatetime, BaseModel, Field, RootModel, model_validator
+from pydantic import (
+    AwareDatetime,
+    BaseModel,
+    Field,
+    RootModel,
+    computed_field,
+    model_validator,
+)
 from t_tech.invest import OperationState, OperationType
 from t_tech.invest.async_services import AsyncServices
 from t_tech.invest.utils import money_to_decimal
@@ -11,7 +18,7 @@ from t_tech.invest.utils import money_to_decimal
 from .account_operations import BondOperationItem, get_account_bond_operations
 from .last_amortization import get_last_amortization
 from .quantity_by_payment import get_quantity_by_payment
-from .quantity_delta import BOND_REPAYMENT_FULL
+from .quantity_delta import BOND_REPAYMENT_FULL, quantity_delta
 
 
 class NormalizedOperation(BaseModel):
@@ -25,6 +32,11 @@ class NormalizedOperation(BaseModel):
     quantity: int = Field(ge=0)
     date: AwareDatetime
     virtual: bool
+
+    @computed_field
+    @property
+    def quantity_delta(self) -> int:
+        return quantity_delta(self.type, self.quantity)
 
     @model_validator(mode="after")
     def _check_fee_parent(self) -> Self:
