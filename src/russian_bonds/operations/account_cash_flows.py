@@ -3,15 +3,13 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 
 import httpx
-from moex import get_moex_bonds, get_moex_security_description
 from t_tech.invest import OperationType
 from t_tech.invest.async_services import AsyncServices
-from toolkit.boolean import ensure
 
+from ..account_bond_histories import get_account_bond_histories_from_operations
 from .account_operations import (
     fetch_account_operations_from_t_invest,
     fetch_virtual_operations_from_t_invest,
-    group_account_operations_by_ticker,
 )
 from .payment_ratios import get_payment_ratios
 
@@ -28,12 +26,6 @@ class BondCashFlow:
     virtual: bool
 
 
-@dataclass(frozen=True)
-class _Nominal:
-    value: float
-    unit: str
-
-
 async def get_account_bond_cash_flows(
     t_invest_client: AsyncServices,
     moex_client: httpx.AsyncClient,
@@ -42,34 +34,22 @@ async def get_account_bond_cash_flows(
 ) -> list[BondCashFlow]:
     now = datetime.now(UTC)
 
-    (
-        account_operations,
-        virtual_operations,
-        nominal_by_ticker,
-    ) = await asyncio.gather(
+    account_operations, virtual_operations = await asyncio.gather(
         fetch_account_operations_from_t_invest(
             t_invest_client, moex_client, account_id, from_
         ),
         fetch_virtual_operations_from_t_invest(t_invest_client, account_id, now),
-        _get_nominal_by_ticker(moex_client),
     )
 
-    groups = group_account_operations_by_ticker(account_operations + virtual_operations)
-
-    for ticker in groups:
-        if ticker in nominal_by_ticker:
-            continue
-        description = await get_moex_security_description(ticker, client=moex_client)
-        nominal_by_ticker[ticker] = _Nominal(
-            ensure(description.FACEVALUE, f"No face value for {ticker}"),
-            ensure(description.FACEUNIT, f"No face unit for {ticker}"),
-        )
+    histories = await get_account_bond_histories_from_operations(
+        account_operations + virtual_operations, moex_client
+    )
 
     cash_flows: list[BondCashFlow] = []
-    for ticker, operations in groups.items():
+    for history in histories.values():
+        operations = history.operations
         # only the bonds bought in the window are counted
         ratio_by_operation_id = get_payment_ratios(operations)
-        nominal = nominal_by_ticker[ticker]
         cash_flows.extend(
             BondCashFlow(
                 ticker=op.ticker,
@@ -77,7 +57,7 @@ async def get_account_bond_cash_flows(
                 description=op.description,
                 type=op.type,
                 value=op.payment * ratio_by_operation_id[op.id],
-                face_unit=nominal.unit,
+                face_unit=history.bond.face_unit,
                 date=op.date,
                 virtual=op.virtual,
             )
@@ -85,8 +65,3 @@ async def get_account_bond_cash_flows(
             if ratio_by_operation_id[op.id] != 0
         )
     return cash_flows
-
-
-async def _get_nominal_by_ticker(moex_client: httpx.AsyncClient) -> dict[str, _Nominal]:
-    bonds = await get_moex_bonds(primary_board=1, client=moex_client)
-    return {bond.SECID: _Nominal(bond.FACEVALUE, bond.FACEUNIT) for bond in bonds}

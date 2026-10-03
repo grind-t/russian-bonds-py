@@ -1,4 +1,3 @@
-from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Self
@@ -153,12 +152,3 @@ async def fetch_virtual_operations_from_t_invest(
             )
         )
     return operations
-
-
-def group_account_operations_by_ticker(
-    operations: Iterable[AccountOperation],
-) -> dict[str, list[AccountOperation]]:
-    operations_by_ticker: dict[str, list[AccountOperation]] = {}
-    for op in operations:
-        operations_by_ticker.setdefault(op.ticker, []).append(op)
-    return operations_by_ticker
