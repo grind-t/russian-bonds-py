@@ -1,7 +1,6 @@
 from collections.abc import Iterable
-from typing import Self
 
-from pydantic import BaseModel, ConfigDict, computed_field, model_validator
+from pydantic import BaseModel, ConfigDict, computed_field
 
 from .account_operations import AccountOperation
 
@@ -9,7 +8,7 @@ from .account_operations import AccountOperation
 class AccountOperationGroup(BaseModel):
     model_config = ConfigDict(frozen=True)
 
-    operations: tuple[AccountOperation, ...]
+    operations: list[AccountOperation]
 
     @computed_field
     @property
@@ -24,6 +23,6 @@ def group_account_operations_by_ticker(
     for op in operations:
         operations_by_ticker.setdefault(op.ticker, []).append(op)
     return {
-        ticker: AccountOperationGroup(operations=tuple(ops))
+        ticker: AccountOperationGroup(operations=ops)
         for ticker, ops in operations_by_ticker.items()
     }
