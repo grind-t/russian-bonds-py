@@ -66,7 +66,7 @@ async def get_account_bond_cash_flows(
     cash_flows: list[BondCashFlow] = []
     for ticker, group in groups.items():
         # only the bonds bought in the window are counted
-        ratio_by_operation_id = get_payment_ratios(group.operations.root)
+        ratio_by_operation_id = get_payment_ratios(group.operations)
         nominal = nominal_by_ticker[ticker]
         cash_flows.extend(
             BondCashFlow(

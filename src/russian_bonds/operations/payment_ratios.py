@@ -11,12 +11,23 @@ BROKER_FEE = OperationType.OPERATION_TYPE_BROKER_FEE
 
 
 class _Operation(Protocol):
-    id: str
-    parent_operation_id: str
-    ticker: str
-    type: OperationType
-    quantity_delta: int
-    date: datetime
+    @property
+    def id(self) -> str: ...
+
+    @property
+    def parent_operation_id(self) -> str: ...
+
+    @property
+    def ticker(self) -> str: ...
+
+    @property
+    def type(self) -> OperationType: ...
+
+    @property
+    def quantity_delta(self) -> int: ...
+
+    @property
+    def date(self) -> datetime: ...
 
 
 def get_payment_ratios(operations: Sequence[_Operation]) -> dict[str, float]:

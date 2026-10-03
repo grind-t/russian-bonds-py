@@ -3,8 +3,11 @@ from typing import Protocol
 
 
 class _Operation(Protocol):
-    ticker: str
-    quantity_delta: int
+    @property
+    def ticker(self) -> str: ...
+
+    @property
+    def quantity_delta(self) -> int: ...
 
 
 def get_net_quantities_by_ticker(operations: Iterable[_Operation]) -> dict[str, int]:

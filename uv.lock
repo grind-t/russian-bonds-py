@@ -196,7 +196,6 @@ dependencies = [
     { name = "grind-t-moex" },
     { name = "grind-t-toolkit" },
     { name = "httpx" },
-    { name = "pydantic" },
     { name = "t-tech-investments" },
 ]
 
@@ -214,7 +213,6 @@ requires-dist = [
     { name = "grind-t-moex", specifier = ">=0.1.0" },
     { name = "grind-t-toolkit", specifier = ">=0.1.0" },
     { name = "httpx", specifier = ">=0.28.1" },
-    { name = "pydantic", specifier = ">=2.13.5" },
     { name = "t-tech-investments", specifier = ">=1.51.0", index = "https://opensource.tbank.ru/api/v4/projects/238/packages/pypi/simple" },
 ]
 
