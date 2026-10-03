@@ -6,12 +6,12 @@ from t_tech.invest.utils import money_to_decimal, quotation_to_decimal
 from toolkit.boolean import ensure
 
 from ..account_bonds import get_account_bonds
-from .account_operations import AccountOperation, AccountOperations
+from .account_operations import AccountOperation
 
 
 async def get_virtual_operations(
     client: AsyncServices, account_id: str, now: datetime
-) -> AccountOperations:
+) -> tuple[AccountOperation, ...]:
     operations: list[AccountOperation] = []
     for pos in await get_account_bonds(client, account_id):
         quantity_decimal = quotation_to_decimal(pos.quantity)
@@ -36,4 +36,4 @@ async def get_virtual_operations(
                 virtual=True,
             )
         )
-    return AccountOperations(operations)
+    return tuple(operations)

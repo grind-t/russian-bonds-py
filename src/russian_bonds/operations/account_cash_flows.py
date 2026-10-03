@@ -8,7 +8,7 @@ from t_tech.invest import OperationType
 from t_tech.invest.async_services import AsyncServices
 from toolkit.boolean import ensure
 
-from .account_operations import AccountOperations
+from .account_operations import fetch_account_operations_from_t_invest
 from .group_by_ticker import group_operations_by_ticker
 from .payment_ratios import get_payment_ratios
 from .virtual_operations import get_virtual_operations
@@ -45,7 +45,7 @@ async def get_account_bond_cash_flows(
         virtual_operations,
         nominal_by_ticker,
     ) = await asyncio.gather(
-        AccountOperations.fetch_from_t_invest(
+        fetch_account_operations_from_t_invest(
             t_invest_client, moex_client, account_id, from_
         ),
         get_virtual_operations(t_invest_client, account_id, now),
@@ -66,7 +66,7 @@ async def get_account_bond_cash_flows(
     cash_flows: list[BondCashFlow] = []
     for ticker, group in groups.items():
         # only the bonds bought in the window are counted
-        ratio_by_operation_id = get_payment_ratios(group.operations.root)
+        ratio_by_operation_id = get_payment_ratios(group.operations)
         nominal = nominal_by_ticker[ticker]
         cash_flows.extend(
             BondCashFlow(

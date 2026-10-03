@@ -1,14 +1,15 @@
+from collections.abc import Iterable
 from typing import Self
 
 from pydantic import BaseModel, ConfigDict, computed_field, model_validator
 
-from .account_operations import AccountOperation, AccountOperations
+from .account_operations import AccountOperation
 
 
 class AccountOperationGroup(BaseModel):
     model_config = ConfigDict(frozen=True)
 
-    operations: AccountOperations
+    operations: tuple[AccountOperation, ...]
 
     @computed_field
     @property
@@ -24,12 +25,12 @@ class AccountOperationGroup(BaseModel):
 
 
 def group_operations_by_ticker(
-    operations: AccountOperations,
+    operations: Iterable[AccountOperation],
 ) -> dict[str, AccountOperationGroup]:
     operations_by_ticker: dict[str, list[AccountOperation]] = {}
     for op in operations:
         operations_by_ticker.setdefault(op.ticker, []).append(op)
     return {
-        ticker: AccountOperationGroup(operations=AccountOperations(ops))
+        ticker: AccountOperationGroup(operations=tuple(ops))
         for ticker, ops in operations_by_ticker.items()
     }

@@ -1,4 +1,3 @@
-from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Self
@@ -9,7 +8,6 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    RootModel,
     model_validator,
 )
 from t_tech.invest import (
@@ -36,7 +34,7 @@ class _TInvestOperationItem(OperationItem):
 
 class AccountOperation(BaseModel):
     model_config = ConfigDict(frozen=True)
-    
+
     id: str = Field(min_length=1)
     parent_operation_id: str
     ticker: str = Field(min_length=1)
@@ -85,58 +83,41 @@ class AccountOperation(BaseModel):
         )
 
 
-class AccountOperations(RootModel[tuple[AccountOperation, ...]]):
-    model_config = ConfigDict(frozen=True)
-
-    def __iter__(self) -> Iterator[AccountOperation]:  # ty: ignore[invalid-method-override]
-        return iter(self.root)
-
-    def __len__(self) -> int:
-        return len(self.root)
-
-    def __add__(self, other: Self) -> Self:
-        return type(self)((*self.root, *other.root))
-
-    @classmethod
-    async def fetch_from_t_invest(
-        cls,
-        t_invest_client: AsyncServices,
-        moex_client: httpx.AsyncClient,
-        account_id: str,
-        from_: datetime | None = None,
-        to: datetime | None = None,
-    ) -> Self:
-        raw_items: list[operations_pb2.OperationItem] = []
-        cursor: str | None = None
-        while True:
-            # the stub is called directly to get raw items that still carry the ticker
-            res = await t_invest_client.operations.stub.GetOperationsByCursor(
-                request=_grpc_helpers.dataclass_to_protobuf(
-                    GetOperationsByCursorRequest(
-                        account_id=account_id,
-                        from_=from_,
-                        to=to,
-                        cursor=cursor,
-                        limit=1000,  # API maximum
-                    ),
-                    operations_pb2.GetOperationsByCursorRequest(),
+async def fetch_account_operations_from_t_invest(
+    t_invest_client: AsyncServices,
+    moex_client: httpx.AsyncClient,
+    account_id: str,
+    from_: datetime | None = None,
+    to: datetime | None = None,
+) -> tuple[AccountOperation, ...]:
+    raw_items: list[operations_pb2.OperationItem] = []
+    cursor: str | None = None
+    while True:
+        # the stub is called directly to get raw items that still carry the ticker
+        res = await t_invest_client.operations.stub.GetOperationsByCursor(
+            request=_grpc_helpers.dataclass_to_protobuf(
+                GetOperationsByCursorRequest(
+                    account_id=account_id,
+                    from_=from_,
+                    to=to,
+                    cursor=cursor,
+                    limit=1000,  # API maximum
                 ),
-                metadata=t_invest_client.operations.metadata,
-            )
-            raw_items.extend(res.items)
-            if not res.has_next:
-                break
-            cursor = res.next_cursor
+                operations_pb2.GetOperationsByCursorRequest(),
+            ),
+            metadata=t_invest_client.operations.metadata,
+        )
+        raw_items.extend(res.items)
+        if not res.has_next:
+            break
+        cursor = res.next_cursor
 
-        operations: list[AccountOperation] = []
-        for raw in raw_items:
-            # API has no instrument type filter, so bonds are picked client-side
-            if raw.instrument_type != "bond":
-                continue
-            item = _grpc_helpers.protobuf_to_dataclass(raw, _TInvestOperationItem)
-            if item.state != OperationState.OPERATION_STATE_EXECUTED:
-                continue
-            operations.append(
-                await AccountOperation.from_t_invest_item(item, moex_client)
-            )
-        return cls(operations)
+    operations: list[AccountOperation] = []
+    for raw in raw_items:
+        if raw.instrument_type != "bond":
+            continue
+        item = _grpc_helpers.protobuf_to_dataclass(raw, _TInvestOperationItem)
+        if item.state != OperationState.OPERATION_STATE_EXECUTED:
+            continue
+        operations.append(await AccountOperation.from_t_invest_item(item, moex_client))
+    return tuple(operations)

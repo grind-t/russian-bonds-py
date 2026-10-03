@@ -73,7 +73,7 @@ asyncio.run(main())
 | Function | Description |
 | --- | --- |
 | `get_account_bond_cash_flows(client, account_id, from_=)` | Bond cash flows of an account, closed with a virtual sell at market price; only the bonds bought since `from_` are counted |
-| `AccountOperations.fetch_from_t_invest(t_invest_client, moex_client, account_id, from_=, to=)` | Executed bond operations of an account as validated `AccountOperation` models with a signed `quantity_delta` |
+| `fetch_account_operations_from_t_invest(t_invest_client, moex_client, account_id, from_=, to=)` | Executed bond operations of an account as validated `AccountOperation` models with a signed `quantity_delta` |
 | `get_account_bonds(client, account_id)` | Bond positions of an account's portfolio |
 
 `client` is the `AsyncServices` object returned by `async with AsyncClient(token)`.
