@@ -6,13 +6,13 @@ from t_tech.invest.utils import money_to_decimal, quotation_to_decimal
 from toolkit.boolean import ensure
 
 from ..account_bonds import get_account_bonds
-from .normalized_operations import NormalizedOperation
+from .account_operations import AccountOperation, AccountOperations
 
 
 async def get_virtual_operations(
     client: AsyncServices, account_id: str, now: datetime
-) -> list[NormalizedOperation]:
-    operations: list[NormalizedOperation] = []
+) -> AccountOperations:
+    operations: list[AccountOperation] = []
     for pos in await get_account_bonds(client, account_id):
         quantity_decimal = quotation_to_decimal(pos.quantity)
         ensure(
@@ -23,7 +23,7 @@ async def get_virtual_operations(
         current_price = float(money_to_decimal(pos.current_price))
         current_nkd = float(money_to_decimal(pos.current_nkd))
         operations.append(
-            NormalizedOperation(
+            AccountOperation(
                 id=f"virtual:{pos.ticker}",
                 parent_operation_id="",
                 ticker=pos.ticker,
@@ -36,4 +36,4 @@ async def get_virtual_operations(
                 virtual=True,
             )
         )
-    return operations
+    return AccountOperations(tuple(operations))

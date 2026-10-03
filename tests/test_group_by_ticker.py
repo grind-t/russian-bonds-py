@@ -2,8 +2,8 @@ from datetime import UTC, datetime
 
 from t_tech.invest import OperationType
 
+from russian_bonds.operations.account_operations import AccountOperation
 from russian_bonds.operations.group_by_ticker import group_operations_by_ticker
-from russian_bonds.operations.normalized_operations import NormalizedOperation
 
 BUY = OperationType.OPERATION_TYPE_BUY
 SELL = OperationType.OPERATION_TYPE_SELL
@@ -12,8 +12,8 @@ COUPON = OperationType.OPERATION_TYPE_COUPON
 
 def _op(
     id_: str, ticker: str, type_: OperationType = BUY, quantity_delta: int = 1
-) -> NormalizedOperation:
-    return NormalizedOperation(
+) -> AccountOperation:
+    return AccountOperation(
         id=id_,
         parent_operation_id="",
         ticker=ticker,
