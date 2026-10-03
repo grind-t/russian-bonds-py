@@ -9,7 +9,7 @@ from t_tech.invest.async_services import AsyncServices
 from toolkit.boolean import ensure
 
 from .group_by_ticker import group_operations_by_ticker
-from .normalized_operations import NormalizedOperations, get_normalized_operations
+from .normalized_operations import get_normalized_operations
 from .payment_ratios import get_payment_ratios
 from .virtual_operations import get_virtual_operations
 
@@ -50,9 +50,7 @@ async def get_account_bond_cash_flows(
         _get_nominal_by_ticker(moex_client),
     )
 
-    groups = group_operations_by_ticker(
-        NormalizedOperations([*normalized_operations, *virtual_operations])
-    )
+    groups = group_operations_by_ticker([*normalized_operations, *virtual_operations])
 
     for ticker in groups:
         if ticker in nominal_by_ticker:

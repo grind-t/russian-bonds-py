@@ -5,13 +5,13 @@ from t_tech.invest.async_services import AsyncServices
 from t_tech.invest.utils import money_to_decimal, quotation_to_decimal
 
 from ..account_bonds import get_account_bonds
-from .normalized_operations import NormalizedOperation, NormalizedOperations
+from .normalized_operations import NormalizedOperation
 
 
 async def get_virtual_operations(
     client: AsyncServices, account_id: str, now: datetime
-) -> NormalizedOperations:
-    operations = []
+) -> list[NormalizedOperation]:
+    operations: list[NormalizedOperation] = []
     for pos in await get_account_bonds(client, account_id):
         quantity_decimal = quotation_to_decimal(pos.quantity)
         if quantity_decimal != quantity_decimal.to_integral_value():
@@ -33,4 +33,4 @@ async def get_virtual_operations(
                 virtual=True,
             )
         )
-    return NormalizedOperations(operations)
+    return operations

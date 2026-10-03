@@ -1,4 +1,3 @@
-from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Self
@@ -66,28 +65,18 @@ class NormalizedOperation:
         )
 
 
-class NormalizedOperations(tuple[NormalizedOperation, ...]):
-    def __new__(cls, operations: Iterable[NormalizedOperation] = ()) -> Self:
-        self = super().__new__(cls, operations)
-        seen: set[str] = set()
-        for op in self:
-            ensure(op.id not in seen, f"Duplicate operation id {op.id}")
-            seen.add(op.id)
-        return self
-
-
 async def get_normalized_operations(
     t_invest_client: AsyncServices,
     moex_client: httpx.AsyncClient,
     account_id: str,
     from_: datetime | None = None,
-) -> NormalizedOperations:
-    return NormalizedOperations(
-        [
-            await NormalizedOperation.from_operation_item(op, moex_client)
-            for op in await get_account_bond_operations(
-                t_invest_client, account_id, from_
-            )
-            if op.state == OperationState.OPERATION_STATE_EXECUTED
-        ]
+) -> list[NormalizedOperation]:
+    operations = [
+        await NormalizedOperation.from_operation_item(op, moex_client)
+        for op in await get_account_bond_operations(t_invest_client, account_id, from_)
+        if op.state == OperationState.OPERATION_STATE_EXECUTED
+    ]
+    ensure(
+        len({op.id for op in operations}) == len(operations), "Duplicate operation ids"
     )
+    return operations
