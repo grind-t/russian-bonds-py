@@ -71,12 +71,8 @@ async def get_normalized_operations(
     account_id: str,
     from_: datetime | None = None,
 ) -> list[NormalizedOperation]:
-    operations = [
+    return [
         await NormalizedOperation.from_operation_item(op, moex_client)
         for op in await get_account_bond_operations(t_invest_client, account_id, from_)
         if op.state == OperationState.OPERATION_STATE_EXECUTED
     ]
-    ensure(
-        len({op.id for op in operations}) == len(operations), "Duplicate operation ids"
-    )
-    return operations

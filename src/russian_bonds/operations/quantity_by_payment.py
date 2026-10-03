@@ -1,9 +1,13 @@
 import math
 
+from toolkit.boolean import ensure
+
 
 def get_quantity_by_payment(payment: float, face_value_rub: float) -> int:
     quantity = payment / face_value_rub
     rounded = round(quantity)
-    if rounded <= 0 or not math.isclose(quantity, rounded):
-        raise ValueError("Abnormal full repayment quantity")
+    ensure(
+        rounded > 0 and math.isclose(quantity, rounded),
+        "Abnormal full repayment quantity",
+    )
     return rounded
