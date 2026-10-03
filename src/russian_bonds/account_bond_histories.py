@@ -1,7 +1,8 @@
+import asyncio
 from typing import Self
 
 import httpx
-from pydantic import BaseModel, computed_field, model_validator
+from pydantic import BaseModel, model_validator
 from toolkit.boolean import ensure
 
 from .bonds import Bond
@@ -28,3 +29,15 @@ class AccountBondHistory(BaseModel):
         first = ensure(operations, "No operations")[0]
         bond = await Bond.fetch_from_moex(first.ticker, client)
         return cls(bond=bond, operations=operations)
+
+
+async def get_account_bond_histories_from_operations(
+    operations: list[AccountOperation], client: httpx.AsyncClient
+) -> dict[str, AccountBondHistory]:
+    by_ticker: dict[str, list[AccountOperation]] = {}
+    for op in operations:
+        by_ticker.setdefault(op.ticker, []).append(op)
+    histories = await asyncio.gather(
+        *(AccountBondHistory.from_operations(ops, client) for ops in by_ticker.values())
+    )
+    return dict(zip(by_ticker, histories, strict=True))
