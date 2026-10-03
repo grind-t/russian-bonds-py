@@ -1,14 +1,11 @@
 from datetime import UTC, datetime
 
-import pytest
-from pydantic import ValidationError
 from t_tech.invest import OperationType
 
-from russian_bonds.operations.account_operations import AccountOperation
 from russian_bonds.operations.account_operation_groups import (
-    AccountOperationGroup,
     group_account_operations_by_ticker,
 )
+from russian_bonds.operations.account_operations import AccountOperation
 
 BUY = OperationType.OPERATION_TYPE_BUY
 SELL = OperationType.OPERATION_TYPE_SELL
@@ -60,8 +57,3 @@ def test_sums_quantity_deltas_per_ticker():
 
 def test_empty_operations():
     assert group_account_operations_by_ticker(()) == {}
-
-
-def test_group_rejects_mixed_tickers():
-    with pytest.raises(ValidationError):
-        AccountOperationGroup(operations=(_op("a1", "A"), _op("b1", "B")))

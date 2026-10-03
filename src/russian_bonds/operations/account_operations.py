@@ -89,7 +89,7 @@ async def fetch_account_operations_from_t_invest(
     account_id: str,
     from_: datetime | None = None,
     to: datetime | None = None,
-) -> tuple[AccountOperation, ...]:
+) -> list[AccountOperation]:
     raw_items: list[operations_pb2.OperationItem] = []
     cursor: str | None = None
     while True:
@@ -120,4 +120,4 @@ async def fetch_account_operations_from_t_invest(
         if item.state != OperationState.OPERATION_STATE_EXECUTED:
             continue
         operations.append(await AccountOperation.from_t_invest_item(item, moex_client))
-    return tuple(operations)
+    return operations
