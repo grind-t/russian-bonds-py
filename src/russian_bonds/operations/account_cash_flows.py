@@ -46,7 +46,7 @@ async def get_account_bond_cash_flows(
 
     cash_flows: list[BondCashFlow] = []
     for history in histories.values():
-        # only the bonds bought in the window are counted
+        # only the bonds bought within history are counted
         operations = history.without_initial_bonds().operations
         cash_flows.extend(
             BondCashFlow(
