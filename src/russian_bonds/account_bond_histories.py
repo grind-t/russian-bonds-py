@@ -8,6 +8,7 @@ from toolkit.boolean import ensure
 
 from .bonds import Bond
 from .operations.account_operations import AccountOperation
+from .operations.fifo_position import FifoPosition
 
 BROKER_FEE = OperationType.OPERATION_TYPE_BROKER_FEE
 
@@ -39,44 +40,27 @@ class AccountBondHistory(BaseModel):
         return -sum(op.quantity_delta for op in self.operations)
 
     def without_initial_bonds(self) -> Self:
-        # FIFO: sells consume the bonds held before the operations first
-        initial_left = self.initial_bond_quantity
-        total = initial_left
-        current_fraction = 0.0  # fraction of the bonds bought within the operations
+        position = FifoPosition(initial=self.initial_bond_quantity)
         op_fractions: dict[str, float] = {}  # fraction of each operation to keep
         # a stable sort keeps operations with the same date in order
         for op in sorted(self.operations, key=lambda op: op.date):
-            if op.type == BROKER_FEE:
-                continue
-            delta = op.quantity_delta
-            if delta < 0:
-                initial_sold = min(initial_left, -delta)
-                initial_left -= initial_sold
-                op_fractions[op.id] = (delta + initial_sold) / delta
-            else:
-                # payments are made for the position at the payment date,
-                # though the record date comes a few days earlier
-                op_fractions[op.id] = 1.0 if delta > 0 else current_fraction
-            total += delta
-            # the fraction carries over to payments after the position is closed
-            if total > 0:
-                current_fraction = (total - initial_left) / total
+            if op.type != BROKER_FEE:
+                op_fractions[op.id] = position.kept_fraction(op)
 
         operations: list[AccountOperation] = []
         for op in self.operations:
             # a fee follows its deal and is dropped with a deal outside the operations
-            key = op.parent_operation_id if op.type == BROKER_FEE else op.id
-            op_fraction = op_fractions.get(key, 0.0)
+            id = op.parent_operation_id if op.type == BROKER_FEE else op.id
+            op_fraction = op_fractions.get(id, 0.0)
             if op_fraction == 0:
                 continue
-            operations.append(
-                op.model_copy(
-                    update={
-                        "payment": op.payment * op_fraction,
-                        "quantity_delta": round(op.quantity_delta * op_fraction),
-                    }
-                )
+            op_copy = op.model_copy(
+                update={
+                    "payment": op.payment * op_fraction,
+                    "quantity_delta": round(op.quantity_delta * op_fraction),
+                }
             )
+            operations.append(op_copy)
         return type(self)(bond=self.bond, operations=operations)
 
     @classmethod
