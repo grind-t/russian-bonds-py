@@ -11,7 +11,6 @@ from .account_operations import (
     fetch_account_operations_from_t_invest,
     fetch_virtual_operations_from_t_invest,
 )
-from .payment_ratios import get_payment_ratios
 
 
 @dataclass(frozen=True)
@@ -47,21 +46,19 @@ async def get_account_bond_cash_flows(
 
     cash_flows: list[BondCashFlow] = []
     for history in histories.values():
-        operations = history.operations
         # only the bonds bought in the window are counted
-        ratio_by_operation_id = get_payment_ratios(operations)
+        operations = history.without_initial_bonds().operations
         cash_flows.extend(
             BondCashFlow(
                 ticker=op.ticker,
                 name=op.name,
                 description=op.description,
                 type=op.type,
-                value=op.payment * ratio_by_operation_id[op.id],
+                value=op.payment,
                 face_unit=history.bond.face_unit,
                 date=op.date,
                 virtual=op.virtual,
             )
             for op in operations
-            if ratio_by_operation_id[op.id] != 0
         )
     return cash_flows

@@ -111,7 +111,8 @@ async def fetch_account_operations_from_t_invest(
         cursor = res.next_cursor
 
     operations: list[AccountOperation] = []
-    for raw in raw_items:
+    # the API returns operations newest first
+    for raw in reversed(raw_items):
         if raw.instrument_type != "bond":
             continue
         item = _grpc_helpers.protobuf_to_dataclass(raw, _TInvestOperationItem)
