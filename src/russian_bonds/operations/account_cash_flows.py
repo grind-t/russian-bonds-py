@@ -16,6 +16,7 @@ from .account_operations import (
 @dataclass(frozen=True)
 class BondCashFlow:
     ticker: str
+    bond_name: str
     name: str
     description: str
     type: OperationType
@@ -50,6 +51,7 @@ async def get_account_bond_cash_flows(
         cash_flows.extend(
             BondCashFlow(
                 ticker=op.ticker,
+                bond_name=history.bond.name,
                 name=op.name,
                 description=op.description,
                 type=op.type,

@@ -37,7 +37,7 @@ def _op(id_: str, ticker: str, type_: OperationType) -> AccountOperation:
 
 async def test_groups_operations_by_ticker(monkeypatch):
     async def fake_fetch_from_moex(ticker: str, client: httpx.AsyncClient) -> Bond:
-        return Bond(ticker=ticker, face_value=1000.0, face_unit="RUB")
+        return Bond(ticker=ticker, name=ticker, face_value=1000.0, face_unit="RUB")
 
     monkeypatch.setattr(Bond, "fetch_from_moex", fake_fetch_from_moex)
     a1, b1, a2 = _op("a1", "A", BUY), _op("b1", "B", BUY), _op("a2", "A", COUPON)
@@ -82,7 +82,7 @@ def _history_op(
 
 
 def _history(*operations: AccountOperation) -> AccountBondHistory:
-    bond = Bond(ticker="A", face_value=1000.0, face_unit="RUB")
+    bond = Bond(ticker="A", name="A", face_value=1000.0, face_unit="RUB")
     return AccountBondHistory(bond=bond, operations=list(operations))
 
 
