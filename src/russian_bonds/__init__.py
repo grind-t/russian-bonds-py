@@ -6,7 +6,7 @@ from .operations.account_operations import (
     fetch_account_operations_from_t_invest,
 )
 from .operations.quantity_delta import BUY_TYPES, SELL_TYPES
-from .screener import ScreenerBond, list_screener_bonds
+from .screener import ScreenerBond, get_issuer_investments, list_screener_bonds
 
 __all__ = [
     "BUY_TYPES",
@@ -18,5 +18,6 @@ __all__ = [
     "ScreenerBond",
     "fetch_account_operations_from_t_invest",
     "get_account_bond_cash_flows",
+    "get_issuer_investments",
     "list_screener_bonds",
 ]

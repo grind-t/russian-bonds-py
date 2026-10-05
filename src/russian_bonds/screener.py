@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 
 import brotli
 import httpx
@@ -16,8 +16,9 @@ from moex import (
 )
 from pydantic import BaseModel, Field, TypeAdapter
 from t_tech.invest import Bond as TInvestBond
+from t_tech.invest import PortfolioPosition
 from t_tech.invest.async_services import AsyncServices
-from t_tech.invest.utils import money_to_decimal
+from t_tech.invest.utils import money_to_decimal, quotation_to_decimal
 
 from .cbr_ratings import Kra, Prediction, convert_prediction, rating_value_to_number
 
@@ -26,6 +27,15 @@ logger = logging.getLogger(__name__)
 BOND_RATINGS_URL = "https://raw.githubusercontent.com/grind-t/cbr-ratings/refs/heads/main/exports/bonds.json.br"
 ISSUER_RATINGS_URL = "https://raw.githubusercontent.com/grind-t/cbr-ratings/refs/heads/main/exports/issuers.json.br"
 IFRS_RATINGS_URL = "https://raw.githubusercontent.com/grind-t/e-disclosure-py/refs/heads/main/exports/ratings.json.br"
+
+# screener thresholds, ytm in percent
+MIN_MATURITY = timedelta(days=91)
+MAX_MATURITY = timedelta(days=730)
+RUB_MIN_YTM = 15.5
+# floaters pay off only if rates stay high, so a longer one needs a higher yield
+FLOATER_YTM_PER_DAY = 0.00275
+MAX_ISSUER_INVESTMENT = 100_000
+FOREIGN_CURRENCY_MIN_YTM = 7.0
 
 # the SDK returns an epoch timestamp instead of a missing date
 _EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
@@ -70,6 +80,91 @@ class ScreenerBond(BaseModel):
     has_amortization: bool
     has_offer: bool
     for_qual: bool
+
+    def is_rub_candidate(self, issuer_investment: float) -> bool:
+        if self.currency != "rub" or not self._fits_common_filters(RUB_MIN_YTM):
+            return False
+        assert self.ytm is not None and self.maturity_date is not None
+        if self.is_floater:
+            days = (self.maturity_date - date.today()).days
+            if self.ytm < RUB_MIN_YTM + days * FLOATER_YTM_PER_DAY:
+                return False
+        return issuer_investment < MAX_ISSUER_INVESTMENT
+
+    def is_foreign_currency_candidate(self) -> bool:
+        return self.currency != "rub" and self._fits_common_filters(
+            FOREIGN_CURRENCY_MIN_YTM
+        )
+
+    def _fits_common_filters(self, min_ytm: float) -> bool:
+        today = date.today()
+        return (
+            self.maturity_date is not None
+            and today + MIN_MATURITY < self.maturity_date < today + MAX_MATURITY
+            and self.ytm is not None
+            and self.ytm >= min_ytm
+            and not self.has_offer
+            and self._has_acceptable_rating()
+        )
+
+    def _has_acceptable_rating(self) -> bool:
+        # an ifrs or a t-invest rating alone is enough, but a poor ifrs one rules
+        # the bond out even with good agency ratings
+        has_rating = (
+            any(
+                _is_acceptable_rating(rating, prediction)
+                for rating, prediction in (
+                    (self.rating_akra, self.prediction_akra),
+                    (self.rating_nkr, self.prediction_nkr),
+                    (self.rating_expert_ra, self.prediction_expert_ra),
+                    (self.rating_nra, self.prediction_nra),
+                )
+            )
+            or (self.rating_t_invest is not None and self.rating_t_invest > 1)
+            or self.rating_ifrs is not None
+        )
+        return has_rating and (
+            self.rating_ifrs is None
+            or _is_acceptable_rating(self.rating_ifrs, self.prediction_ifrs)
+        )
+
+
+def _is_acceptable_rating(rating: int | None, prediction: Prediction | None) -> bool:
+    # a missing prediction counts as the best one each threshold allows
+    if rating is None:
+        return False
+    return (
+        rating > 18
+        or (rating > 15 and prediction in (None, "STA", "POS"))
+        or (rating > 14 and prediction in (None, "POS"))
+    )
+
+
+async def get_issuer_investments(
+    *, t_invest_client: AsyncServices, account_id: str, bonds: list[ScreenerBond]
+) -> dict[str, float]:
+    portfolio = await t_invest_client.operations.get_portfolio(account_id=account_id)
+    return build_issuer_investments(positions=portfolio.positions, bonds=bonds)
+
+
+def build_issuer_investments(
+    *, positions: list[PortfolioPosition], bonds: list[ScreenerBond]
+) -> dict[str, float]:
+    # sums prices as is, without converting currencies
+    issuer_inn_by_isin = {bond.isin: bond.issuer_inn for bond in bonds}
+    result: dict[str, float] = {}
+    for pos in positions:
+        if pos.instrument_type != "bond":
+            continue
+        # t-invest bond tickers are isins
+        issuer_inn = issuer_inn_by_isin.get(pos.ticker)
+        if issuer_inn is None:
+            continue
+        investment = quotation_to_decimal(pos.quantity) * money_to_decimal(
+            pos.average_position_price
+        )
+        result[issuer_inn] = result.get(issuer_inn, 0.0) + float(investment)
+    return result
 
 
 async def list_screener_bonds(
