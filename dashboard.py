@@ -18,7 +18,7 @@ from russian_bonds import (
 PERIOD = timedelta(days=365)
 TAX_RATE = 0.13
 MIN_HOLDING_DAYS = 60
-DAYS_PER_MONTH = 365.25 / 12
+DAYS_PER_YEAR = 365.25
 
 
 def http_client() -> httpx.AsyncClient:
@@ -113,8 +113,10 @@ def screener_table(
                 ),
                 "YTM": bond.ytm,
                 "Флоатер": bond.is_floater,
-                "До погашения, мес.": round(
-                    (bond.maturity_date - today).days / DAYS_PER_MONTH, 1
+                "Амортизация": bond.has_amortization,
+                "Для квалов": bond.for_qual,
+                "До погашения, лет": round(
+                    (bond.maturity_date - today).days / DAYS_PER_YEAR, 2
                 )
                 if bond.maturity_date
                 else None,
