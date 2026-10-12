@@ -1,10 +1,6 @@
 from datetime import date, timedelta
 
-import pytest
-import time_machine
-from t_tech.invest import MoneyValue, PortfolioPosition, Quotation
-
-from russian_bonds.screener import ScreenerBond, build_issuer_investments
+from russian_bonds._core.screener.screener_bond import ScreenerBond
 
 TODAY = date(2026, 1, 1)
 
@@ -39,12 +35,6 @@ def screener_bond(**fields) -> ScreenerBond:
     return ScreenerBond.model_validate(defaults | fields)
 
 
-@pytest.fixture(autouse=True)
-def frozen_today():
-    with time_machine.travel(TODAY, tick=False):
-        yield
-
-
 def test_rub_candidate(subtests):
     floater = {"is_floater": True, "maturity_date": TODAY + timedelta(400)}
     cases = {
@@ -65,13 +55,13 @@ def test_rub_candidate(subtests):
     }
     for name, (fields, expected) in cases.items():
         with subtests.test(name):
-            assert screener_bond(**fields).is_rub_candidate(0) is expected
+            assert screener_bond(**fields).is_rub_candidate(0, TODAY) is expected
 
 
 def test_rub_candidate_issuer_investment_limit():
     bond = screener_bond()
-    assert bond.is_rub_candidate(99_999.99)
-    assert not bond.is_rub_candidate(100_000)
+    assert bond.is_rub_candidate(99_999.99, TODAY)
+    assert not bond.is_rub_candidate(100_000, TODAY)
 
 
 def test_foreign_currency_candidate(subtests):
@@ -87,7 +77,9 @@ def test_foreign_currency_candidate(subtests):
     }
     for name, (fields, expected) in cases.items():
         with subtests.test(name):
-            assert screener_bond(**fields).is_foreign_currency_candidate() is expected
+            assert (
+                screener_bond(**fields).is_foreign_currency_candidate(TODAY) is expected
+            )
 
 
 def test_ratings(subtests):
@@ -144,36 +136,4 @@ def test_ratings(subtests):
     }
     for name, (ratings, expected) in cases.items():
         with subtests.test(name):
-            assert screener_bond(**ratings).is_rub_candidate(0) is expected
-
-
-def position(ticker: str, quantity: int, price: float, type_: str = "bond"):
-    units = int(price)
-    nano = round((price - units) * 1e9)
-    return PortfolioPosition(
-        ticker=ticker,
-        instrument_type=type_,
-        quantity=Quotation(units=quantity, nano=0),
-        average_position_price=MoneyValue(currency="rub", units=units, nano=nano),
-    )
-
-
-def test_issuer_investments():
-    bonds = [
-        screener_bond(isin="A1", issuer_inn="1"),
-        screener_bond(isin="A2", issuer_inn="1"),
-        screener_bond(isin="B1", issuer_inn="2"),
-        screener_bond(isin="NO_INN", issuer_inn=None),
-    ]
-    positions = [
-        position("A1", 10, 1000.5),
-        position("A2", 5, 990.0),
-        position("B1", 1, 1010.0),
-        position("NO_INN", 3, 1000.0),
-        position("NOT_LISTED", 2, 1000.0),
-        position("A1", 100, 50.0, type_="share"),
-    ]
-    assert build_issuer_investments(positions=positions, bonds=bonds) == {
-        "1": 10 * 1000.5 + 5 * 990.0,
-        "2": 1010.0,
-    }
+            assert screener_bond(**ratings).is_rub_candidate(0, TODAY) is expected

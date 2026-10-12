@@ -1,16 +1,15 @@
 from datetime import UTC, datetime, timedelta
 
-import httpx
 import pytest
 from pydantic import ValidationError
 from t_tech.invest import OperationType
 
-from russian_bonds.account_bond_histories import (
+from russian_bonds._core.cash_flows.account_bond_history import (
     AccountBondHistory,
-    get_account_bond_histories_from_operations,
+    group_operations_by_ticker,
 )
-from russian_bonds.bonds import Bond
-from russian_bonds.operations.account_operations import AccountOperation
+from russian_bonds._core.cash_flows.account_operation import AccountOperation
+from russian_bonds._core.cash_flows.bond import Bond
 
 BOND_REPAYMENT_FULL = OperationType.OPERATION_TYPE_BOND_REPAYMENT_FULL
 BROKER_FEE = OperationType.OPERATION_TYPE_BROKER_FEE
@@ -35,28 +34,9 @@ def _op(id_: str, ticker: str, type_: OperationType) -> AccountOperation:
     )
 
 
-async def test_groups_operations_by_ticker(monkeypatch):
-    async def fake_fetch_from_moex(ticker: str, client: httpx.AsyncClient) -> Bond:
-        return Bond(ticker=ticker, name=ticker, face_value=1000.0, face_unit="RUB")
-
-    monkeypatch.setattr(Bond, "fetch_from_moex", fake_fetch_from_moex)
+def test_groups_operations_by_ticker():
     a1, b1, a2 = _op("a1", "A", BUY), _op("b1", "B", BUY), _op("a2", "A", COUPON)
-
-    async with httpx.AsyncClient() as client:
-        histories = await get_account_bond_histories_from_operations(
-            [a1, b1, a2], client
-        )
-
-    assert list(histories) == ["A", "B"]
-    assert histories["A"].bond.ticker == "A"
-    assert histories["A"].operations == [a1, a2]
-    assert histories["B"].bond.ticker == "B"
-    assert histories["B"].operations == [b1]
-
-
-async def test_empty_operations_give_empty_dict():
-    async with httpx.AsyncClient() as client:
-        assert await get_account_bond_histories_from_operations([], client) == {}
+    assert group_operations_by_ticker([a1, b1, a2]) == {"A": [a1, a2], "B": [b1]}
 
 
 def _history_op(

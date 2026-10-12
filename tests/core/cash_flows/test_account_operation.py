@@ -4,7 +4,7 @@ import pytest
 from pydantic import ValidationError
 from t_tech.invest import OperationType
 
-from russian_bonds.operations.account_operations import AccountOperation
+from russian_bonds._core.cash_flows.account_operation import AccountOperation
 
 
 def test_fee_without_parent_raises():

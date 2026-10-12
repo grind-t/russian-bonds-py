@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import pytest
 from t_tech.invest import OperationType
 
-from russian_bonds.operations.fifo_position import FifoPosition
+from russian_bonds._core.cash_flows.fifo_position import FifoPosition
 
 
 @dataclass

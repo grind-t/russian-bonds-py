@@ -215,6 +215,7 @@ with portfolio_tab:
         )
 
 screener_bonds, issuer_investments = load_screener()
+today = datetime.now(UTC).date()
 
 with rub_tab:
     st.caption(
@@ -226,7 +227,9 @@ with rub_tab:
         [
             bond
             for bond in screener_bonds
-            if bond.is_rub_candidate(issuer_investments.get(bond.issuer_inn or "", 0.0))
+            if bond.is_rub_candidate(
+                issuer_investments.get(bond.issuer_inn or "", 0.0), today
+            )
         ],
         issuer_investments,
     )
@@ -237,5 +240,5 @@ with foreign_currency_tab:
         "доходность от 7%, надёжный рейтинг."
     )
     screener_table(
-        [bond for bond in screener_bonds if bond.is_foreign_currency_candidate()]
+        [bond for bond in screener_bonds if bond.is_foreign_currency_candidate(today)]
     )

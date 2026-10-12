@@ -1,4 +1,7 @@
+import math
+
 from t_tech.invest import OperationType
+from toolkit.boolean import ensure
 
 BUY_TYPES = frozenset(
     {
@@ -17,7 +20,7 @@ SELL_TYPES = frozenset(
     }
 )
 BOND_REPAYMENT_FULL = OperationType.OPERATION_TYPE_BOND_REPAYMENT_FULL
-NEUTRAL_TYPES = frozenset(
+_NEUTRAL_TYPES = frozenset(
     {
         OperationType.OPERATION_TYPE_INPUT,
         OperationType.OPERATION_TYPE_BOND_TAX,
@@ -76,6 +79,16 @@ def quantity_delta(type: OperationType, quantity: int) -> int:
         return quantity
     if type in SELL_TYPES or type == BOND_REPAYMENT_FULL:
         return -quantity
-    if type in NEUTRAL_TYPES:
+    if type in _NEUTRAL_TYPES:
         return 0
     raise ValueError(f"Unsupported operation type: {type}")
+
+
+def quantity_by_payment(payment: float, face_value_rub: float) -> int:
+    quantity = payment / face_value_rub
+    rounded = round(quantity)
+    ensure(
+        rounded > 0 and math.isclose(quantity, rounded),
+        "Abnormal full repayment quantity",
+    )
+    return rounded

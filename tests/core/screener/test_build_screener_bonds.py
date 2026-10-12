@@ -1,15 +1,16 @@
-import logging
 from datetime import date
 
 import pytest
 from cbr_ratings import Prediction, RatingItem
 from google.protobuf import json_format
 from moex import MoexBond, MoexBondMarketData, MoexBondMarketYield, MoexSecurity
+from pydantic import TypeAdapter
 from syrupy.extensions.json import JSONSnapshotExtension
 from t_tech.invest import Bond, _grpc_helpers
 from t_tech.invest.grpc import instruments_pb2
 
-from russian_bonds.screener import CbrRatings, IfrsRating, build_screener_bonds
+from russian_bonds._core.screener.build_screener_bonds import build_screener_bonds
+from russian_bonds._core.screener.ratings import CbrRatings, IfrsRatings
 
 
 def t_invest_bond(isin: str, **fields) -> Bond:
@@ -90,7 +91,7 @@ T_INVEST_BONDS = [
     t_invest_bond("NOT_BUYABLE", buyAvailableFlag=False),
     # skipped silently: spb exchange
     t_invest_bond("SPB_ONLY", classCode="SPBBND"),
-    # skipped with a warning: missing moex data
+    # skipped and reported: missing moex data
     t_invest_bond("NO_MOEX"),
 ]
 
@@ -139,9 +140,9 @@ ISSUER_RATINGS: CbrRatings = {
     },
 }
 
-IFRS_RATINGS = {
-    "7700000001": IfrsRating(value=17, outlook="STA"),
-}
+IFRS_RATINGS = TypeAdapter(IfrsRatings).validate_python(
+    {"7700000001": {"value": 17, "outlook": "STA"}}
+)
 
 
 @pytest.fixture
@@ -163,10 +164,10 @@ def build():
 
 
 def test_screener_bonds(snapshot):
-    assert [bond.model_dump(mode="json") for bond in build()] == snapshot
+    bonds, _ = build()
+    assert [bond.model_dump(mode="json") for bond in bonds] == snapshot
 
 
-def test_warns_about_missing_moex_data(caplog):
-    with caplog.at_level(logging.WARNING):
-        build()
-    assert caplog.messages == ["Missing moex data for bond NO_MOEX"]
+def test_reports_bonds_missing_from_moex():
+    _, missing_moex = build()
+    assert missing_moex == ["NO_MOEX"]

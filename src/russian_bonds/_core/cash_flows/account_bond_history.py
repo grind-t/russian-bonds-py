@@ -1,16 +1,14 @@
-import asyncio
 from typing import Self
 
-import httpx
 from pydantic import BaseModel, computed_field, model_validator
 from t_tech.invest import OperationType
 from toolkit.boolean import ensure
 
-from russian_bonds.bonds import Bond
-from russian_bonds.operations.account_operations import AccountOperation
-from russian_bonds.operations.fifo_position import FifoPosition
+from russian_bonds._core.cash_flows.account_operation import AccountOperation
+from russian_bonds._core.cash_flows.bond import Bond
+from russian_bonds._core.cash_flows.fifo_position import FifoPosition
 
-BROKER_FEE = OperationType.OPERATION_TYPE_BROKER_FEE
+_BROKER_FEE = OperationType.OPERATION_TYPE_BROKER_FEE
 
 
 class AccountBondHistory(BaseModel):
@@ -44,13 +42,13 @@ class AccountBondHistory(BaseModel):
         op_fractions: dict[str, float] = {}  # fraction of each operation to keep
         # a stable sort keeps operations with the same date in order
         for op in sorted(self.operations, key=lambda op: op.date):
-            if op.type != BROKER_FEE:
+            if op.type != _BROKER_FEE:
                 op_fractions[op.id] = position.kept_fraction(op)
 
         operations: list[AccountOperation] = []
         for op in self.operations:
             # a fee follows its deal and is dropped with a deal outside the operations
-            id = op.parent_operation_id if op.type == BROKER_FEE else op.id
+            id = op.parent_operation_id if op.type == _BROKER_FEE else op.id
             op_fraction = op_fractions.get(id, 0.0)
             if op_fraction == 0:
                 continue
@@ -63,22 +61,11 @@ class AccountBondHistory(BaseModel):
             operations.append(op_copy)
         return type(self)(bond=self.bond, operations=operations)
 
-    @classmethod
-    async def from_operations(
-        cls, operations: list[AccountOperation], client: httpx.AsyncClient
-    ) -> Self:
-        first = ensure(operations, "No operations")[0]
-        bond = await Bond.fetch_from_moex(first.ticker, client)
-        return cls(bond=bond, operations=operations)
 
-
-async def get_account_bond_histories_from_operations(
-    operations: list[AccountOperation], client: httpx.AsyncClient
-) -> dict[str, AccountBondHistory]:
+def group_operations_by_ticker(
+    operations: list[AccountOperation],
+) -> dict[str, list[AccountOperation]]:
     by_ticker: dict[str, list[AccountOperation]] = {}
     for op in operations:
         by_ticker.setdefault(op.ticker, []).append(op)
-    histories = await asyncio.gather(
-        *(AccountBondHistory.from_operations(ops, client) for ops in by_ticker.values())
-    )
-    return dict(zip(by_ticker, histories, strict=True))
+    return by_ticker
