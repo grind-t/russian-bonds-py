@@ -6,9 +6,9 @@ from pydantic import BaseModel, computed_field, model_validator
 from t_tech.invest import OperationType
 from toolkit.boolean import ensure
 
-from .bonds import Bond
-from .operations.account_operations import AccountOperation
-from .operations.fifo_position import FifoPosition
+from russian_bonds.bonds import Bond
+from russian_bonds.operations.account_operations import AccountOperation
+from russian_bonds.operations.fifo_position import FifoPosition
 
 BROKER_FEE = OperationType.OPERATION_TYPE_BROKER_FEE
 

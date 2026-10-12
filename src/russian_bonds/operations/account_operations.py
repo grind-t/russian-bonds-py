@@ -21,9 +21,9 @@ from t_tech.invest.grpc import operations_pb2
 from t_tech.invest.utils import money_to_decimal, quotation_to_decimal
 from toolkit.boolean import ensure
 
-from .last_amortization import get_last_amortization
-from .quantity_by_payment import get_quantity_by_payment
-from .quantity_delta import BOND_REPAYMENT_FULL, quantity_delta
+from russian_bonds.operations.last_amortization import get_last_amortization
+from russian_bonds.operations.quantity_by_payment import get_quantity_by_payment
+from russian_bonds.operations.quantity_delta import BOND_REPAYMENT_FULL, quantity_delta
 
 
 # the SDK schema omits the ticker field that the API does return

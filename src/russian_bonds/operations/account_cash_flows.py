@@ -9,8 +9,7 @@ from t_tech.invest.async_services import AsyncServices
 from russian_bonds.account_bond_histories import (
     get_account_bond_histories_from_operations,
 )
-
-from .account_operations import (
+from russian_bonds.operations.account_operations import (
     fetch_account_operations_from_t_invest,
     fetch_virtual_operations_from_t_invest,
 )
