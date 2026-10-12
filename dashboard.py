@@ -1,6 +1,6 @@
 import asyncio
 import os
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 import httpx
 import streamlit as st
@@ -95,7 +95,7 @@ def screener_table(
         ),
         reverse=True,
     )
-    today = date.today()
+    today = datetime.now(UTC).date()
     st.dataframe(
         [
             {

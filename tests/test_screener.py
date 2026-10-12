@@ -44,12 +44,16 @@ def moex_security(isin: str, inn: str | None, type_: str = "corporate_bond"):
 
 
 def moex_bond(secid: str, board: str = "TQCB", **fields) -> MoexBond:
-    defaults = dict(CALLOPTIONDATE=None, PUTOPTIONDATE=None, YIELDATPREVWAPRICE=None)
+    defaults = {
+        "CALLOPTIONDATE": None,
+        "PUTOPTIONDATE": None,
+        "YIELDATPREVWAPRICE": None,
+    }
     return MoexBond.model_construct(SECID=secid, BOARDID=board, **defaults | fields)
 
 
 def market_data(secid: str, board: str = "TQCB", **fields) -> MoexBondMarketData:
-    defaults = dict(YIELDTOOFFER=None, YIELD=None, YIELDATWAPRICE=None)
+    defaults = {"YIELDTOOFFER": None, "YIELD": None, "YIELDATWAPRICE": None}
     return MoexBondMarketData.model_construct(
         SECID=secid, BOARDID=board, **defaults | fields
     )

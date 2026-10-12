@@ -2,6 +2,7 @@
 name = "grind-t-russian-bonds"
 version = "0.1.0"
 description = "Russian bonds analytics on top of T-Invest and MOEX ISS APIs"
+license = "ISC"
 authors = [
     { name = "grind-t", email = "grindt.gd@gmail.com" }
 ]
@@ -15,6 +16,10 @@ dependencies = [
     "pydantic>=2",
     "t-tech-investments>=1.51.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/grind-t/russian-bonds-py"
+Issues = "https://github.com/grind-t/russian-bonds-py/issues"
 
 [build-system]
 requires = ["uv_build>=0.12.9,<0.13.0"]
@@ -44,4 +49,11 @@ dev = [
 ]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "UP", "B"]
+select = [
+    "E", "F", "I", "UP", "B", "SIM", "RUF", "PT", "N",
+    "C4", "PIE", "PERF", "FURB", "PTH", "T20", "ANN", "ASYNC", "DTZ", "TID",
+]
+ignore = ["RUF001"]  # allow Cyrillic in strings
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["ANN"]

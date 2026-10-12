@@ -9,7 +9,7 @@ def test_returns_whole_quantity():
 
 @pytest.mark.parametrize("payment", [0, -1000, 1500])
 def test_rejects_abnormal_quantity(payment):
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Abnormal full repayment quantity"):
         get_quantity_by_payment(payment, 1000)
 
 

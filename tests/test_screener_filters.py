@@ -11,31 +11,31 @@ TODAY = date(2026, 1, 1)
 
 def screener_bond(**fields) -> ScreenerBond:
     # a bond that fits the ruble screener, so each test breaks one condition
-    defaults = dict(
-        isin="RU000A000001",
-        name="Облигация",
-        maturity_date=TODAY + timedelta(days=365),
-        ytm=20.0,
-        rating_t_invest=None,
-        rating_akra=19,
-        rating_nkr=None,
-        rating_expert_ra=None,
-        rating_nra=None,
-        rating_ifrs=None,
-        prediction_akra=None,
-        prediction_nkr=None,
-        prediction_expert_ra=None,
-        prediction_nra=None,
-        prediction_ifrs=None,
-        nominal=1000.0,
-        currency="rub",
-        sector="financial",
-        issuer_inn="7700000001",
-        is_floater=False,
-        has_amortization=False,
-        has_offer=False,
-        for_qual=False,
-    )
+    defaults = {
+        "isin": "RU000A000001",
+        "name": "Облигация",
+        "maturity_date": TODAY + timedelta(days=365),
+        "ytm": 20.0,
+        "rating_t_invest": None,
+        "rating_akra": 19,
+        "rating_nkr": None,
+        "rating_expert_ra": None,
+        "rating_nra": None,
+        "rating_ifrs": None,
+        "prediction_akra": None,
+        "prediction_nkr": None,
+        "prediction_expert_ra": None,
+        "prediction_nra": None,
+        "prediction_ifrs": None,
+        "nominal": 1000.0,
+        "currency": "rub",
+        "sector": "financial",
+        "issuer_inn": "7700000001",
+        "is_floater": False,
+        "has_amortization": False,
+        "has_offer": False,
+        "for_qual": False,
+    }
     return ScreenerBond.model_validate(defaults | fields)
 
 

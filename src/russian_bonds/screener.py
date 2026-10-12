@@ -78,9 +78,10 @@ class ScreenerBond(BaseModel):
     def is_rub_candidate(self, issuer_investment: float) -> bool:
         if self.currency != "rub" or not self._fits_common_filters(RUB_MIN_YTM):
             return False
-        assert self.ytm is not None and self.maturity_date is not None
+        assert self.ytm is not None
+        assert self.maturity_date is not None
         if self.is_floater:
-            days = (self.maturity_date - date.today()).days
+            days = (self.maturity_date - datetime.now(UTC).date()).days
             if self.ytm < RUB_MIN_YTM + days * FLOATER_YTM_PER_DAY:
                 return False
         return issuer_investment < MAX_ISSUER_INVESTMENT
@@ -91,7 +92,7 @@ class ScreenerBond(BaseModel):
         )
 
     def _fits_common_filters(self, min_ytm: float) -> bool:
-        today = date.today()
+        today = datetime.now(UTC).date()
         return (
             self.maturity_date is not None
             and today + MIN_MATURITY < self.maturity_date < today + MAX_MATURITY
