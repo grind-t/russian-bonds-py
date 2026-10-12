@@ -6,6 +6,7 @@ from toolkit.boolean import ensure
 
 from russian_bonds._core.cash_flows.account_operation import AccountOperation
 from russian_bonds._core.cash_flows.bond import Bond
+from russian_bonds._core.cash_flows.bond_cash_flow import BondCashFlow
 from russian_bonds._core.cash_flows.fifo_position import FifoPosition
 
 _BROKER_FEE = OperationType.OPERATION_TYPE_BROKER_FEE
@@ -60,3 +61,20 @@ class AccountBondHistory(BaseModel):
             )
             operations.append(op_copy)
         return type(self)(bond=self.bond, operations=operations)
+
+    def to_cash_flows(self) -> list[BondCashFlow]:
+        """Cash flows of the bonds bought within the history."""
+        return [
+            BondCashFlow(
+                ticker=op.ticker,
+                bond_name=self.bond.name,
+                name=op.name,
+                description=op.description,
+                type=op.type,
+                value=op.payment,
+                face_unit=self.bond.face_unit,
+                date=op.date,
+                virtual=op.virtual,
+            )
+            for op in self.without_initial_bonds().operations
+        ]
