@@ -34,7 +34,15 @@ module-name = "russian_bonds"
 t-tech-investments = { path = "vendor/t_tech_investments-1.51.0-py3-none-any.whl" }
 
 [tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--import-mode=importlib", "--strict-markers", "--strict-config", "-ra"]
+xfail_strict = true
 asyncio_mode = "auto"
+filterwarnings = [
+    "error",
+    # the T-Invest SDK warns about its own deprecated fields at import time
+    "ignore:.*figi is deprecated:DeprecationWarning",
+]
 
 [dependency-groups]
 dev = [
