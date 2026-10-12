@@ -89,16 +89,17 @@ def test_full_repayment_consumes_initial_bonds_first():
     assert position.bought == 0
 
 
-@pytest.mark.parametrize(
-    "type_",
-    [
-        OperationType.OPERATION_TYPE_BROKER_FEE,
-        OperationType.OPERATION_TYPE_INPUT_SECURITIES,
-        OperationType.OPERATION_TYPE_OUTPUT_SECURITIES,
-        OperationType.OPERATION_TYPE_BOND_TAX,
-    ],
-)
-def test_unsupported_type_raises(type_: OperationType):
-    position = FifoPosition(initial=10)
-    with pytest.raises(ValueError, match="Unsupported operation type"):
-        position.kept_fraction(_Op(type_))
+def test_unsupported_type_raises(subtests):
+    cases = {
+        "broker fee": OperationType.OPERATION_TYPE_BROKER_FEE,
+        "securities input": OperationType.OPERATION_TYPE_INPUT_SECURITIES,
+        "securities output": OperationType.OPERATION_TYPE_OUTPUT_SECURITIES,
+        "bond tax": OperationType.OPERATION_TYPE_BOND_TAX,
+    }
+    for name, type_ in cases.items():
+        position = FifoPosition(initial=10)
+        with (
+            subtests.test(name),
+            pytest.raises(ValueError, match="Unsupported operation type"),
+        ):
+            position.kept_fraction(_Op(type_))
