@@ -4,6 +4,7 @@ from datetime import UTC, date, datetime, timedelta
 
 import brotli
 import httpx
+from cbr_ratings import KraCode, Prediction, RatingItem
 from moex import (
     MoexBond,
     MoexBondMarketData,
@@ -14,18 +15,16 @@ from moex import (
     get_moex_bonds_market_data,
     get_moex_bonds_market_yield,
 )
-from pydantic import BaseModel, Field, TypeAdapter
+from pydantic import BaseModel, TypeAdapter
 from t_tech.invest import Bond as TInvestBond
 from t_tech.invest import PortfolioPosition
 from t_tech.invest.async_services import AsyncServices
 from t_tech.invest.utils import money_to_decimal, quotation_to_decimal
 
-from .cbr_ratings import Kra, Prediction, convert_prediction, rating_value_to_number
-
 logger = logging.getLogger(__name__)
 
-BOND_RATINGS_URL = "https://raw.githubusercontent.com/grind-t/cbr-ratings/refs/heads/main/exports/bonds.json.br"
-ISSUER_RATINGS_URL = "https://raw.githubusercontent.com/grind-t/cbr-ratings/refs/heads/main/exports/issuers.json.br"
+BOND_RATINGS_URL = "https://raw.githubusercontent.com/grind-t/cbr-ratings-py/refs/heads/main/exports/bonds.json.br"
+ISSUER_RATINGS_URL = "https://raw.githubusercontent.com/grind-t/cbr-ratings-py/refs/heads/main/exports/issuers.json.br"
 IFRS_RATINGS_URL = "https://raw.githubusercontent.com/grind-t/e-disclosure-py/refs/heads/main/exports/ratings.json.br"
 
 # screener thresholds, ytm in percent
@@ -41,18 +40,13 @@ FOREIGN_CURRENCY_MIN_YTM = 7.0
 _EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
 
 
-class CbrRating(BaseModel):
-    rating_value: str = Field(alias="ratingValue")
-    prediction: str
-
-
 class IfrsRating(BaseModel):
     value: int | None = None
     outlook: Prediction | None = None
 
 
 # keyed by isin (bonds) or inn (issuers), then by agency
-CbrRatings = dict[str, dict[str, CbrRating]]
+CbrRatings = dict[str, dict[KraCode, RatingItem]]
 IfrsRatings = dict[str, IfrsRating]  # keyed by inn
 
 
@@ -300,25 +294,25 @@ def build_screener_bonds(
 
 class _KraRatings:
     def __init__(
-        self, of_bond: dict[str, CbrRating], of_issuer: dict[str, CbrRating]
+        self,
+        of_bond: dict[KraCode, RatingItem],
+        of_issuer: dict[KraCode, RatingItem],
     ) -> None:
         self._of_bond = of_bond
         self._of_issuer = of_issuer
 
-    def rating(self, kra: Kra) -> int | None:
-        rating = self._field(kra, "rating_value")
-        return rating_value_to_number(rating) if rating else None
+    def rating(self, kra: KraCode) -> int | None:
+        record = self._record(kra)
+        return record.rating_number if record else None
 
-    def prediction(self, kra: Kra) -> Prediction | None:
-        # a bond prediction like "NA" wins over the issuer one, as in the TS version
-        return convert_prediction(self._field(kra, "prediction"))
+    def prediction(self, kra: KraCode) -> Prediction | None:
+        record = self._record(kra)
+        return record.prediction if record else None
 
-    def _field(self, kra: Kra, name: str) -> str | None:
-        bond_rating = self._of_bond.get(kra)
-        issuer_rating = self._of_issuer.get(kra)
-        return (getattr(bond_rating, name) if bond_rating else None) or (
-            getattr(issuer_rating, name) if issuer_rating else None
-        )
+    def _record(self, kra: KraCode) -> RatingItem | None:
+        # the whole bond record wins over the issuer one, so a bond without
+        # a prediction does not borrow the issuer's
+        return self._of_bond.get(kra) or self._of_issuer.get(kra)
 
 
 def _by_board[T: MoexBond | MoexBondMarketData | MoexBondMarketYield](

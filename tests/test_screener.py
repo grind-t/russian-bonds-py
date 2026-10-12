@@ -2,13 +2,14 @@ import logging
 from datetime import date
 
 import pytest
+from cbr_ratings import Prediction, RatingItem
 from google.protobuf import json_format
 from moex import MoexBond, MoexBondMarketData, MoexBondMarketYield, MoexSecurity
 from syrupy.extensions.json import JSONSnapshotExtension
 from t_tech.invest import Bond, _grpc_helpers
 from t_tech.invest.grpc import instruments_pb2
 
-from russian_bonds.screener import CbrRating, IfrsRating, build_screener_bonds
+from russian_bonds.screener import CbrRatings, IfrsRating, build_screener_bonds
 
 
 def t_invest_bond(isin: str, **fields) -> Bond:
@@ -54,10 +55,9 @@ def market_data(secid: str, board: str = "TQCB", **fields) -> MoexBondMarketData
     )
 
 
-def cbr(rating_value: str, prediction: str) -> CbrRating:
-    return CbrRating.model_validate(
-        {"ratingValue": rating_value, "prediction": prediction}
-    )
+def cbr(rating_code: str, prediction: Prediction | None) -> RatingItem:
+    # the screener reads only these fields, rating_number is computed from the code
+    return RatingItem.model_construct(rating_code=rating_code, prediction=prediction)
 
 
 T_INVEST_BONDS = [
@@ -120,18 +120,18 @@ MOEX_MARKET_YIELDS = [
     ),
 ]
 
-BOND_RATINGS = {
-    "PUT_OFFER": {"AKRA": cbr("AA-(RU)", "NA – не предусмотрен методологией")},
+BOND_RATINGS: CbrRatings = {
+    "PUT_OFFER": {"AKRA": cbr("AA-", None)},
 }
 
-ISSUER_RATINGS = {
+ISSUER_RATINGS: CbrRatings = {
     "7700000001": {
-        "AKRA": cbr("A(RU)", "POS – позитивный"),
-        "EXPERT_RA": cbr("ruA+", "STA – стабильный"),
+        "AKRA": cbr("A", "POS"),
+        "EXPERT_RA": cbr("A+", "STA"),
     },
     "7700000003": {
-        "NKR": cbr("BB+.ru", "NEG – негативный"),
-        "NRA": cbr("BBB|ru|", "DEV – развивающийся"),
+        "NKR": cbr("BB+", "NEG"),
+        "NRA": cbr("BBB", "DEV"),
     },
 }
 

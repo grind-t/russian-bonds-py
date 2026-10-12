@@ -233,6 +233,20 @@ wheels = [
 ]
 
 [[package]]
+name = "grind-t-cbr-ratings"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+    { name = "tenacity" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3c/da/a0105db1f90ecd3930214e41d123b779b133887e6de2ccd2feb0cc434319/grind_t_cbr_ratings-0.1.1.tar.gz", hash = "sha256:6c8851b59c8ab468524aa93bcfd4e4b0fc2c9b733cfaf345f742d3b492d31e06", size = 11882, upload-time = "2026-10-12T16:01:38.905Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/51/ff/f1c320c7074d058003702b0bd749bdc264ad8aab434612d98db9b126bb3a/grind_t_cbr_ratings-0.1.1-py3-none-any.whl", hash = "sha256:be6d82281bef1d3279c456c35626c022125d1306621cf41bde63f031d610633e", size = 19590, upload-time = "2026-10-12T16:01:37.469Z" },
+]
+
+[[package]]
 name = "grind-t-moex"
 version = "0.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -251,6 +265,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "brotli" },
+    { name = "grind-t-cbr-ratings" },
     { name = "grind-t-moex" },
     { name = "grind-t-toolkit" },
     { name = "httpx" },
@@ -273,6 +288,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "brotli", specifier = ">=1.2.0" },
+    { name = "grind-t-cbr-ratings", specifier = ">=0.1.1" },
     { name = "grind-t-moex", specifier = ">=0.1.0" },
     { name = "grind-t-toolkit", specifier = ">=0.1.0" },
     { name = "httpx", specifier = ">=0.28.1" },
@@ -1216,6 +1232,15 @@ requires-dist = [
     { name = "sentry-sdk", specifier = ">=2.47.0,<3.0.0" },
 ]
 provides-extras = ["all"]
+
+[[package]]
+name = "tenacity"
+version = "9.2.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/82/9e/497c1c8ebe5a5b5d1d4a7511aea22c0bb1a97e3170d98abdef0e1b34265a/tenacity-9.2.1.tar.gz", hash = "sha256:a606b5c808d0cded4a359d5b9932d867ff2a6a6b64d37350260fd01bbdf83839", size = 58261, upload-time = "2026-10-07T12:13:01.633Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d6/26/1ff2b0721ac66a3ec5b1402b333110b352ab0a8724052ac279a7b82d40c4/tenacity-9.2.1-py3-none-any.whl", hash = "sha256:9e56f17539296baab7beabb08b92f6ee3d7be92d8be72d763360677c2ad6580e", size = 32310, upload-time = "2026-10-07T12:13:00.102Z" },
+]
 
 [[package]]
 name = "time-machine"
