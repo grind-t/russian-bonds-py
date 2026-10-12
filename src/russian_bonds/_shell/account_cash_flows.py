@@ -7,11 +7,11 @@ from t_tech.invest import GetOperationsByCursorRequest, _grpc_helpers
 from t_tech.invest.async_services import AsyncServices
 from t_tech.invest.grpc import operations_pb2
 
-from russian_bonds._core.cash_flows.account_bond_history import (
-    AccountBondHistory,
+from russian_bonds._core.cash_flows.account_bond_history import AccountBondHistory
+from russian_bonds._core.cash_flows.account_operation import (
+    AccountOperation,
     group_operations_by_ticker,
 )
-from russian_bonds._core.cash_flows.account_operation import AccountOperation
 from russian_bonds._core.cash_flows.bond import Bond
 from russian_bonds._core.cash_flows.bond_cash_flow import BondCashFlow, bond_cash_flows
 from russian_bonds._core.cash_flows.operation_quantity import BOND_REPAYMENT_FULL

@@ -60,12 +60,3 @@ class AccountBondHistory(BaseModel):
             )
             operations.append(op_copy)
         return type(self)(bond=self.bond, operations=operations)
-
-
-def group_operations_by_ticker(
-    operations: list[AccountOperation],
-) -> dict[str, list[AccountOperation]]:
-    by_ticker: dict[str, list[AccountOperation]] = {}
-    for op in operations:
-        by_ticker.setdefault(op.ticker, []).append(op)
-    return by_ticker

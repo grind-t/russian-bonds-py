@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import Self
 
 from pydantic import AwareDatetime, BaseModel, Field, model_validator
@@ -24,3 +25,12 @@ class AccountOperation(BaseModel):
         ):
             raise ValueError(f"No parent operation for fee {self.id} of {self.ticker}")
         return self
+
+
+def group_operations_by_ticker(
+    operations: list[AccountOperation],
+) -> dict[str, list[AccountOperation]]:
+    by_ticker: defaultdict[str, list[AccountOperation]] = defaultdict(list)
+    for op in operations:
+        by_ticker[op.ticker].append(op)
+    return by_ticker
