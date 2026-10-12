@@ -44,8 +44,23 @@ filterwarnings = [
     "ignore:.*figi is deprecated:DeprecationWarning",
 ]
 
+[tool.poe.tasks]
+fmt = "ruff format"
+lint = [
+    { cmd = "ruff check" },
+    { cmd = "lint-imports" },
+    { cmd = "lint-rules src" },
+]
+typecheck = "ty check"
+test = "pytest"
+build = "uv build"
+check = ["lint", "typecheck", "test"]
+
 [dependency-groups]
 dev = [
+    "grind-t-lint-rules>=0.2.0",
+    "import-linter>=2.15",
+    "poethepoet>=0.48.0",
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",
     "pyxirr>=0.10.8",
