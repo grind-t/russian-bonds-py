@@ -35,7 +35,7 @@ t-tech-investments = { path = "vendor/t_tech_investments-1.51.0-py3-none-any.whl
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = ["--import-mode=importlib", "--strict-markers", "--strict-config", "-ra"]
+addopts = ["--import-mode=importlib", "--strict-markers", "--strict-config", "-ra", "-q"]
 xfail_strict = true
 asyncio_mode = "auto"
 filterwarnings = [
@@ -48,7 +48,7 @@ filterwarnings = [
 fmt = "ruff format"
 lint = [
     { cmd = "ruff check" },
-    { cmd = "lint-imports" },
+    { cmd = "lint-imports --no-logo" },
     { cmd = "lint-rules src" },
 ]
 typecheck = "ty check"
