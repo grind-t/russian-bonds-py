@@ -6,7 +6,7 @@ from pydantic import BaseModel
 # screener thresholds, ytm in percent
 _MIN_MATURITY = timedelta(days=91)
 _MAX_MATURITY = timedelta(days=730)
-_RUB_MIN_YTM = 15.5
+_RUB_MIN_YTM = 15.0
 # floaters pay off only if rates stay high, so a longer one needs a higher yield
 _FLOATER_YTM_PER_DAY = 0.00275
 _MAX_ISSUER_INVESTMENT = 100_000

@@ -40,8 +40,8 @@ def test_rub_candidate(subtests):
     cases = {
         "fits all filters": ({}, True),
         "non-ruble currency": ({"currency": "usd"}, False),
-        "ytm at minimum": ({"ytm": 15.5}, True),
-        "ytm below minimum": ({"ytm": 15.4}, False),
+        "ytm at minimum": ({"ytm": 15.0}, True),
+        "ytm below minimum": ({"ytm": 14.9}, False),
         "no ytm": ({"ytm": None}, False),
         "has offer": ({"has_offer": True}, False),
         "no maturity date": ({"maturity_date": None}, False),
@@ -49,9 +49,9 @@ def test_rub_candidate(subtests):
         "matures soon enough": ({"maturity_date": TODAY + timedelta(days=92)}, True),
         "matures late enough": ({"maturity_date": TODAY + timedelta(days=729)}, True),
         "matures too late": ({"maturity_date": TODAY + timedelta(days=730)}, False),
-        # a floater maturing in 400 days needs 15.5 + 400 * 0.00275 = 16.6
-        "floater ytm at minimum": (floater | {"ytm": 16.6}, True),
-        "floater ytm below minimum": (floater | {"ytm": 16.5}, False),
+        # a floater maturing in 400 days needs 15 + 400 * 0.00275 = 16.1
+        "floater ytm at minimum": (floater | {"ytm": 16.1}, True),
+        "floater ytm below minimum": (floater | {"ytm": 16.0}, False),
     }
     for name, (fields, expected) in cases.items():
         with subtests.test(name):
