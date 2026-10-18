@@ -112,6 +112,9 @@ def screener_table(
                     }
                 ),
                 "YTM": bond.ytm,
+                "Последняя цена": bond.last_price,
+                "Лучшее предложение": bond.best_offer,
+                "Валюта": bond.currency.upper(),
                 "Флоатер": bond.is_floater,
                 "Амортизация": bond.has_amortization,
                 "Для квалов": bond.for_qual,
@@ -130,7 +133,11 @@ def screener_table(
             }
             for bond in bonds
         ],
-        column_config={"YTM": st.column_config.NumberColumn(format="%.2f%%")},
+        column_config={
+            "YTM": st.column_config.NumberColumn(format="%.2f%%"),
+            "Последняя цена": st.column_config.NumberColumn(format="%.2f"),
+            "Лучшее предложение": st.column_config.NumberColumn(format="%.2f"),
+        },
         hide_index=True,
     )
 

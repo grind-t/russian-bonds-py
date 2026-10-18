@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Any
 
 import pytest
 from cbr_ratings import Prediction, RatingItem
@@ -45,16 +46,23 @@ def moex_security(isin: str, inn: str | None, type_: str = "corporate_bond"):
 
 
 def moex_bond(secid: str, board: str = "TQCB", **fields) -> MoexBond:
-    defaults = {
+    defaults: dict[str, Any] = {
         "CALLOPTIONDATE": None,
         "PUTOPTIONDATE": None,
         "YIELDATPREVWAPRICE": None,
+        "FACEVALUE": 1000.0,
     }
     return MoexBond.model_construct(SECID=secid, BOARDID=board, **defaults | fields)
 
 
 def market_data(secid: str, board: str = "TQCB", **fields) -> MoexBondMarketData:
-    defaults = {"YIELDTOOFFER": None, "YIELD": None, "YIELDATWAPRICE": None}
+    defaults = {
+        "YIELDTOOFFER": None,
+        "YIELD": None,
+        "YIELDATWAPRICE": None,
+        "LAST": None,
+        "OFFER": None,
+    }
     return MoexBondMarketData.model_construct(
         SECID=secid, BOARDID=board, **defaults | fields
     )
@@ -114,7 +122,9 @@ MOEX_BONDS = [
 
 MOEX_MARKET_DATA = [
     market_data("OFZ_FLOAT", YIELD=15.0),
-    market_data("PUT_OFFER", YIELDTOOFFER=19.2, YIELD=18.0),
+    market_data(
+        "PUT_OFFER", YIELDTOOFFER=19.2, YIELD=18.0, LAST=99.5, OFFER=99.7
+    ),
     market_data("CALL_OFFER", YIELDTOOFFER=0.0, YIELD=17.3),
     market_data("OTHER_BOARD", board="TQIR", YIELD=30.0),
 ]

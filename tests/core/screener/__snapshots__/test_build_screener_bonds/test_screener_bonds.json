@@ -1,5 +1,6 @@
 [
   {
+    "best_offer": null,
     "currency": "rub",
     "for_qual": false,
     "has_amortization": false,
@@ -7,6 +8,7 @@
     "is_floater": true,
     "isin": "OFZ_FLOAT",
     "issuer_inn": "7710168360",
+    "last_price": null,
     "maturity_date": "2030-06-15",
     "name": "Облигация OFZ_FLOAT",
     "nominal": 1000.0,
@@ -25,6 +27,7 @@
     "ytm": 16.1
   },
   {
+    "best_offer": 997.0,
     "currency": "rub",
     "for_qual": true,
     "has_amortization": true,
@@ -32,6 +35,7 @@
     "is_floater": false,
     "isin": "PUT_OFFER",
     "issuer_inn": "7700000001",
+    "last_price": 995.0,
     "maturity_date": "2030-06-15",
     "name": "Облигация PUT_OFFER",
     "nominal": 1000.0,
@@ -50,6 +54,7 @@
     "ytm": 19.2
   },
   {
+    "best_offer": null,
     "currency": "rub",
     "for_qual": false,
     "has_amortization": false,
@@ -57,6 +62,7 @@
     "is_floater": false,
     "isin": "CALL_OFFER",
     "issuer_inn": "7700000002",
+    "last_price": null,
     "maturity_date": "2030-06-15",
     "name": "Облигация CALL_OFFER",
     "nominal": 1000.0,
@@ -75,6 +81,7 @@
     "ytm": 17.3
   },
   {
+    "best_offer": null,
     "currency": "usd",
     "for_qual": false,
     "has_amortization": false,
@@ -82,6 +89,7 @@
     "is_floater": false,
     "isin": "PREV_YIELD",
     "issuer_inn": "7700000003",
+    "last_price": null,
     "maturity_date": null,
     "name": "Облигация PREV_YIELD",
     "nominal": null,
@@ -100,6 +108,7 @@
     "ytm": 21.5
   },
   {
+    "best_offer": null,
     "currency": "rub",
     "for_qual": false,
     "has_amortization": false,
@@ -107,6 +116,7 @@
     "is_floater": false,
     "isin": "OTHER_BOARD",
     "issuer_inn": null,
+    "last_price": null,
     "maturity_date": "2030-06-15",
     "name": "Облигация OTHER_BOARD",
     "nominal": 1000.0,

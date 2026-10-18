@@ -12,6 +12,8 @@ def screener_bond(**fields) -> ScreenerBond:
         "name": "Облигация",
         "maturity_date": TODAY + timedelta(days=365),
         "ytm": 20.0,
+        "last_price": None,
+        "best_offer": None,
         "rating_t_invest": None,
         "rating_akra": 19,
         "rating_nkr": None,

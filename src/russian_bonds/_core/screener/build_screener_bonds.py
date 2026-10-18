@@ -81,6 +81,8 @@ def build_screener_bonds(
                 name=bond.name,
                 maturity_date=_t_invest_date(bond.maturity_date),
                 ytm=ytm,
+                last_price=_price(md.LAST if md else None, mb),
+                best_offer=_price(md.OFFER if md else None, mb),
                 rating_t_invest=3 - bond.risk_level if bond.risk_level >= 1 else None,
                 rating_akra=ratings.rating("AKRA"),
                 rating_nkr=ratings.rating("NKR"),
@@ -136,6 +138,13 @@ def _by_board[T: MoexBond | MoexBondMarketData | MoexBondMarketYield](
     for row in rows:
         result.setdefault((row.SECID, row.BOARDID), row)  # first match, like find
     return result
+
+
+def _price(percent: float | None, moex_bond: MoexBond | None) -> float | None:
+    # moex quotes prices in percent of the current, possibly amortized, face value
+    if percent is None or moex_bond is None:
+        return None
+    return percent * moex_bond.FACEVALUE / 100
 
 
 def _t_invest_date(value: datetime | None) -> date | None:

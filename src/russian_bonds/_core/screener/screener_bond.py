@@ -18,6 +18,9 @@ class ScreenerBond(BaseModel):
     name: str
     maturity_date: date | None
     ytm: float | None
+    # in the nominal currency, None without trades or quotes
+    last_price: float | None
+    best_offer: float | None
     rating_t_invest: int | None
     rating_akra: int | None
     rating_nkr: int | None
