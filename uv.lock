@@ -298,11 +298,11 @@ wheels = [
 
 [[package]]
 name = "grind-t-lint-rules"
-version = "0.2.1"
+version = "0.4.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/de/b0/45c91cac6c09a441da46bb2cef11373e69a43b380a9e4cbdffbd1f07604c/grind_t_lint_rules-0.2.1.tar.gz", hash = "sha256:60c096a16c3396b156af8ea455809bde80f824d3470aa97e7b8d968f8db4a480", size = 11409, upload-time = "2026-10-09T21:36:41.935Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/09/af/f4cb7062d8a017d12303f2b86b681768bf85bd672125161087b5a743c265/grind_t_lint_rules-0.4.0.tar.gz", hash = "sha256:cfccee3fe867910b2b59fb404ee3e4a345624ef06a788f8e161555c321670e9f", size = 10811, upload-time = "2026-10-21T19:10:34.082Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/56/96/92a9b087c2fd0288e53f4fee8bab4710e2445bd1715259d5c96fed848f7d/grind_t_lint_rules-0.2.1-py3-none-any.whl", hash = "sha256:799ad3b7d4704edd39589f3e7c20e49fc163218f678c59c5334c6e324b71166a", size = 31782, upload-time = "2026-10-09T21:36:40.381Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/df/63903355d4bed2a93c4972cec1f5918fe873bd6a5b4152068c00b6952c7a/grind_t_lint_rules-0.4.0-py3-none-any.whl", hash = "sha256:53338eb77b8db91d2a7d20d20ac82554a790424a56f61d9ffd698038f91ab647", size = 28678, upload-time = "2026-10-21T19:10:32.979Z" },
 ]
 
 [[package]]
@@ -345,6 +345,7 @@ dev = [
     { name = "syrupy" },
     { name = "time-machine" },
     { name = "ty" },
+    { name = "vulture" },
 ]
 
 [package.metadata]
@@ -360,7 +361,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "grind-t-lint-rules", specifier = ">=0.2.0" },
+    { name = "grind-t-lint-rules", specifier = ">=0.4.0" },
     { name = "import-linter", specifier = ">=2.15" },
     { name = "poethepoet", specifier = ">=0.48.0" },
     { name = "pytest", specifier = ">=9.1.1" },
@@ -371,6 +372,7 @@ dev = [
     { name = "syrupy", specifier = ">=6.1.1" },
     { name = "time-machine", specifier = ">=3.5.1" },
     { name = "ty", specifier = ">=0.0.84" },
+    { name = "vulture", specifier = ">=2.16" },
 ]
 
 [[package]]
@@ -1537,6 +1539,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/da/34/30e9280707135d2cfc589dfff3cb796bd07a3aeb1a3e415ba09dd89d7bb4/uvicorn-0.54.0.tar.gz", hash = "sha256:a2e33cbfaa0306f8e6b0c13e0cb89d7d7a2da3e62b90c66e18c33d9807b28620", size = 112283, upload-time = "2026-09-25T06:52:37.601Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/38/0c/b54a4fdd7f90a3af8b02ebc9ce6712c2c208b7926a2f7bad95c33ebbe943/uvicorn-0.54.0-py3-none-any.whl", hash = "sha256:505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf", size = 87427, upload-time = "2026-09-25T06:52:35.829Z" },
+]
+
+[[package]]
+name = "vulture"
+version = "2.16"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/66/3e/4d08c5903b2c0c70cad583c170cc4a663fc6a61e2ad00b711fcda61358cd/vulture-2.16.tar.gz", hash = "sha256:f8d9f6e2af03011664a3c6c240c9765b3f392917d3135fddca6d6a68d359f717", size = 52680, upload-time = "2026-03-25T14:41:27.141Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f5/be/f935130312330614811dae2ea9df3f395f6d63889eb6c2e68c14507152ee/vulture-2.16-py3-none-any.whl", hash = "sha256:6e0f1c312cef1c87856957e5c2ca9608834a7c794c2180477f30bf0e4cc58eee", size = 26993, upload-time = "2026-03-25T14:41:26.21Z" },
 ]
 
 [[package]]

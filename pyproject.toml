@@ -50,15 +50,17 @@ lint = [
     { cmd = "ruff check" },
     { cmd = "lint-imports --no-logo" },
     { cmd = "lint-rules src" },
+    { cmd = "vulture src dashboard.py" },
 ]
 typecheck = "ty check"
 test = "pytest"
 build = "uv build"
 check = ["lint", "typecheck", "test"]
+dashboard = "streamlit run dashboard.py"
 
 [dependency-groups]
 dev = [
-    "grind-t-lint-rules>=0.2.0",
+    "grind-t-lint-rules>=0.4.0",
     "import-linter>=2.15",
     "poethepoet>=0.48.0",
     "pytest>=9.1.1",
@@ -69,6 +71,7 @@ dev = [
     "syrupy>=6.1.1",
     "time-machine>=3.5.1",
     "ty>=0.0.84",
+    "vulture>=2.16",
 ]
 
 [tool.ruff.lint]
@@ -87,15 +90,20 @@ ban-relative-imports = "all"
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["ANN"]
 
+[tool.vulture]
+ignore_decorators = ["@model_validator"]
+
 # ---------- Architecture rules enforced by lint-imports ----------
 [tool.importlinter]
 root_package = "russian_bonds"
 include_external_packages = true
 
 [[tool.importlinter.contracts]]
-name = "Shell depends on core, never the reverse"
+name = "Effects -> workflows -> computations -> entities"
 type = "layers"
 layers = [
-    "russian_bonds._shell",
-    "russian_bonds._core",
+    "russian_bonds._stateless_effects : russian_bonds._stateful_effects",
+    "russian_bonds._stateless_workflows : russian_bonds._stateful_workflows",
+    "russian_bonds._stateless_computations : russian_bonds._stateful_computations",
+    "russian_bonds._entities",
 ]
