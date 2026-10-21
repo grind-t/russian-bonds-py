@@ -1,5 +1,5 @@
-from t_tech.invest import MoneyValue, PortfolioPosition, Quotation
-
+from russian_bonds._entities.portfolio_bond_position import PortfolioBondPosition
+from russian_bonds._entities.rub_money import RubMoney
 from russian_bonds._entities.screener_bond import ScreenerBond
 from russian_bonds._stateless_computations.build_issuer_investments import (
     build_issuer_investments,
@@ -11,14 +11,10 @@ def _bond(isin: str, issuer_inn: str | None) -> ScreenerBond:
     return ScreenerBond.model_construct(isin=isin, issuer_inn=issuer_inn)
 
 
-def position(ticker: str, quantity: int, price: float, type_: str = "bond"):
-    units = int(price)
-    nano = round((price - units) * 1e9)
-    return PortfolioPosition(
-        ticker=ticker,
-        instrument_type=type_,
-        quantity=Quotation(units=quantity, nano=0),
-        average_position_price=MoneyValue(currency="rub", units=units, nano=nano),
+def position(ticker: str, quantity: int, price: float) -> PortfolioBondPosition:
+    # only the fields the issuer investments read
+    return PortfolioBondPosition.model_construct(
+        ticker=ticker, quantity=quantity, average_price=RubMoney(amount=price)
     )
 
 
@@ -35,7 +31,6 @@ def test_issuer_investments():
         position("B1", 1, 1010.0),
         position("NO_INN", 3, 1000.0),
         position("NOT_LISTED", 2, 1000.0),
-        position("A1", 100, 50.0, type_="share"),
     ]
     assert build_issuer_investments(positions=positions, bonds=bonds) == {
         "1": 10 * 1000.5 + 5 * 990.0,

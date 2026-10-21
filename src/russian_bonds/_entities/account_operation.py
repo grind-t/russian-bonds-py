@@ -3,6 +3,8 @@ from typing import Self
 from pydantic import AwareDatetime, BaseModel, Field, model_validator
 from t_tech.invest import OperationType
 
+from russian_bonds._entities.rub_money import RubMoney
+
 
 class AccountOperation(BaseModel):
     id: str = Field(min_length=1)
@@ -11,7 +13,7 @@ class AccountOperation(BaseModel):
     name: str = Field(min_length=1)
     description: str = Field(min_length=1)
     type: OperationType
-    payment: float = Field(allow_inf_nan=False)
+    payment: RubMoney
     quantity_delta: int
     date: AwareDatetime
     virtual: bool

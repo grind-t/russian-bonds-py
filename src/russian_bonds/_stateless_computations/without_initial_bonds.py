@@ -2,6 +2,7 @@ from t_tech.invest import OperationType
 
 from russian_bonds._entities.account_bond_history import AccountBondHistory
 from russian_bonds._entities.account_operation import AccountOperation
+from russian_bonds._entities.rub_money import RubMoney
 from russian_bonds._stateful_computations.fifo_position import FifoPosition
 
 _BROKER_FEE = OperationType.OPERATION_TYPE_BROKER_FEE
@@ -24,7 +25,7 @@ def without_initial_bonds(history: AccountBondHistory) -> AccountBondHistory:
             continue
         op_copy = op.model_copy(
             update={
-                "payment": op.payment * op_fraction,
+                "payment": RubMoney(amount=op.payment.amount * op_fraction),
                 "quantity_delta": round(op.quantity_delta * op_fraction),
             }
         )

@@ -29,7 +29,7 @@ def _history_op(
         id=id_,
         parent_operation_id=parent_operation_id,
         type=type_,
-        payment=payment,
+        payment={"amount": payment},
         quantity_delta=quantity_delta,
         date=T0 + timedelta(days=days),
     )
@@ -42,7 +42,7 @@ def _history(*operations: AccountOperation) -> AccountBondHistory:
 def _adjusted(history: AccountBondHistory) -> dict[str, tuple[float, int]]:
     adjusted = without_initial_bonds(history)
     assert adjusted.initial_bond_quantity == 0
-    return {op.id: (op.payment, op.quantity_delta) for op in adjusted.operations}
+    return {op.id: (op.payment.amount, op.quantity_delta) for op in adjusted.operations}
 
 
 def test_history_without_initial_bonds_is_unchanged():

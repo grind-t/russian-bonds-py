@@ -15,6 +15,7 @@ from t_tech.invest.grpc import operations_pb2
 from russian_bonds import get_account_bond_cash_flows
 
 # recorded from a real account on 2026-10-03 with ids anonymized
+# average position prices copy the current ones, the recording lacked them
 FIXTURES = Path(__file__).parent / "fixtures" / "account_cash_flows"
 ACCOUNT_ID = "test-account"
 NOW = datetime(2026, 10, 3, tzinfo=UTC)

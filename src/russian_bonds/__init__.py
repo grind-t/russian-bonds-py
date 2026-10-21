@@ -17,6 +17,7 @@ from russian_bonds._entities.account_operation import AccountOperation
 from russian_bonds._entities.bond import Bond
 from russian_bonds._entities.bond_cash_flow import BondCashFlow
 from russian_bonds._entities.credit_rating import CreditRating
+from russian_bonds._entities.rub_money import RubMoney
 from russian_bonds._entities.screener_bond import ScreenerBond
 from russian_bonds._stateless_computations.is_foreign_currency_candidate import (
     is_foreign_currency_candidate,
@@ -25,8 +26,8 @@ from russian_bonds._stateless_computations.is_rub_candidate import is_rub_candid
 from russian_bonds._stateless_computations.quantity_delta import BUY_TYPES, SELL_TYPES
 from russian_bonds._stateless_effects.fetch_bond import fetch_bond
 from russian_bonds._stateless_effects.fetch_brotli_json import fetch_brotli_json
-from russian_bonds._stateless_effects.fetch_portfolio_positions import (
-    fetch_portfolio_positions,
+from russian_bonds._stateless_effects.fetch_portfolio_bond_positions import (
+    fetch_portfolio_bond_positions,
 )
 from russian_bonds._stateless_effects.fetch_t_invest_operations import (
     fetch_t_invest_operations,
@@ -56,7 +57,9 @@ async def get_account_bond_cash_flows(
         account_id,
         from_,
         fetch_t_invest_operations=partial(fetch_t_invest_operations, t_invest_client),
-        fetch_portfolio_positions=partial(fetch_portfolio_positions, t_invest_client),
+        fetch_portfolio_bond_positions=partial(
+            fetch_portfolio_bond_positions, t_invest_client
+        ),
         fetch_bond_amortizations=partial(
             get_moex_bond_amortizations, client=moex_client
         ),
@@ -70,7 +73,9 @@ async def get_issuer_investments(
     return await _get_issuer_investments(
         account_id,
         bonds,
-        fetch_portfolio_positions=partial(fetch_portfolio_positions, t_invest_client),
+        fetch_portfolio_bond_positions=partial(
+            fetch_portfolio_bond_positions, t_invest_client
+        ),
     )
 
 
@@ -111,6 +116,7 @@ __all__ = [
     "Bond",
     "BondCashFlow",
     "CreditRating",
+    "RubMoney",
     "ScreenerBond",
     "get_account_bond_cash_flows",
     "get_issuer_investments",

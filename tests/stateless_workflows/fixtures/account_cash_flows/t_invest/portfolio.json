@@ -16,7 +16,12 @@
     "units": "999",
     "nano": 900000000
    },
-   "ticker": "RU000A10C6W2"
+   "ticker": "RU000A10C6W2",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "999",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -32,7 +37,11 @@
     "currency": "rub",
     "units": "1010"
    },
-   "ticker": "RU000A10DTA2"
+   "ticker": "RU000A10DTA2",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1010"
+   }
   },
   {
    "instrumentType": "bond",
@@ -49,7 +58,12 @@
     "units": "995",
     "nano": 600000000
    },
-   "ticker": "RU000A10FWZ8"
+   "ticker": "RU000A10FWZ8",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "995",
+    "nano": 600000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -66,7 +80,12 @@
     "units": "1014",
     "nano": 100000000
    },
-   "ticker": "RU000A108KU4"
+   "ticker": "RU000A108KU4",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1014",
+    "nano": 100000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -83,7 +102,12 @@
     "units": "1006",
     "nano": 200000000
    },
-   "ticker": "RU000A10CWF7"
+   "ticker": "RU000A10CWF7",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1006",
+    "nano": 200000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -100,7 +124,12 @@
     "units": "955",
     "nano": 900000000
    },
-   "ticker": "RU000A105KR6"
+   "ticker": "RU000A105KR6",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "955",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -117,7 +146,12 @@
     "units": "1116",
     "nano": 900000000
    },
-   "ticker": "RU000A10B7W1"
+   "ticker": "RU000A10B7W1",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1116",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -133,7 +167,11 @@
     "currency": "rub",
     "units": "1051"
    },
-   "ticker": "RU000A10BWC6"
+   "ticker": "RU000A10BWC6",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1051"
+   }
   },
   {
    "instrumentType": "bond",
@@ -150,7 +188,12 @@
     "units": "465",
     "nano": 450000000
    },
-   "ticker": "RU000A1033B9"
+   "ticker": "RU000A1033B9",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "465",
+    "nano": 450000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -167,7 +210,12 @@
     "units": "1098",
     "nano": 999800000
    },
-   "ticker": "RU000A10CTH9"
+   "ticker": "RU000A10CTH9",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1098",
+    "nano": 999800000
+   }
   },
   {
    "instrumentType": "bond",
@@ -184,7 +232,12 @@
     "units": "1043",
     "nano": 500000000
    },
-   "ticker": "RU000A109VK0"
+   "ticker": "RU000A109VK0",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1043",
+    "nano": 500000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -201,7 +254,12 @@
     "units": "1020",
     "nano": 900000000
    },
-   "ticker": "RU000A10DHX9"
+   "ticker": "RU000A10DHX9",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1020",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -218,7 +276,12 @@
     "units": "719",
     "nano": 670000000
    },
-   "ticker": "RU000A10BTJ7"
+   "ticker": "RU000A10BTJ7",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "719",
+    "nano": 670000000
+   }
   },
   {
    "instrumentType": "currency",
@@ -246,7 +309,12 @@
     "units": "999",
     "nano": 300000000
    },
-   "ticker": "RU000A1070L0"
+   "ticker": "RU000A1070L0",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "999",
+    "nano": 300000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -263,7 +331,12 @@
     "units": "998",
     "nano": 900000000
    },
-   "ticker": "RU000A107W48"
+   "ticker": "RU000A107W48",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "998",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -280,7 +353,12 @@
     "units": "980",
     "nano": 700000000
    },
-   "ticker": "RU000A10EJQ7"
+   "ticker": "RU000A10EJQ7",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "980",
+    "nano": 700000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -296,7 +374,11 @@
     "currency": "rub",
     "units": "994"
    },
-   "ticker": "RU000A10FG84"
+   "ticker": "RU000A10FG84",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "994"
+   }
   },
   {
    "instrumentType": "bond",
@@ -313,7 +395,12 @@
     "units": "731",
     "nano": 250000000
    },
-   "ticker": "RU000A104Y15"
+   "ticker": "RU000A104Y15",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "731",
+    "nano": 250000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -330,7 +417,12 @@
     "units": "382",
     "nano": 40000000
    },
-   "ticker": "RU000A102CT6"
+   "ticker": "RU000A102CT6",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "382",
+    "nano": 40000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -347,7 +439,12 @@
     "units": "504",
     "nano": 400000000
    },
-   "ticker": "RU000A108CC9"
+   "ticker": "RU000A108CC9",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "504",
+    "nano": 400000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -364,7 +461,12 @@
     "units": "968",
     "nano": 300000000
    },
-   "ticker": "RU000A104Z48"
+   "ticker": "RU000A104Z48",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "968",
+    "nano": 300000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -381,7 +483,12 @@
     "units": "1039",
     "nano": 600000000
    },
-   "ticker": "RU000A0JWYQ5"
+   "ticker": "RU000A0JWYQ5",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1039",
+    "nano": 600000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -398,7 +505,12 @@
     "units": "980",
     "nano": 100000000
    },
-   "ticker": "RU000A10EYY0"
+   "ticker": "RU000A10EYY0",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "980",
+    "nano": 100000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -415,7 +527,12 @@
     "units": "1027",
     "nano": 700000000
    },
-   "ticker": "RU000A10BQC8"
+   "ticker": "RU000A10BQC8",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1027",
+    "nano": 700000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -432,7 +549,12 @@
     "units": "931",
     "nano": 100000000
    },
-   "ticker": "RU000A101RV2"
+   "ticker": "RU000A101RV2",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "931",
+    "nano": 100000000
+   }
   },
   {
    "instrumentType": "etf",
@@ -461,7 +583,12 @@
     "units": "1008",
     "nano": 900000000
    },
-   "ticker": "RU000A10DJ18"
+   "ticker": "RU000A10DJ18",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1008",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -478,7 +605,12 @@
     "units": "995",
     "nano": 500000000
    },
-   "ticker": "RU000A104362"
+   "ticker": "RU000A104362",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "995",
+    "nano": 500000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -495,7 +627,12 @@
     "units": "84315",
     "nano": 817000000
    },
-   "ticker": "RU000A0JX2M2"
+   "ticker": "RU000A0JX2M2",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "84315",
+    "nano": 817000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -511,7 +648,11 @@
     "currency": "rub",
     "units": "1020"
    },
-   "ticker": "RU000A10D3J5"
+   "ticker": "RU000A10D3J5",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1020"
+   }
   },
   {
    "instrumentType": "bond",
@@ -528,7 +669,12 @@
     "units": "1001",
     "nano": 700000000
    },
-   "ticker": "RU000A107HR8"
+   "ticker": "RU000A107HR8",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1001",
+    "nano": 700000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -545,7 +691,12 @@
     "units": "8378",
     "nano": 444200000
    },
-   "ticker": "RU000A10B008"
+   "ticker": "RU000A10B008",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "8378",
+    "nano": 444200000
+   }
   },
   {
    "instrumentType": "bond",
@@ -562,7 +713,12 @@
     "units": "1063",
     "nano": 900000000
    },
-   "ticker": "RU000A10B933"
+   "ticker": "RU000A10B933",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1063",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -579,7 +735,12 @@
     "units": "926",
     "nano": 100000000
    },
-   "ticker": "RU000A102556"
+   "ticker": "RU000A102556",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "926",
+    "nano": 100000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -596,7 +757,12 @@
     "units": "998",
     "nano": 100000000
    },
-   "ticker": "RU000A10FEB7"
+   "ticker": "RU000A10FEB7",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "998",
+    "nano": 100000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -613,7 +779,12 @@
     "units": "983",
     "nano": 900000000
    },
-   "ticker": "RU000A10EK06"
+   "ticker": "RU000A10EK06",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "983",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -630,7 +801,12 @@
     "units": "1012",
     "nano": 400000000
    },
-   "ticker": "RU000A10DZU7"
+   "ticker": "RU000A10DZU7",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1012",
+    "nano": 400000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -646,7 +822,11 @@
     "currency": "rub",
     "units": "991"
    },
-   "ticker": "RU000A104A39"
+   "ticker": "RU000A104A39",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "991"
+   }
   },
   {
    "instrumentType": "bond",
@@ -663,7 +843,12 @@
     "units": "8441",
     "nano": 574700000
    },
-   "ticker": "RU000A1094G0"
+   "ticker": "RU000A1094G0",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "8441",
+    "nano": 574700000
+   }
   },
   {
    "instrumentType": "share",
@@ -692,7 +877,12 @@
     "units": "908",
     "nano": 700000000
    },
-   "ticker": "RU000A107GX8"
+   "ticker": "RU000A107GX8",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "908",
+    "nano": 700000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -709,7 +899,12 @@
     "units": "1018",
     "nano": 900000000
    },
-   "ticker": "RU000A10BY94"
+   "ticker": "RU000A10BY94",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1018",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -726,7 +921,12 @@
     "units": "973",
     "nano": 900000000
    },
-   "ticker": "RU000A10C8F3"
+   "ticker": "RU000A10C8F3",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "973",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -743,7 +943,12 @@
     "units": "1033",
     "nano": 100000000
    },
-   "ticker": "RU000A10B0U0"
+   "ticker": "RU000A10B0U0",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1033",
+    "nano": 100000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -760,7 +965,12 @@
     "units": "81650",
     "nano": 927400000
    },
-   "ticker": "RU000A10D483"
+   "ticker": "RU000A10D483",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "81650",
+    "nano": 927400000
+   }
   },
   {
    "instrumentType": "bond",
@@ -776,7 +986,11 @@
     "currency": "rub",
     "units": "998"
    },
-   "ticker": "RU000A109DT9"
+   "ticker": "RU000A109DT9",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "998"
+   }
   },
   {
    "instrumentType": "bond",
@@ -793,7 +1007,12 @@
     "units": "741",
     "nano": 650000000
    },
-   "ticker": "RU000A10AST0"
+   "ticker": "RU000A10AST0",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "741",
+    "nano": 650000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -810,7 +1029,12 @@
     "units": "671",
     "nano": 400000000
    },
-   "ticker": "RU000A10CQE2"
+   "ticker": "RU000A10CQE2",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "671",
+    "nano": 400000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -826,7 +1050,11 @@
     "currency": "rub",
     "units": "1007"
    },
-   "ticker": "RU000A10DYC8"
+   "ticker": "RU000A10DYC8",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1007"
+   }
   },
   {
    "instrumentType": "bond",
@@ -843,7 +1071,12 @@
     "units": "988",
     "nano": 900000000
    },
-   "ticker": "RU000A10B0Z9"
+   "ticker": "RU000A10B0Z9",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "988",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -859,7 +1092,11 @@
     "currency": "rub",
     "units": "858"
    },
-   "ticker": "RU000A10ASC6"
+   "ticker": "RU000A10ASC6",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "858"
+   }
   },
   {
    "instrumentType": "bond",
@@ -873,7 +1110,11 @@
     "currency": "rub",
     "units": "999"
    },
-   "ticker": "RU000A10F397"
+   "ticker": "RU000A10F397",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "999"
+   }
   },
   {
    "instrumentType": "bond",
@@ -890,7 +1131,12 @@
     "units": "8355",
     "nano": 903500000
    },
-   "ticker": "RU000A10B3Z3"
+   "ticker": "RU000A10B3Z3",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "8355",
+    "nano": 903500000
+   }
   },
   {
    "instrumentType": "bond",
@@ -907,7 +1153,12 @@
     "units": "987",
     "nano": 600000000
    },
-   "ticker": "RU000A10CSQ2"
+   "ticker": "RU000A10CSQ2",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "987",
+    "nano": 600000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -924,7 +1175,12 @@
     "units": "948",
     "nano": 900000000
    },
-   "ticker": "RU000A102952"
+   "ticker": "RU000A102952",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "948",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -941,7 +1197,12 @@
     "units": "1023",
     "nano": 500000000
    },
-   "ticker": "RU000A10D4D6"
+   "ticker": "RU000A10D4D6",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1023",
+    "nano": 500000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -958,7 +1219,12 @@
     "units": "502",
     "nano": 600000000
    },
-   "ticker": "RU000A107UU5"
+   "ticker": "RU000A107UU5",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "502",
+    "nano": 600000000
+   }
   },
   {
    "instrumentType": "currency",
@@ -987,7 +1253,12 @@
     "units": "1019",
     "nano": 300000000
    },
-   "ticker": "RU000A10BG13"
+   "ticker": "RU000A10BG13",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1019",
+    "nano": 300000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1004,7 +1275,12 @@
     "units": "607",
     "nano": 180000000
    },
-   "ticker": "RU000A105CM4"
+   "ticker": "RU000A105CM4",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "607",
+    "nano": 180000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1021,7 +1297,12 @@
     "units": "1042",
     "nano": 200000000
    },
-   "ticker": "RU000A10B1X2"
+   "ticker": "RU000A10B1X2",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1042",
+    "nano": 200000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1037,7 +1318,11 @@
     "currency": "rub",
     "units": "997"
    },
-   "ticker": "RU000A10CU89"
+   "ticker": "RU000A10CU89",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "997"
+   }
   },
   {
    "instrumentType": "bond",
@@ -1054,7 +1339,12 @@
     "units": "1012",
     "nano": 500000000
    },
-   "ticker": "RU000A10D9K0"
+   "ticker": "RU000A10D9K0",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1012",
+    "nano": 500000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1070,7 +1360,11 @@
     "currency": "rub",
     "units": "1016"
    },
-   "ticker": "RU000A10BBD8"
+   "ticker": "RU000A10BBD8",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1016"
+   }
   },
   {
    "instrumentType": "bond",
@@ -1087,7 +1381,12 @@
     "units": "1012",
     "nano": 500000000
    },
-   "ticker": "RU000A109VJ2"
+   "ticker": "RU000A109VJ2",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1012",
+    "nano": 500000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1104,7 +1403,12 @@
     "units": "231",
     "nano": 220000000
    },
-   "ticker": "RU000A101GD3"
+   "ticker": "RU000A101GD3",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "231",
+    "nano": 220000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1121,7 +1425,12 @@
     "units": "80470",
     "nano": 131200000
    },
-   "ticker": "RU000A105JH9"
+   "ticker": "RU000A105JH9",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "80470",
+    "nano": 131200000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1138,7 +1447,12 @@
     "units": "1014",
     "nano": 900000000
    },
-   "ticker": "RU000A10DQ68"
+   "ticker": "RU000A10DQ68",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1014",
+    "nano": 900000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1155,7 +1469,12 @@
     "units": "956",
     "nano": 700000000
    },
-   "ticker": "RU000A1068S9"
+   "ticker": "RU000A1068S9",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "956",
+    "nano": 700000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1171,7 +1490,12 @@
     "units": "1029",
     "nano": 200000000
    },
-   "ticker": "RU000A10BW70"
+   "ticker": "RU000A10BW70",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1029",
+    "nano": 200000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1188,7 +1512,12 @@
     "units": "1001",
     "nano": 400000000
    },
-   "ticker": "RU000A109JX8"
+   "ticker": "RU000A109JX8",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1001",
+    "nano": 400000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1205,7 +1534,12 @@
     "units": "7899",
     "nano": 747500000
    },
-   "ticker": "RU000A10CRC4"
+   "ticker": "RU000A10CRC4",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "7899",
+    "nano": 747500000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1221,7 +1555,12 @@
     "units": "340",
     "nano": 440000000
    },
-   "ticker": "RU000A108AL4"
+   "ticker": "RU000A108AL4",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "340",
+    "nano": 440000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1238,7 +1577,12 @@
     "units": "8168",
     "nano": 949700000
    },
-   "ticker": "RU000A10ECK5"
+   "ticker": "RU000A10ECK5",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "8168",
+    "nano": 949700000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1255,7 +1599,12 @@
     "units": "1002",
     "nano": 400000000
    },
-   "ticker": "RU000A108VW7"
+   "ticker": "RU000A108VW7",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "1002",
+    "nano": 400000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1272,7 +1621,12 @@
     "units": "713",
     "nano": 110000000
    },
-   "ticker": "RU000A10B0J3"
+   "ticker": "RU000A10B0J3",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "713",
+    "nano": 110000000
+   }
   },
   {
    "instrumentType": "bond",
@@ -1288,7 +1642,11 @@
     "currency": "rub",
     "units": "989"
    },
-   "ticker": "RU000A109KX6"
+   "ticker": "RU000A109KX6",
+   "averagePositionPrice": {
+    "currency": "rub",
+    "units": "989"
+   }
   }
  ]
 }

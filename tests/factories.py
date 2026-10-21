@@ -19,7 +19,7 @@ def account_operation(**fields: Any) -> AccountOperation:
         "name": "Операция",
         "description": "Операция с ценными бумагами",
         "type": OperationType.OPERATION_TYPE_BUY,
-        "payment": -1000.0,
+        "payment": {"amount": -1000.0},
         "quantity_delta": 0,
         "date": datetime(2026, 1, 1, tzinfo=UTC),
         "virtual": False,

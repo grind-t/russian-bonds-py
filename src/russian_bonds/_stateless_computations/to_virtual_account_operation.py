@@ -1,25 +1,17 @@
 from datetime import datetime
 
-from t_tech.invest import OperationType, PortfolioPosition
-from t_tech.invest.utils import quotation_to_decimal
-from toolkit.boolean import ensure
+from t_tech.invest import OperationType
 
 from russian_bonds._entities.account_operation import AccountOperation
-from russian_bonds._stateless_computations.money_to_float import money_to_float
+from russian_bonds._entities.portfolio_bond_position import PortfolioBondPosition
+from russian_bonds._entities.rub_money import RubMoney
 
 
 def to_virtual_account_operation(
-    position: PortfolioPosition, now: datetime
+    position: PortfolioBondPosition, now: datetime
 ) -> AccountOperation:
     """Sells an open position at the market price to close its history."""
-    quantity_decimal = quotation_to_decimal(position.quantity)
-    ensure(
-        quantity_decimal == quantity_decimal.to_integral_value(),
-        f"Fractional position quantity for {position.ticker}",
-    )
-    quantity = int(quantity_decimal)
-    current_price = money_to_float(position.current_price)
-    current_nkd = money_to_float(position.current_nkd)
+    price = position.current_price.amount + position.current_nkd.amount
     return AccountOperation(
         id=f"virtual:{position.ticker}",
         parent_operation_id="",
@@ -27,8 +19,8 @@ def to_virtual_account_operation(
         name="Продажа",
         description="Виртуальная продажа по рыночной цене",
         type=OperationType.OPERATION_TYPE_SELL,
-        payment=(current_price + current_nkd) * quantity,
-        quantity_delta=-quantity,
+        payment=RubMoney(amount=price * position.quantity),
+        quantity_delta=-position.quantity,
         date=now,
         virtual=True,
     )
