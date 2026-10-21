@@ -5,16 +5,17 @@ from itertools import chain
 
 from moex import MoexBondAmortization
 from t_tech.invest import OperationState, PortfolioPosition
-from t_tech.invest.utils import money_to_decimal
 
 from russian_bonds._entities.account_bond_history import AccountBondHistory
 from russian_bonds._entities.account_operation import AccountOperation
 from russian_bonds._entities.bond import Bond
 from russian_bonds._entities.bond_cash_flow import BondCashFlow
+from russian_bonds._entities.bond_instrument_type import BOND_INSTRUMENT_TYPE
 from russian_bonds._entities.t_invest_operation import TInvestOperation
 from russian_bonds._stateless_computations.group_operations_by_ticker import (
     group_operations_by_ticker,
 )
+from russian_bonds._stateless_computations.money_to_float import money_to_float
 from russian_bonds._stateless_computations.quantity_by_payment import (
     quantity_by_payment,
 )
@@ -52,7 +53,7 @@ async def get_account_bond_cash_flows(
     virtual_operations = [
         to_virtual_account_operation(pos, now)
         for pos in positions
-        if pos.instrument_type == "bond"
+        if pos.instrument_type == BOND_INSTRUMENT_TYPE
     ]
     by_ticker = group_operations_by_ticker(account_operations + virtual_operations)
     bonds = await asyncio.gather(*(fetch_bond(ticker) for ticker in by_ticker))
@@ -71,7 +72,7 @@ async def _to_account_operations(
     executed_operations = [
         op
         for op in reversed(operations)
-        if op.instrument_type == "bond"
+        if op.instrument_type == BOND_INSTRUMENT_TYPE
         and op.state == OperationState.OPERATION_STATE_EXECUTED
     ]
     # sequential requests to spare moex
@@ -91,5 +92,5 @@ async def _fill_missing_quantity(
         raise ValueError(f"No final amortization for {op.ticker}")
     # the payment is in rubles even for currency bonds
     op.quantity_done = quantity_by_payment(
-        float(money_to_decimal(op.payment)), final_amortization_rub
+        money_to_float(op.payment), final_amortization_rub
     )

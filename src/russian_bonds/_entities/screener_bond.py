@@ -1,7 +1,9 @@
 from datetime import date, timedelta
 
-from cbr_ratings import Prediction
+from cbr_ratings import KraCode
 from pydantic import BaseModel
+
+from russian_bonds._entities.credit_rating import CreditRating
 
 # screener thresholds, ytm in percent
 _MIN_MATURITY = timedelta(days=91)
@@ -21,17 +23,10 @@ class ScreenerBond(BaseModel):
     # in the nominal currency, None without trades or quotes
     last_price: float | None
     best_offer: float | None
-    rating_t_invest: int | None
-    rating_akra: int | None
-    rating_nkr: int | None
-    rating_expert_ra: int | None
-    rating_nra: int | None
-    rating_ifrs: int | None
-    prediction_akra: Prediction | None
-    prediction_nkr: Prediction | None
-    prediction_expert_ra: Prediction | None
-    prediction_nra: Prediction | None
-    prediction_ifrs: Prediction | None
+    t_invest_rating: int | None
+    # only the agencies that rated the bond or its issuer
+    agency_ratings: dict[KraCode, CreditRating]
+    ifrs_rating: CreditRating | None
     nominal: float | None
     currency: str
     sector: str
@@ -70,31 +65,11 @@ class ScreenerBond(BaseModel):
     def _has_acceptable_rating(self) -> bool:
         # an ifrs or a t-invest rating alone is enough, but a poor ifrs one rules
         # the bond out even with good agency ratings
+        ifrs = self.ifrs_rating
+        has_ifrs = ifrs is not None and ifrs.value is not None
         has_rating = (
-            any(
-                _is_acceptable_rating(rating, prediction)
-                for rating, prediction in (
-                    (self.rating_akra, self.prediction_akra),
-                    (self.rating_nkr, self.prediction_nkr),
-                    (self.rating_expert_ra, self.prediction_expert_ra),
-                    (self.rating_nra, self.prediction_nra),
-                )
-            )
-            or (self.rating_t_invest is not None and self.rating_t_invest > 1)
-            or self.rating_ifrs is not None
+            any(rating.is_acceptable() for rating in self.agency_ratings.values())
+            or (self.t_invest_rating is not None and self.t_invest_rating > 1)
+            or has_ifrs
         )
-        return has_rating and (
-            self.rating_ifrs is None
-            or _is_acceptable_rating(self.rating_ifrs, self.prediction_ifrs)
-        )
-
-
-def _is_acceptable_rating(rating: int | None, prediction: Prediction | None) -> bool:
-    # a missing prediction counts as the best one each threshold allows
-    if rating is None:
-        return False
-    return (
-        rating > 18
-        or (rating > 15 and prediction in (None, "STA", "POS"))
-        or (rating > 14 and prediction in (None, "POS"))
-    )
+        return has_rating and (ifrs is None or not has_ifrs or ifrs.is_acceptable())

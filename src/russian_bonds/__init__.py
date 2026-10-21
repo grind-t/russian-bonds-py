@@ -16,6 +16,7 @@ from russian_bonds._entities.account_operation import AccountOperation
 from russian_bonds._entities.bond import Bond
 from russian_bonds._entities.bond_cash_flow import BondCashFlow
 from russian_bonds._entities.cbr_ratings import CbrRatings
+from russian_bonds._entities.credit_rating import CreditRating
 from russian_bonds._entities.ifrs_ratings import IfrsRatings
 from russian_bonds._entities.screener_bond import ScreenerBond
 from russian_bonds._stateless_computations.quantity_delta import BUY_TYPES, SELL_TYPES
@@ -100,6 +101,7 @@ __all__ = [
     "AccountOperation",
     "Bond",
     "BondCashFlow",
+    "CreditRating",
     "ScreenerBond",
     "get_account_bond_cash_flows",
     "get_issuer_investments",

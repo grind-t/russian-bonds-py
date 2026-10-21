@@ -35,6 +35,8 @@ t-tech-investments = { path = "vendor/t_tech_investments-1.51.0-py3-none-any.whl
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# shared test helpers import as `factories`
+pythonpath = ["tests"]
 addopts = ["--import-mode=importlib", "--strict-markers", "--strict-config", "-ra", "-q"]
 xfail_strict = true
 asyncio_mode = "auto"
@@ -89,6 +91,9 @@ ban-relative-imports = "all"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["ANN"]
+
+[tool.ty.environment]
+extra-paths = ["tests"]
 
 [tool.vulture]
 ignore_decorators = ["@model_validator"]

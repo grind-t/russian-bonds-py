@@ -4,11 +4,13 @@ from datetime import UTC, datetime, timedelta
 
 import httpx
 import streamlit as st
+from cbr_ratings import KraCode
 from pyxirr import xirr
 from t_tech.invest import AsyncClient
 
 from russian_bonds import (
     BondCashFlow,
+    CreditRating,
     ScreenerBond,
     get_account_bond_cash_flows,
     get_issuer_investments,
@@ -72,8 +74,19 @@ def holding_days(bond_rows: list[BondCashFlow]) -> int:
     return (max(dates) - min(dates)).days
 
 
-def rating(value: int | None, prediction: str | None) -> str:
-    return " ".join(str(v) for v in (value, prediction) if v is not None)
+AGENCY_LABELS: dict[KraCode, str] = {
+    "AKRA": "АКРА",
+    "NKR": "НКР",
+    "EXPERT_RA": "Эксперт РА",
+    "NRA": "НРА",
+}
+
+
+def rating(credit_rating: CreditRating | None) -> str:
+    if credit_rating is None:
+        return ""
+    parts = (credit_rating.value, credit_rating.prediction)
+    return " ".join(str(v) for v in parts if v is not None)
 
 
 def screener_table(
@@ -123,12 +136,12 @@ def screener_table(
                 )
                 if bond.maturity_date
                 else None,
-                "T-Invest": bond.rating_t_invest,
-                "АКРА": rating(bond.rating_akra, bond.prediction_akra),
-                "НКР": rating(bond.rating_nkr, bond.prediction_nkr),
-                "Эксперт РА": rating(bond.rating_expert_ra, bond.prediction_expert_ra),
-                "НРА": rating(bond.rating_nra, bond.prediction_nra),
-                "МСФО": rating(bond.rating_ifrs, bond.prediction_ifrs),
+                "T-Invest": bond.t_invest_rating,
+                **{
+                    label: rating(bond.agency_ratings.get(kra))
+                    for kra, label in AGENCY_LABELS.items()
+                },
+                "МСФО": rating(bond.ifrs_rating),
                 "Сектор": bond.sector,
             }
             for bond in bonds

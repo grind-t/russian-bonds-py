@@ -1,8 +1,21 @@
 from datetime import date, timedelta
+from typing import Any
+
+from cbr_ratings import KraCode, Prediction
 
 from russian_bonds._entities.screener_bond import ScreenerBond
 
 TODAY = date(2026, 1, 1)
+
+
+def agency(
+    kra: KraCode, value: int, prediction: Prediction | None = None
+) -> dict[str, Any]:
+    return {"agency_ratings": {kra: {"value": value, "prediction": prediction}}}
+
+
+def ifrs(value: int, prediction: Prediction | None = None) -> dict[str, Any]:
+    return {"ifrs_rating": {"value": value, "prediction": prediction}}
 
 
 def screener_bond(**fields) -> ScreenerBond:
@@ -14,17 +27,9 @@ def screener_bond(**fields) -> ScreenerBond:
         "ytm": 20.0,
         "last_price": None,
         "best_offer": None,
-        "rating_t_invest": None,
-        "rating_akra": 19,
-        "rating_nkr": None,
-        "rating_expert_ra": None,
-        "rating_nra": None,
-        "rating_ifrs": None,
-        "prediction_akra": None,
-        "prediction_nkr": None,
-        "prediction_expert_ra": None,
-        "prediction_nra": None,
-        "prediction_ifrs": None,
+        "t_invest_rating": None,
+        **agency("AKRA", 19),
+        "ifrs_rating": None,
         "nominal": 1000.0,
         "currency": "rub",
         "sector": "financial",
@@ -85,54 +90,57 @@ def test_foreign_currency_candidate(subtests):
 
 
 def test_ratings(subtests):
-    no_akra = {"rating_akra": None}
+    no_agency = {"agency_ratings": {}}
     cases = {
-        "no rating": (no_akra, False),
+        "no rating": (no_agency, False),
         "high rating with stable outlook": (
-            {"rating_akra": 18, "prediction_akra": "STA"},
+            agency("AKRA", 18, "STA"),
             True,
         ),
         "high rating with negative outlook": (
-            {"rating_akra": 18, "prediction_akra": "NEG"},
+            agency("AKRA", 18, "NEG"),
             False,
         ),
         "medium rating with positive outlook": (
-            {"rating_akra": 16, "prediction_akra": "POS"},
+            agency("AKRA", 16, "POS"),
             True,
         ),
         "medium rating under review": (
-            {"rating_akra": 16, "prediction_akra": "DEV"},
+            agency("AKRA", 16, "DEV"),
             False,
         ),
         # a missing outlook counts as the best one the rating allows
-        "low rating without outlook": ({"rating_akra": 15}, True),
+        "low rating without outlook": (agency("AKRA", 15), True),
         "low rating with stable outlook": (
-            {"rating_akra": 15, "prediction_akra": "STA"},
+            agency("AKRA", 15, "STA"),
             False,
         ),
         "low rating with positive outlook": (
-            {"rating_akra": 15, "prediction_akra": "POS"},
+            agency("AKRA", 15, "POS"),
             True,
         ),
-        "too low rating": ({"rating_akra": 14}, False),
+        "too low rating": (agency("AKRA", 14), False),
         "top nkr rating with negative outlook": (
-            no_akra | {"rating_nkr": 19, "prediction_nkr": "NEG"},
+            agency("NKR", 19, "NEG"),
             True,
         ),
-        "expert ra rating": (no_akra | {"rating_expert_ra": 17}, True),
-        "nra rating": (no_akra | {"rating_nra": 16, "prediction_nra": "STA"}, True),
-        "acceptable t-invest rating": (no_akra | {"rating_t_invest": 2}, True),
-        "poor t-invest rating": (no_akra | {"rating_t_invest": 1}, False),
+        "expert ra rating": (agency("EXPERT_RA", 17), True),
+        "nra rating": (agency("NRA", 16, "STA"), True),
+        "acceptable t-invest rating": (
+            no_agency | {"t_invest_rating": 2},
+            True,
+        ),
+        "poor t-invest rating": (no_agency | {"t_invest_rating": 1}, False),
         # an ifrs rating alone is enough
-        "acceptable ifrs rating alone": (no_akra | {"rating_ifrs": 15}, True),
-        "poor ifrs rating alone": (no_akra | {"rating_ifrs": 14}, False),
+        "acceptable ifrs rating alone": (no_agency | ifrs(15), True),
+        "poor ifrs rating alone": (no_agency | ifrs(14), False),
         # a poor ifrs rating rules out good agency ratings
         "poor ifrs rating with agency rating": (
-            {"rating_ifrs": 16, "prediction_ifrs": "NEG"},
+            ifrs(16, "NEG"),
             False,
         ),
         "top ifrs rating with negative outlook": (
-            {"rating_ifrs": 19, "prediction_ifrs": "NEG"},
+            ifrs(19, "NEG"),
             True,
         ),
     }

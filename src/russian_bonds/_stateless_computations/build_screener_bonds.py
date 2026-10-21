@@ -1,13 +1,13 @@
 from datetime import UTC, date, datetime
 
-from cbr_ratings import KraCode, Prediction, RatingItem
 from moex import MoexBond, MoexBondMarketData, MoexBondMarketYield, MoexSecurity
 from t_tech.invest import Bond as TInvestBond
-from t_tech.invest.utils import money_to_decimal
 
 from russian_bonds._entities.cbr_ratings import CbrRatings
+from russian_bonds._entities.credit_rating import CreditRating
 from russian_bonds._entities.ifrs_ratings import IfrsRatings
 from russian_bonds._entities.screener_bond import ScreenerBond
+from russian_bonds._stateless_computations.money_to_float import money_to_float
 
 # the SDK returns an epoch timestamp instead of a missing date
 _EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
@@ -67,10 +67,12 @@ def build_screener_bonds(
         )
 
         issuer_inn = moex_security.emitent_inn
-        ratings = _KraRatings(
-            bond_ratings.get(bond.isin, {}),
-            issuer_ratings.get(issuer_inn, {}) if issuer_inn else {},
-        )
+        # the whole bond record wins over the issuer one, so a bond without
+        # a prediction does not borrow the issuer's
+        agency_records = {
+            **(issuer_ratings.get(issuer_inn, {}) if issuer_inn else {}),
+            **bond_ratings.get(bond.isin, {}),
+        }
         ifrs_rating = ifrs_ratings.get(issuer_inn) if issuer_inn else None
 
         nominal = bond.nominal
@@ -84,18 +86,19 @@ def build_screener_bonds(
                 ytm=ytm,
                 last_price=_price(md.LAST if md else None, mb),
                 best_offer=_price(md.OFFER if md else None, mb),
-                rating_t_invest=3 - bond.risk_level if bond.risk_level >= 1 else None,
-                rating_akra=ratings.rating("AKRA"),
-                rating_nkr=ratings.rating("NKR"),
-                rating_expert_ra=ratings.rating("EXPERT_RA"),
-                rating_nra=ratings.rating("NRA"),
-                rating_ifrs=ifrs_rating.value if ifrs_rating else None,
-                prediction_akra=ratings.prediction("AKRA"),
-                prediction_nkr=ratings.prediction("NKR"),
-                prediction_expert_ra=ratings.prediction("EXPERT_RA"),
-                prediction_nra=ratings.prediction("NRA"),
-                prediction_ifrs=ifrs_rating.outlook if ifrs_rating else None,
-                nominal=float(money_to_decimal(nominal)) if has_nominal else None,
+                t_invest_rating=3 - bond.risk_level if bond.risk_level >= 1 else None,
+                agency_ratings={
+                    kra: CreditRating(
+                        value=record.rating_number, prediction=record.prediction
+                    )
+                    for kra, record in agency_records.items()
+                },
+                ifrs_rating=CreditRating(
+                    value=ifrs_rating.value, prediction=ifrs_rating.outlook
+                )
+                if ifrs_rating
+                else None,
+                nominal=money_to_float(nominal) if has_nominal else None,
                 currency=nominal.currency if has_nominal else bond.currency,
                 sector=bond.sector,
                 issuer_inn=issuer_inn,
@@ -107,29 +110,6 @@ def build_screener_bonds(
         )
 
     return result, missing_moex
-
-
-class _KraRatings:
-    def __init__(
-        self,
-        of_bond: dict[KraCode, RatingItem],
-        of_issuer: dict[KraCode, RatingItem],
-    ) -> None:
-        self._of_bond = of_bond
-        self._of_issuer = of_issuer
-
-    def rating(self, kra: KraCode) -> int | None:
-        record = self._record(kra)
-        return record.rating_number if record else None
-
-    def prediction(self, kra: KraCode) -> Prediction | None:
-        record = self._record(kra)
-        return record.prediction if record else None
-
-    def _record(self, kra: KraCode) -> RatingItem | None:
-        # the whole bond record wins over the issuer one, so a bond without
-        # a prediction does not borrow the issuer's
-        return self._of_bond.get(kra) or self._of_issuer.get(kra)
 
 
 def _by_board[T: MoexBond | MoexBondMarketData | MoexBondMarketYield](

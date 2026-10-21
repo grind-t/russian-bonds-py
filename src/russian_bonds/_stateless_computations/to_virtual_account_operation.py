@@ -1,10 +1,11 @@
 from datetime import datetime
 
 from t_tech.invest import OperationType, PortfolioPosition
-from t_tech.invest.utils import money_to_decimal, quotation_to_decimal
+from t_tech.invest.utils import quotation_to_decimal
 from toolkit.boolean import ensure
 
 from russian_bonds._entities.account_operation import AccountOperation
+from russian_bonds._stateless_computations.money_to_float import money_to_float
 
 
 def to_virtual_account_operation(
@@ -17,8 +18,8 @@ def to_virtual_account_operation(
         f"Fractional position quantity for {position.ticker}",
     )
     quantity = int(quantity_decimal)
-    current_price = float(money_to_decimal(position.current_price))
-    current_nkd = float(money_to_decimal(position.current_nkd))
+    current_price = money_to_float(position.current_price)
+    current_nkd = money_to_float(position.current_nkd)
     return AccountOperation(
         id=f"virtual:{position.ticker}",
         parent_operation_id="",

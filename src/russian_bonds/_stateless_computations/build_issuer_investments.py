@@ -1,6 +1,7 @@
 from t_tech.invest import PortfolioPosition
 from t_tech.invest.utils import money_to_decimal, quotation_to_decimal
 
+from russian_bonds._entities.bond_instrument_type import BOND_INSTRUMENT_TYPE
 from russian_bonds._entities.screener_bond import ScreenerBond
 
 
@@ -11,7 +12,7 @@ def build_issuer_investments(
     issuer_inn_by_isin = {bond.isin: bond.issuer_inn for bond in bonds}
     result: dict[str, float] = {}
     for pos in positions:
-        if pos.instrument_type != "bond":
+        if pos.instrument_type != BOND_INSTRUMENT_TYPE:
             continue
         # t-invest bond tickers are isins
         issuer_inn = issuer_inn_by_isin.get(pos.ticker)

@@ -1,10 +1,10 @@
 from datetime import UTC, datetime, timedelta
 
+from factories import account_operation, bond
 from t_tech.invest import OperationType
 
 from russian_bonds._entities.account_bond_history import AccountBondHistory
 from russian_bonds._entities.account_operation import AccountOperation
-from russian_bonds._entities.bond import Bond
 from russian_bonds._stateless_computations.without_initial_bonds import (
     without_initial_bonds,
 )
@@ -25,23 +25,18 @@ def _history_op(
     payment: float = 600.0,
     parent_operation_id: str = "",
 ) -> AccountOperation:
-    return AccountOperation(
+    return account_operation(
         id=id_,
         parent_operation_id=parent_operation_id,
-        ticker="A",
-        name="Операция",
-        description="Операция с ценными бумагами",
         type=type_,
         payment=payment,
         quantity_delta=quantity_delta,
         date=T0 + timedelta(days=days),
-        virtual=False,
     )
 
 
 def _history(*operations: AccountOperation) -> AccountBondHistory:
-    bond = Bond(ticker="A", name="A", face_unit="RUB")
-    return AccountBondHistory(bond=bond, operations=list(operations))
+    return AccountBondHistory(bond=bond(), operations=list(operations))
 
 
 def _adjusted(history: AccountBondHistory) -> dict[str, tuple[float, int]]:
