@@ -5,7 +5,7 @@ from t_tech.invest import OperationType
 
 
 @dataclass(frozen=True)
-class BondCashFlow:
+class CashFlow:
     ticker: str
     bond_name: str
     operation_name: str

@@ -9,7 +9,7 @@ from t_tech.invest import OperationState
 from russian_bonds._entities.account_bond_history import AccountBondHistory
 from russian_bonds._entities.account_operation import AccountOperation
 from russian_bonds._entities.bond import Bond
-from russian_bonds._entities.bond_cash_flow import BondCashFlow
+from russian_bonds._entities.cash_flow import CashFlow
 from russian_bonds._entities.portfolio_bond_position import PortfolioBondPosition
 from russian_bonds._entities.t_invest_operation import TInvestOperation
 from russian_bonds._stateless_computations.group_operations_by_ticker import (
@@ -30,10 +30,10 @@ from russian_bonds._stateless_computations.to_virtual_account_operation import (
     to_virtual_account_operation,
 )
 
-type _FetchBondAmortizations = Callable[[str], Awaitable[list[MoexBondAmortization]]]
+type _FetchAmortizations = Callable[[str], Awaitable[list[MoexBondAmortization]]]
 
 
-async def get_account_bond_cash_flows(
+async def get_account_cash_flows(
     account_id: str,
     from_: datetime | None,
     *,
@@ -43,15 +43,15 @@ async def get_account_bond_cash_flows(
     fetch_portfolio_bond_positions: Callable[
         [str], Awaitable[list[PortfolioBondPosition]]
     ],
-    fetch_bond_amortizations: _FetchBondAmortizations,
+    fetch_amortizations: _FetchAmortizations,
     fetch_bond: Callable[[str], Awaitable[Bond]],
-) -> list[BondCashFlow]:
+) -> list[CashFlow]:
     t_invest_operations, positions = await asyncio.gather(
         fetch_t_invest_operations(account_id, from_),
         fetch_portfolio_bond_positions(account_id),
     )
     account_operations = await _to_account_operations(
-        t_invest_operations, fetch_bond_amortizations
+        t_invest_operations, fetch_amortizations
     )
     now = datetime.now(UTC)
     virtual_operations = [to_virtual_account_operation(pos, now) for pos in positions]
@@ -66,7 +66,7 @@ async def get_account_bond_cash_flows(
 
 async def _to_account_operations(
     operations: list[TInvestOperation],
-    fetch_bond_amortizations: _FetchBondAmortizations,
+    fetch_amortizations: _FetchAmortizations,
 ) -> list[AccountOperation]:
     # the API returns operations newest first
     executed_operations = [
@@ -77,16 +77,16 @@ async def _to_account_operations(
     ]
     # sequential requests to spare moex
     for op in executed_operations:
-        await _fill_missing_quantity(op, fetch_bond_amortizations)
+        await _fill_missing_quantity(op, fetch_amortizations)
     return [to_account_operation(op) for op in executed_operations]
 
 
 async def _fill_missing_quantity(
-    op: TInvestOperation, fetch_bond_amortizations: _FetchBondAmortizations
+    op: TInvestOperation, fetch_amortizations: _FetchAmortizations
 ) -> None:
     if op.type != BOND_REPAYMENT_FULL or op.quantity_done > 0:
         return
-    amortizations = await fetch_bond_amortizations(op.ticker)
+    amortizations = await fetch_amortizations(op.ticker)
     final_amortization_rub = amortizations[-1].value_rub if amortizations else None
     if final_amortization_rub is None:
         raise ValueError(f"No final amortization for {op.ticker}")

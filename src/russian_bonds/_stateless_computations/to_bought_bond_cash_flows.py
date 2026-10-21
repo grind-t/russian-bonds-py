@@ -1,14 +1,14 @@
 from russian_bonds._entities.account_bond_history import AccountBondHistory
-from russian_bonds._entities.bond_cash_flow import BondCashFlow
+from russian_bonds._entities.cash_flow import CashFlow
 from russian_bonds._stateless_computations.without_initial_bonds import (
     without_initial_bonds,
 )
 
 
-def to_bought_bond_cash_flows(history: AccountBondHistory) -> list[BondCashFlow]:
+def to_bought_bond_cash_flows(history: AccountBondHistory) -> list[CashFlow]:
     """Cash flows of the bonds bought within the history."""
     return [
-        BondCashFlow(
+        CashFlow(
             ticker=op.ticker,
             bond_name=history.bond.name,
             operation_name=op.name,

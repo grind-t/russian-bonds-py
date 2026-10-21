@@ -41,7 +41,7 @@ def _history(*operations: AccountOperation) -> AccountBondHistory:
 
 def _adjusted(history: AccountBondHistory) -> dict[str, tuple[float, int]]:
     adjusted = without_initial_bonds(history)
-    assert adjusted.initial_bond_quantity == 0
+    assert adjusted.initial_quantity == 0
     return {op.id: (op.payment.amount, op.quantity_delta) for op in adjusted.operations}
 
 

@@ -9,7 +9,7 @@ _BROKER_FEE = OperationType.OPERATION_TYPE_BROKER_FEE
 
 
 def without_initial_bonds(history: AccountBondHistory) -> AccountBondHistory:
-    position = FifoPosition(initial=history.initial_bond_quantity)
+    position = FifoPosition(initial=history.initial_quantity)
     op_fractions: dict[str, float] = {}  # fraction of each operation to keep
     # a stable sort keeps operations with the same date in order
     for op in sorted(history.operations, key=lambda op: op.date):

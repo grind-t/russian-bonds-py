@@ -15,7 +15,7 @@ from t_tech.invest.async_services import AsyncServices
 from russian_bonds._entities.account_bond_history import AccountBondHistory
 from russian_bonds._entities.account_operation import AccountOperation
 from russian_bonds._entities.bond import Bond
-from russian_bonds._entities.bond_cash_flow import BondCashFlow
+from russian_bonds._entities.cash_flow import CashFlow
 from russian_bonds._entities.credit_rating import CreditRating
 from russian_bonds._entities.rub_money import RubMoney
 from russian_bonds._entities.screener_bond import ScreenerBond
@@ -32,8 +32,8 @@ from russian_bonds._stateless_effects.fetch_portfolio_bond_positions import (
 from russian_bonds._stateless_effects.fetch_t_invest_operations import (
     fetch_t_invest_operations,
 )
-from russian_bonds._stateless_workflows.get_account_bond_cash_flows import (
-    get_account_bond_cash_flows as _get_account_bond_cash_flows,
+from russian_bonds._stateless_workflows.get_account_cash_flows import (
+    get_account_cash_flows as _get_account_cash_flows,
 )
 from russian_bonds._stateless_workflows.get_issuer_investments import (
     get_issuer_investments as _get_issuer_investments,
@@ -47,22 +47,20 @@ _ISSUER_RATINGS_URL = "https://raw.githubusercontent.com/grind-t/cbr-ratings-py/
 _IFRS_RATINGS_URL = "https://raw.githubusercontent.com/grind-t/e-disclosure-py/refs/heads/main/exports/ratings.json.br"
 
 
-async def get_account_bond_cash_flows(
+async def get_account_cash_flows(
     t_invest_client: AsyncServices,
     moex_client: httpx.AsyncClient,
     account_id: str,
     from_: datetime | None = None,
-) -> list[BondCashFlow]:
-    return await _get_account_bond_cash_flows(
+) -> list[CashFlow]:
+    return await _get_account_cash_flows(
         account_id,
         from_,
         fetch_t_invest_operations=partial(fetch_t_invest_operations, t_invest_client),
         fetch_portfolio_bond_positions=partial(
             fetch_portfolio_bond_positions, t_invest_client
         ),
-        fetch_bond_amortizations=partial(
-            get_moex_bond_amortizations, client=moex_client
-        ),
+        fetch_amortizations=partial(get_moex_bond_amortizations, client=moex_client),
         fetch_bond=partial(fetch_bond, client=moex_client),
     )
 
@@ -114,11 +112,11 @@ __all__ = [
     "AccountBondHistory",
     "AccountOperation",
     "Bond",
-    "BondCashFlow",
+    "CashFlow",
     "CreditRating",
     "RubMoney",
     "ScreenerBond",
-    "get_account_bond_cash_flows",
+    "get_account_cash_flows",
     "get_issuer_investments",
     "get_screener_bonds",
     "is_foreign_currency_candidate",

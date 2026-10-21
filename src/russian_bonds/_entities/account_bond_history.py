@@ -28,7 +28,7 @@ class AccountBondHistory(BaseModel):
 
     @computed_field
     @property
-    def initial_bond_quantity(self) -> int:
+    def initial_quantity(self) -> int:
         # history always ends at zero (virtual sell or full repayment),
         # so a negative sum is the quantity held before the operations
         return -sum(op.quantity_delta for op in self.operations)

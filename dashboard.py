@@ -9,10 +9,10 @@ from pyxirr import xirr
 from t_tech.invest import AsyncClient
 
 from russian_bonds import (
-    BondCashFlow,
+    CashFlow,
     CreditRating,
     ScreenerBond,
-    get_account_bond_cash_flows,
+    get_account_cash_flows,
     get_issuer_investments,
     get_screener_bonds,
     is_foreign_currency_candidate,
@@ -32,12 +32,12 @@ def http_client() -> httpx.AsyncClient:
     )
 
 
-async def fetch_cash_flows(from_: datetime) -> list[BondCashFlow]:
+async def fetch_cash_flows(from_: datetime) -> list[CashFlow]:
     async with (
         AsyncClient(os.environ["T_INVEST_READONLY_TOKEN"]) as t_invest_client,
         http_client() as moex_client,
     ):
-        return await get_account_bond_cash_flows(
+        return await get_account_cash_flows(
             t_invest_client=t_invest_client,
             moex_client=moex_client,
             account_id=os.environ["T_INVEST_ACCOUNT_ID"],
@@ -46,7 +46,7 @@ async def fetch_cash_flows(from_: datetime) -> list[BondCashFlow]:
 
 
 @st.cache_data(ttl=timedelta(hours=1), show_spinner="Загрузка операций...")
-def load_cash_flows() -> list[BondCashFlow]:
+def load_cash_flows() -> list[CashFlow]:
     return asyncio.run(fetch_cash_flows(datetime.now(UTC) - PERIOD))
 
 
@@ -71,7 +71,7 @@ def load_screener() -> tuple[list[ScreenerBond], dict[str, float]]:
     return asyncio.run(fetch_screener())
 
 
-def holding_days(bond_rows: list[BondCashFlow]) -> int:
+def holding_days(bond_rows: list[CashFlow]) -> int:
     dates = [row.date for row in bond_rows]
     return (max(dates) - min(dates)).days
 
@@ -177,7 +177,7 @@ with portfolio_tab:
         "Все суммы в рублях, разбивка по валюте номинала."
     )
 
-    by_currency: dict[str, list[BondCashFlow]] = {}
+    by_currency: dict[str, list[CashFlow]] = {}
     for row in rows:
         by_currency.setdefault(row.face_unit, []).append(row)
 
@@ -200,7 +200,7 @@ with portfolio_tab:
         f"После налога {TAX_RATE:.0%}", f"{net:,.2f} ₽".replace(",", " ")
     )
 
-    by_bond: dict[tuple[str, str], list[BondCashFlow]] = {}
+    by_bond: dict[tuple[str, str], list[CashFlow]] = {}
     for row in rows:
         by_bond.setdefault((row.bond_name, row.face_unit), []).append(row)
 

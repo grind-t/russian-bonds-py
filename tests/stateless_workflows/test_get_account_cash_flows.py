@@ -12,7 +12,7 @@ from syrupy.extensions.json import JSONSnapshotExtension
 from t_tech.invest import PortfolioResponse, _grpc_helpers
 from t_tech.invest.grpc import operations_pb2
 
-from russian_bonds import get_account_bond_cash_flows
+from russian_bonds import get_account_cash_flows
 
 # recorded from a real account on 2026-10-03 with ids anonymized
 # average position prices copy the current ones, the recording lacked them
@@ -60,7 +60,7 @@ def snapshot(snapshot):
 
 
 @time_machine.travel(NOW, tick=False)
-async def test_account_bond_cash_flows(snapshot):
+async def test_account_cash_flows(snapshot):
     t_invest_client = SimpleNamespace(
         operations=SimpleNamespace(
             stub=_FakeOperationsStub(), metadata=[], get_portfolio=_get_portfolio
@@ -69,7 +69,7 @@ async def test_account_bond_cash_flows(snapshot):
     async with httpx.AsyncClient(
         transport=httpx.MockTransport(_moex_handler)
     ) as moex_client:
-        cash_flows = await get_account_bond_cash_flows(
+        cash_flows = await get_account_cash_flows(
             t_invest_client=t_invest_client,  # ty: ignore[invalid-argument-type]
             moex_client=moex_client,
             account_id=ACCOUNT_ID,
