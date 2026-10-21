@@ -15,6 +15,8 @@ from russian_bonds import (
     get_account_bond_cash_flows,
     get_issuer_investments,
     get_screener_bonds,
+    is_foreign_currency_candidate,
+    is_rub_candidate,
 )
 
 PERIOD = timedelta(days=365)
@@ -247,8 +249,8 @@ with rub_tab:
         [
             bond
             for bond in screener_bonds
-            if bond.is_rub_candidate(
-                issuer_investments.get(bond.issuer_inn or "", 0.0), today
+            if is_rub_candidate(
+                bond, issuer_investments.get(bond.issuer_inn or "", 0.0), today
             )
         ],
         issuer_investments,
@@ -260,5 +262,5 @@ with foreign_currency_tab:
         "доходность от 7%, надёжный рейтинг."
     )
     screener_table(
-        [bond for bond in screener_bonds if bond.is_foreign_currency_candidate(today)]
+        [bond for bond in screener_bonds if is_foreign_currency_candidate(bond, today)]
     )

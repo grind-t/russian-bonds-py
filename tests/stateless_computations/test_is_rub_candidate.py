@@ -1,45 +1,8 @@
-from datetime import date, timedelta
-from typing import Any
+from datetime import timedelta
 
-from cbr_ratings import KraCode, Prediction
+from factories import TODAY, agency, ifrs, screener_bond
 
-from russian_bonds._entities.screener_bond import ScreenerBond
-
-TODAY = date(2026, 1, 1)
-
-
-def agency(
-    code: KraCode, value: int, prediction: Prediction | None = None
-) -> dict[str, Any]:
-    return {"agency_ratings": {code: {"value": value, "prediction": prediction}}}
-
-
-def ifrs(value: int, prediction: Prediction | None = None) -> dict[str, Any]:
-    return {"ifrs_rating": {"value": value, "prediction": prediction}}
-
-
-def screener_bond(**fields) -> ScreenerBond:
-    # a bond that fits the ruble screener, so each test breaks one condition
-    defaults = {
-        "isin": "RU000A000001",
-        "name": "Облигация",
-        "maturity_date": TODAY + timedelta(days=365),
-        "ytm": 20.0,
-        "last_price": None,
-        "best_ask_price": None,
-        "t_invest_rating": None,
-        **agency("AKRA", 19),
-        "ifrs_rating": None,
-        "face_value": 1000.0,
-        "currency": "rub",
-        "sector": "financial",
-        "issuer_inn": "7700000001",
-        "is_floater": False,
-        "has_amortization": False,
-        "has_offer": False,
-        "is_for_qualified_investors": False,
-    }
-    return ScreenerBond.model_validate(defaults | fields)
+from russian_bonds._stateless_computations.is_rub_candidate import is_rub_candidate
 
 
 def test_rub_candidate(subtests):
@@ -62,31 +25,13 @@ def test_rub_candidate(subtests):
     }
     for name, (fields, expected) in cases.items():
         with subtests.test(name):
-            assert screener_bond(**fields).is_rub_candidate(0, TODAY) is expected
+            assert is_rub_candidate(screener_bond(**fields), 0, TODAY) is expected
 
 
 def test_rub_candidate_issuer_investment_limit():
     bond = screener_bond()
-    assert bond.is_rub_candidate(99_999.99, TODAY)
-    assert not bond.is_rub_candidate(100_000, TODAY)
-
-
-def test_foreign_currency_candidate(subtests):
-    cases = {
-        "ytm at minimum": ({"currency": "usd", "ytm": 7.0}, True),
-        "ytm below minimum": ({"currency": "cny", "ytm": 6.9}, False),
-        "ruble currency": ({"currency": "rub", "ytm": 20.0}, False),
-        "has offer": ({"currency": "usd", "has_offer": True}, False),
-        "matures too soon": (
-            {"currency": "usd", "maturity_date": TODAY + timedelta(days=30)},
-            False,
-        ),
-    }
-    for name, (fields, expected) in cases.items():
-        with subtests.test(name):
-            assert (
-                screener_bond(**fields).is_foreign_currency_candidate(TODAY) is expected
-            )
+    assert is_rub_candidate(bond, 99_999.99, TODAY)
+    assert not is_rub_candidate(bond, 100_000, TODAY)
 
 
 def test_ratings(subtests):
@@ -146,4 +91,4 @@ def test_ratings(subtests):
     }
     for name, (ratings, expected) in cases.items():
         with subtests.test(name):
-            assert screener_bond(**ratings).is_rub_candidate(0, TODAY) is expected
+            assert is_rub_candidate(screener_bond(**ratings), 0, TODAY) is expected
