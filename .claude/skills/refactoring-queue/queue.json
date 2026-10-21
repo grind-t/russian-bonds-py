@@ -193,6 +193,39 @@
     ]
   },
   {
+    "principle": "D-011: Fail fast",
+    "severity": "minor",
+    "category": "Design principles",
+    "description": "Report an unexpected condition where it arises instead of carrying on with a guess, so the defect surfaces close to its cause rather than as a plausible wrong result far away. Established by Shore, Fail Fast, 2004; the antipatterns it fights are error hiding and silent data loss.",
+    "hierarchy": [
+      [
+        "Computer Science",
+        "Software engineering",
+        "Software reliability",
+        "Fail-fast system (Gray, Why Do Computers Stop and What Can Be Done About It?, 1985)"
+      ],
+      [
+        "Computer Science",
+        "Software engineering",
+        "Error handling",
+        "Fail fast (Shore, IEEE Software, 2004)",
+        "Error hiding anti-pattern"
+      ]
+    ],
+    "violations": [
+      {
+        "description": "A held bond that the screener left out (not buyable now, SPB-only or missing from MOEX) is skipped without notice, so its issuer's investment is understated and the ruble screener can recommend more of an issuer that is already over the limit.",
+        "locations": [
+          "src/russian_bonds/_stateless_computations/build_issuer_investments.py:13",
+          "src/russian_bonds/_stateless_computations/build_issuer_investments.py:14",
+          "src/russian_bonds/_stateless_computations/build_issuer_investments.py:15",
+          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:35",
+          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:43"
+        ]
+      }
+    ]
+  },
+  {
     "principle": "D-005: Minimize mutability",
     "severity": "minor",
     "category": "Design principles",
@@ -274,6 +307,40 @@
     ]
   },
   {
+    "principle": "D-012: Minimize the public interface",
+    "severity": "minor",
+    "category": "Design principles",
+    "description": "Publish only what consumers need to call the API and read its results; everything else stays private and free to change. Grounded in information hiding and known as 'minimize accessibility'; every extra export becomes a contract that Hyrum's law makes hard to withdraw.",
+    "hierarchy": [
+      [
+        "Computer Science",
+        "Software engineering",
+        "Modularity",
+        "Information hiding (Parnas, On the Criteria To Be Used in Decomposing Systems into Modules, 1972)",
+        "Minimize the accessibility of classes and members (Bloch, Effective Java, 2001)"
+      ],
+      [
+        "Computer Science",
+        "Software engineering",
+        "API design",
+        "Minimal interface (Bloch, How to Design a Good API and Why it Matters, 2006)"
+      ]
+    ],
+    "violations": [
+      {
+        "description": "The package exports internal intermediate types and operation type sets that no public function takes or returns and no consumer imports, freezing internals such as AccountBondHistory and the T-Invest operation grouping as public contract.",
+        "locations": [
+          "src/russian_bonds/__init__.py:15",
+          "src/russian_bonds/__init__.py:16",
+          "src/russian_bonds/__init__.py:17",
+          "src/russian_bonds/__init__.py:20",
+          "src/russian_bonds/__init__.py:26",
+          "src/russian_bonds/__init__.py:112"
+        ]
+      }
+    ]
+  },
+  {
     "principle": "D-008: Replace primitives with domain types",
     "severity": "minor",
     "category": "Design principles",
@@ -311,6 +378,17 @@
           "src/russian_bonds/_stateless_computations/build_issuer_investments.py:12",
           "src/russian_bonds/_stateless_computations/build_issuer_investments.py:13",
           "src/russian_bonds/__init__.py:72"
+        ]
+      },
+      {
+        "description": "Yields are bare floats in percent while the tax rate and XIRR are fractions, so the unit lives only in comments and display formats, and mixing the two is not caught.",
+        "locations": [
+          "src/russian_bonds/_entities/screener_bond.py:13",
+          "src/russian_bonds/_stateless_computations/is_rub_candidate.py:8",
+          "src/russian_bonds/_stateless_computations/is_foreign_currency_candidate.py:8",
+          "src/russian_bonds/_stateless_computations/fits_common_screener_filters.py:15",
+          "dashboard.py:23",
+          "dashboard.py:152"
         ]
       }
     ]
