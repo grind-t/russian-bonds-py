@@ -6,22 +6,20 @@ disable-model-invocation: true
 
 # Refactoring queue
 
-Find explicit violations of Computer Science principles that the project does not state yet, and keep `queue.json` next to this file current. Edit no file but the queue.
+Find explicit violations of Computer Science principles that the project does not state yet, and keep `queue.json` next to this file current and sorted by importance. Edit no file but the queue.
 
 ## Format
-
-An array of the proposed principles, each with the problems that break it nested, worked from the top:
 
 ```json
 [
   {
-    "entry": "<id>: <formulation>",
+    "principle": "<id>: <formulation>",
     "category": "...",
     "description": "...",
     "hierarchy": [["Computer Science", "...", "..."]],
-    "problems": [
+    "violations": [
       {
-        "problem": "...",
+        "description": "...",
         "locations": ["path:line"]
       }
     ]
@@ -31,12 +29,12 @@ An array of the proposed principles, each with the problems that break it nested
 
 Principle fields:
 
-- `entry`: the list entry as it will appear under the category heading. The ID is the next free one of the category's prefix across the rules, the skills and the queue (a new letter for a new category). The formulation is like the existing ones: a short imperative English phrase, preferably the established term.
+- `principle`: the list entry as it will appear under the category heading. The ID is the next free one of the category's prefix across the rules, the skills and the queue (a new letter for a new category). The formulation is like the existing ones: a short imperative English phrase, preferably the established term.
 - `category`: the heading of the existing rules file or skill whose topic fits, such as `Naming principles` or `Design principles`, or a new one: a rules file for a property of the code, a skill for a principle of how to work.
 - `description`: a free description of the principle: its established term, its most common formulation and related terms, such as the antipattern it fights.
 - `hierarchy`: paths from Computer Science down to the principle, each an array of nodes. Name the canonical source (author, work, year) at the node it comes from. Add a second path when the principle has both a theoretical and an engineering side.
 
-Problem fields:
+Violation fields:
 
-- `problem`: what is wrong and what it leads to.
+- `description`: what is wrong and what it leads to.
 - `locations`: every place, as `path:line` relative to the repository root.
