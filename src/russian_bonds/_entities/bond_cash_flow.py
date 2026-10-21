@@ -8,10 +8,10 @@ from t_tech.invest import OperationType
 class BondCashFlow:
     ticker: str
     bond_name: str
-    name: str
+    operation_name: str
     description: str
     type: OperationType
-    value: float
+    payment: float
     face_unit: str
     date: datetime
     virtual: bool

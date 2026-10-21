@@ -20,21 +20,21 @@ class ScreenerBond(BaseModel):
     name: str
     maturity_date: date | None
     ytm: float | None
-    # in the nominal currency, None without trades or quotes
+    # in the face value currency, None without trades or quotes
     last_price: float | None
-    best_offer: float | None
+    best_ask_price: float | None
     t_invest_rating: int | None
     # only the agencies that rated the bond or its issuer
     agency_ratings: dict[KraCode, CreditRating]
     ifrs_rating: CreditRating | None
-    nominal: float | None
+    face_value: float | None
     currency: str
     sector: str
     issuer_inn: str | None
     is_floater: bool
     has_amortization: bool
     has_offer: bool
-    for_qual: bool
+    is_for_qualified_investors: bool
 
     def is_rub_candidate(self, issuer_investment: float, today: date) -> bool:
         if self.currency != "rub" or not self._fits_common_filters(_RUB_MIN_YTM, today):

@@ -71,11 +71,11 @@ _NEUTRAL_TYPES = frozenset(
 )
 
 
-def quantity_delta(type: OperationType, quantity: int) -> int:
-    if type in BUY_TYPES:
+def quantity_delta(type_: OperationType, quantity: int) -> int:
+    if type_ in BUY_TYPES:
         return quantity
-    if type in SELL_TYPES or type == BOND_REPAYMENT_FULL:
+    if type_ in SELL_TYPES or type_ == BOND_REPAYMENT_FULL:
         return -quantity
-    if type in _NEUTRAL_TYPES:
+    if type_ in _NEUTRAL_TYPES:
         return 0
-    raise ValueError(f"Unsupported operation type: {type}")
+    raise ValueError(f"Unsupported operation type: {type_}")

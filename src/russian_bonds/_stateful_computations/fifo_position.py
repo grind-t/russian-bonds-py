@@ -36,7 +36,7 @@ class FifoPosition:
     # carries over to payments after the position is closed
     bought_share: float = 0.0
 
-    def kept_fraction(self, operation: _Operation) -> float:
+    def apply(self, operation: _Operation) -> float:
         """Applies an operation and returns the fraction of it to keep."""
         ensure(
             operation.type in _SUPPORTED_TYPES,

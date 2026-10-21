@@ -9,9 +9,9 @@ TODAY = date(2026, 1, 1)
 
 
 def agency(
-    kra: KraCode, value: int, prediction: Prediction | None = None
+    code: KraCode, value: int, prediction: Prediction | None = None
 ) -> dict[str, Any]:
-    return {"agency_ratings": {kra: {"value": value, "prediction": prediction}}}
+    return {"agency_ratings": {code: {"value": value, "prediction": prediction}}}
 
 
 def ifrs(value: int, prediction: Prediction | None = None) -> dict[str, Any]:
@@ -26,18 +26,18 @@ def screener_bond(**fields) -> ScreenerBond:
         "maturity_date": TODAY + timedelta(days=365),
         "ytm": 20.0,
         "last_price": None,
-        "best_offer": None,
+        "best_ask_price": None,
         "t_invest_rating": None,
         **agency("AKRA", 19),
         "ifrs_rating": None,
-        "nominal": 1000.0,
+        "face_value": 1000.0,
         "currency": "rub",
         "sector": "financial",
         "issuer_inn": "7700000001",
         "is_floater": False,
         "has_amortization": False,
         "has_offer": False,
-        "for_qual": False,
+        "is_for_qualified_investors": False,
     }
     return ScreenerBond.model_validate(defaults | fields)
 
@@ -93,15 +93,15 @@ def test_ratings(subtests):
     no_agency = {"agency_ratings": {}}
     cases = {
         "no rating": (no_agency, False),
-        "high rating with stable outlook": (
+        "high rating with stable prediction": (
             agency("AKRA", 18, "STA"),
             True,
         ),
-        "high rating with negative outlook": (
+        "high rating with negative prediction": (
             agency("AKRA", 18, "NEG"),
             False,
         ),
-        "medium rating with positive outlook": (
+        "medium rating with positive prediction": (
             agency("AKRA", 16, "POS"),
             True,
         ),
@@ -109,18 +109,18 @@ def test_ratings(subtests):
             agency("AKRA", 16, "DEV"),
             False,
         ),
-        # a missing outlook counts as the best one the rating allows
-        "low rating without outlook": (agency("AKRA", 15), True),
-        "low rating with stable outlook": (
+        # a missing prediction counts as the best one the rating allows
+        "low rating without prediction": (agency("AKRA", 15), True),
+        "low rating with stable prediction": (
             agency("AKRA", 15, "STA"),
             False,
         ),
-        "low rating with positive outlook": (
+        "low rating with positive prediction": (
             agency("AKRA", 15, "POS"),
             True,
         ),
         "too low rating": (agency("AKRA", 14), False),
-        "top nkr rating with negative outlook": (
+        "top nkr rating with negative prediction": (
             agency("NKR", 19, "NEG"),
             True,
         ),
@@ -139,7 +139,7 @@ def test_ratings(subtests):
             ifrs(16, "NEG"),
             False,
         ),
-        "top ifrs rating with negative outlook": (
+        "top ifrs rating with negative prediction": (
             ifrs(19, "NEG"),
             True,
         ),

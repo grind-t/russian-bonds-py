@@ -34,8 +34,8 @@ from russian_bonds._stateless_workflows.get_account_bond_cash_flows import (
 from russian_bonds._stateless_workflows.get_issuer_investments import (
     get_issuer_investments as _get_issuer_investments,
 )
-from russian_bonds._stateless_workflows.list_screener_bonds import (
-    list_screener_bonds as _list_screener_bonds,
+from russian_bonds._stateless_workflows.get_screener_bonds import (
+    get_screener_bonds as _get_screener_bonds,
 )
 
 _BOND_RATINGS_URL = "https://raw.githubusercontent.com/grind-t/cbr-ratings-py/refs/heads/main/exports/bonds.json.br"
@@ -71,10 +71,10 @@ async def get_issuer_investments(
     )
 
 
-async def list_screener_bonds(
+async def get_screener_bonds(
     *, t_invest_client: AsyncServices, http_client: httpx.AsyncClient
 ) -> list[ScreenerBond]:
-    return await _list_screener_bonds(
+    return await _get_screener_bonds(
         fetch_t_invest_bonds=t_invest_client.instruments.bonds,
         fetch_moex_securities=partial(get_moex_bond_securities, client=http_client),
         fetch_moex_bonds=partial(get_moex_bonds, client=http_client),
@@ -105,5 +105,5 @@ __all__ = [
     "ScreenerBond",
     "get_account_bond_cash_flows",
     "get_issuer_investments",
-    "list_screener_bonds",
+    "get_screener_bonds",
 ]

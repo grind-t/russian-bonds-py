@@ -97,6 +97,8 @@ extra-paths = ["tests"]
 
 [tool.vulture]
 ignore_decorators = ["@model_validator"]
+# public fields of returned entities that only library consumers read
+ignore_names = ["face_value", "operation_name"]
 
 # ---------- Architecture rules enforced by lint-imports ----------
 [tool.importlinter]

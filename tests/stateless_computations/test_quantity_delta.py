@@ -20,7 +20,7 @@ def test_other_types_do_not_change_quantity():
     assert quantity_delta(OperationType.OPERATION_TYPE_COUPON, 10) == 0
 
 
-def test_unknown_type_raises():
+def test_unsupported_type_raises():
     with pytest.raises(ValueError, match="Unsupported operation type"):
         # transfer between accounts
         quantity_delta(OperationType.OPERATION_TYPE_TRANS_BS_BS, 10)

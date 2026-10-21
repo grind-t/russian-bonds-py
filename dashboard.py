@@ -14,7 +14,7 @@ from russian_bonds import (
     ScreenerBond,
     get_account_bond_cash_flows,
     get_issuer_investments,
-    list_screener_bonds,
+    get_screener_bonds,
 )
 
 PERIOD = timedelta(days=365)
@@ -53,7 +53,7 @@ async def fetch_screener() -> tuple[list[ScreenerBond], dict[str, float]]:
         AsyncClient(os.environ["T_INVEST_READONLY_TOKEN"]) as t_invest_client,
         http_client() as client,
     ):
-        bonds = await list_screener_bonds(
+        bonds = await get_screener_bonds(
             t_invest_client=t_invest_client, http_client=client
         )
         issuer_investments = await get_issuer_investments(
@@ -126,11 +126,11 @@ def screener_table(
                 ),
                 "YTM": bond.ytm,
                 "Последняя цена": bond.last_price,
-                "Лучшее предложение": bond.best_offer,
+                "Лучшее предложение": bond.best_ask_price,
                 "Валюта": bond.currency.upper(),
                 "Флоатер": bond.is_floater,
                 "Амортизация": bond.has_amortization,
-                "Для квалов": bond.for_qual,
+                "Для квалов": bond.is_for_qualified_investors,
                 "До погашения, лет": round(
                     (bond.maturity_date - today).days / DAYS_PER_YEAR, 2
                 )
@@ -138,8 +138,8 @@ def screener_table(
                 else None,
                 "T-Invest": bond.t_invest_rating,
                 **{
-                    label: rating(bond.agency_ratings.get(kra))
-                    for kra, label in AGENCY_LABELS.items()
+                    label: rating(bond.agency_ratings.get(agency))
+                    for agency, label in AGENCY_LABELS.items()
                 },
                 "МСФО": rating(bond.ifrs_rating),
                 "Сектор": bond.sector,
@@ -183,11 +183,11 @@ with portfolio_tab:
         st.columns(max(len(by_currency), 1)), sorted(by_currency.items()), strict=False
     ):
         value = xirr(
-            [row.date for row in currency_rows], [row.value for row in currency_rows]
+            [row.date for row in currency_rows], [row.payment for row in currency_rows]
         )
         column.metric(f"Номинал {currency}", "—" if value is None else f"{value:.2%}")
 
-    total = sum(row.value for row in rows)
+    total = sum(row.payment for row in rows)
     # tax is only due on a profit
     net = total * (1 - TAX_RATE) if total > 0 else total
 
@@ -205,7 +205,7 @@ with portfolio_tab:
     bond_xirrs = {
         key: xirr(
             [row.date for row in bond_rows],
-            [row.value for row in bond_rows],
+            [row.payment for row in bond_rows],
             silent=True,
         )
         for key, bond_rows in by_bond.items()
@@ -214,7 +214,7 @@ with portfolio_tab:
     bond_stats = [
         {
             "Наименование": name,
-            "Итог, ₽": round(sum(row.value for row in bond_rows), 2),
+            "Итог, ₽": round(sum(row.payment for row in bond_rows), 2),
             "XIRR": bond_xirrs[name, currency],
             "Дней в портфеле": holding_days(bond_rows),
             "Номинал": currency,

@@ -19,7 +19,7 @@ _logger = logging.getLogger(__name__)
 type _Fetch[T] = Callable[[], Coroutine[Any, Any, T]]
 
 
-async def list_screener_bonds(
+async def get_screener_bonds(
     *,
     fetch_t_invest_bonds: _Fetch[BondsResponse],
     fetch_moex_securities: _Fetch[list[MoexSecurity]],
@@ -40,7 +40,7 @@ async def list_screener_bonds(
         bond_ratings = tg.create_task(fetch_bond_ratings())
         issuer_ratings = tg.create_task(fetch_issuer_ratings())
         ifrs_ratings = tg.create_task(fetch_ifrs_ratings())
-    bonds, missing_moex = build_screener_bonds(
+    bonds, missing_moex_isins = build_screener_bonds(
         t_invest_bonds=t_invest_bonds.result().instruments,
         moex_securities=moex_securities.result(),
         moex_bonds=moex_bonds.result(),
@@ -50,6 +50,6 @@ async def list_screener_bonds(
         issuer_ratings=issuer_ratings.result(),
         ifrs_ratings=ifrs_ratings.result(),
     )
-    for isin in missing_moex:
+    for isin in missing_moex_isins:
         _logger.warning("Missing moex data for bond %s", isin)
     return bonds

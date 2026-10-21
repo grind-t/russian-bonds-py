@@ -5,16 +5,16 @@ from russian_bonds._stateless_computations.without_initial_bonds import (
 )
 
 
-def to_cash_flows(history: AccountBondHistory) -> list[BondCashFlow]:
+def to_bought_bond_cash_flows(history: AccountBondHistory) -> list[BondCashFlow]:
     """Cash flows of the bonds bought within the history."""
     return [
         BondCashFlow(
             ticker=op.ticker,
             bond_name=history.bond.name,
-            name=op.name,
+            operation_name=op.name,
             description=op.description,
             type=op.type,
-            value=op.payment,
+            payment=op.payment,
             face_unit=history.bond.face_unit,
             date=op.date,
             virtual=op.virtual,

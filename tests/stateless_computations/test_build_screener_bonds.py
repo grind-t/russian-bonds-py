@@ -71,7 +71,7 @@ def market_data(secid: str, board: str = "TQCB", **fields) -> MoexBondMarketData
     )
 
 
-def cbr(rating_code: str, prediction: Prediction | None) -> RatingItem:
+def rating_item(rating_code: str, prediction: Prediction | None) -> RatingItem:
     # the screener reads only these fields, rating_number is computed from the code
     return RatingItem.model_construct(rating_code=rating_code, prediction=prediction)
 
@@ -137,17 +137,17 @@ MOEX_MARKET_YIELDS = [
 ]
 
 BOND_RATINGS: CbrRatings = {
-    "PUT_OFFER": {"AKRA": cbr("AA-", None)},
+    "PUT_OFFER": {"AKRA": rating_item("AA-", None)},
 }
 
 ISSUER_RATINGS: CbrRatings = {
     "7700000001": {
-        "AKRA": cbr("A", "POS"),
-        "EXPERT_RA": cbr("A+", "STA"),
+        "AKRA": rating_item("A", "POS"),
+        "EXPERT_RA": rating_item("A+", "STA"),
     },
     "7700000003": {
-        "NKR": cbr("BB+", "NEG"),
-        "NRA": cbr("BBB", "DEV"),
+        "NKR": rating_item("BB+", "NEG"),
+        "NRA": rating_item("BBB", "DEV"),
     },
 }
 
@@ -180,5 +180,5 @@ def test_screener_bonds(snapshot):
 
 
 def test_reports_bonds_missing_from_moex():
-    _, missing_moex = build()
-    assert missing_moex == ["NO_MOEX"]
+    _, missing_moex_isins = build()
+    assert missing_moex_isins == ["NO_MOEX"]

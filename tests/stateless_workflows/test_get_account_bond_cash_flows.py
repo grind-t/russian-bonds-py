@@ -68,7 +68,7 @@ async def test_account_bond_cash_flows(snapshot):
     async with httpx.AsyncClient(
         transport=httpx.MockTransport(_moex_handler)
     ) as moex_client:
-        rows = await get_account_bond_cash_flows(
+        cash_flows = await get_account_bond_cash_flows(
             t_invest_client=t_invest_client,  # ty: ignore[invalid-argument-type]
             moex_client=moex_client,
             account_id=ACCOUNT_ID,
@@ -76,9 +76,9 @@ async def test_account_bond_cash_flows(snapshot):
         )
     assert [
         {
-            **dataclasses.asdict(row),
-            "type": row.type.name,
-            "date": row.date.isoformat(),
+            **dataclasses.asdict(cash_flow),
+            "type": cash_flow.type.name,
+            "date": cash_flow.date.isoformat(),
         }
-        for row in rows
+        for cash_flow in cash_flows
     ] == snapshot

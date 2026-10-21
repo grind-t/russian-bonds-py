@@ -23,7 +23,9 @@ from russian_bonds._stateless_computations.quantity_delta import BOND_REPAYMENT_
 from russian_bonds._stateless_computations.to_account_operation import (
     to_account_operation,
 )
-from russian_bonds._stateless_computations.to_cash_flows import to_cash_flows
+from russian_bonds._stateless_computations.to_bought_bond_cash_flows import (
+    to_bought_bond_cash_flows,
+)
 from russian_bonds._stateless_computations.to_virtual_account_operation import (
     to_virtual_account_operation,
 )
@@ -61,7 +63,7 @@ async def get_account_bond_cash_flows(
         AccountBondHistory(bond=bond, operations=ops)
         for bond, ops in zip(bonds, by_ticker.values(), strict=True)
     )
-    return list(chain.from_iterable(to_cash_flows(h) for h in histories))
+    return list(chain.from_iterable(to_bought_bond_cash_flows(h) for h in histories))
 
 
 async def _to_account_operations(

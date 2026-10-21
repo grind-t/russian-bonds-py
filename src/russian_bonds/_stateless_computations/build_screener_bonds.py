@@ -26,12 +26,12 @@ def build_screener_bonds(
 ) -> tuple[list[ScreenerBond], list[str]]:
     """Returns the bonds and the isins of the bonds missing from moex."""
     moex_security_by_isin = {v.isin: v for v in moex_securities}
-    moex_bond_by_board = _by_board(moex_bonds)
-    market_data_by_board = _by_board(moex_market_data)
-    market_yield_by_board = _by_board(moex_market_yields)
+    moex_bond_by_secid_board = _by_secid_board(moex_bonds)
+    market_data_by_secid_board = _by_secid_board(moex_market_data)
+    market_yield_by_secid_board = _by_secid_board(moex_market_yields)
 
     result: list[ScreenerBond] = []
-    missing_moex: list[str] = []
+    missing_moex_isins: list[str] = []
     for bond in t_invest_bonds:
         if not bond.buy_available_flag or not bond.api_trade_available_flag:
             continue
@@ -40,13 +40,13 @@ def build_screener_bonds(
         if moex_security is None:
             is_spb_exchange = bond.class_code.startswith(("SPB", "PS"))
             if not is_spb_exchange:
-                missing_moex.append(bond.isin)
+                missing_moex_isins.append(bond.isin)
             continue
 
         key = (moex_security.secid, moex_security.primary_boardid)
-        moex_bond = moex_bond_by_board.get(key)
-        market_data = market_data_by_board.get(key)
-        market_yield = market_yield_by_board.get(key)
+        moex_bond = moex_bond_by_secid_board.get(key)
+        market_data = market_data_by_secid_board.get(key)
+        market_yield = market_yield_by_secid_board.get(key)
 
         is_ofz = moex_security.type == "ofz_bond"
         is_floater = bond.floating_coupon_flag
@@ -85,34 +85,34 @@ def build_screener_bonds(
                 maturity_date=_t_invest_date(bond.maturity_date),
                 ytm=ytm,
                 last_price=_price(md.LAST if md else None, mb),
-                best_offer=_price(md.OFFER if md else None, mb),
+                best_ask_price=_price(md.OFFER if md else None, mb),
                 t_invest_rating=3 - bond.risk_level if bond.risk_level >= 1 else None,
                 agency_ratings={
-                    kra: CreditRating(
+                    agency: CreditRating(
                         value=record.rating_number, prediction=record.prediction
                     )
-                    for kra, record in agency_records.items()
+                    for agency, record in agency_records.items()
                 },
                 ifrs_rating=CreditRating(
-                    value=ifrs_rating.value, prediction=ifrs_rating.outlook
+                    value=ifrs_rating.value, prediction=ifrs_rating.prediction
                 )
                 if ifrs_rating
                 else None,
-                nominal=money_to_float(nominal) if has_nominal else None,
+                face_value=money_to_float(nominal) if has_nominal else None,
                 currency=nominal.currency if has_nominal else bond.currency,
                 sector=bond.sector,
                 issuer_inn=issuer_inn,
                 is_floater=is_floater,
                 has_amortization=bond.amortization_flag,
                 has_offer=has_offer,
-                for_qual=bond.for_qual_investor_flag,
+                is_for_qualified_investors=bond.for_qual_investor_flag,
             )
         )
 
-    return result, missing_moex
+    return result, missing_moex_isins
 
 
-def _by_board[T: MoexBond | MoexBondMarketData | MoexBondMarketYield](
+def _by_secid_board[T: MoexBond | MoexBondMarketData | MoexBondMarketYield](
     rows: list[T],
 ) -> dict[tuple[str, str | None], T]:
     result: dict[tuple[str, str | None], T] = {}
