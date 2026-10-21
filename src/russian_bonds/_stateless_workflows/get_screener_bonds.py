@@ -7,7 +7,7 @@ from cbr_ratings import KraCode, RatingItem
 from moex import MoexBond, MoexBondMarketData, MoexBondMarketYield, MoexSecurity
 from t_tech.invest import BondsResponse
 
-from russian_bonds._entities.ifrs_rating import IfrsRating
+from russian_bonds._entities.credit_rating import CreditRating
 from russian_bonds._entities.screener_bond import ScreenerBond
 from russian_bonds._stateless_computations.build_screener_bonds import (
     build_screener_bonds,
@@ -28,7 +28,7 @@ async def get_screener_bonds(
     fetch_moex_market_yields: _Fetch[list[MoexBondMarketYield]],
     fetch_cbr_ratings_by_isin: _Fetch[dict[str, dict[KraCode, RatingItem]]],
     fetch_cbr_ratings_by_inn: _Fetch[dict[str, dict[KraCode, RatingItem]]],
-    fetch_ifrs_rating_by_inn: _Fetch[dict[str, IfrsRating]],
+    fetch_ifrs_rating_by_inn: _Fetch[dict[str, CreditRating]],
 ) -> list[ScreenerBond]:
     # a task group keeps result types that gather loses beyond six awaitables
     async with asyncio.TaskGroup() as tg:

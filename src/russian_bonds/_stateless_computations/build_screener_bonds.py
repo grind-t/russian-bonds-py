@@ -5,7 +5,6 @@ from moex import MoexBond, MoexBondMarketData, MoexBondMarketYield, MoexSecurity
 from t_tech.invest import Bond as TInvestBond
 
 from russian_bonds._entities.credit_rating import CreditRating
-from russian_bonds._entities.ifrs_rating import IfrsRating
 from russian_bonds._entities.screener_bond import ScreenerBond
 from russian_bonds._stateless_computations.money_to_float import money_to_float
 
@@ -22,7 +21,7 @@ def build_screener_bonds(
     moex_market_yields: list[MoexBondMarketYield],
     cbr_ratings_by_isin: dict[str, dict[KraCode, RatingItem]],
     cbr_ratings_by_inn: dict[str, dict[KraCode, RatingItem]],
-    ifrs_rating_by_inn: dict[str, IfrsRating],
+    ifrs_rating_by_inn: dict[str, CreditRating],
 ) -> tuple[list[ScreenerBond], list[str]]:
     """Returns the bonds and the isins of the bonds missing from moex."""
     moex_security_by_isin = {v.isin: v for v in moex_securities}
@@ -73,7 +72,6 @@ def build_screener_bonds(
             **(cbr_ratings_by_inn.get(issuer_inn, {}) if issuer_inn else {}),
             **cbr_ratings_by_isin.get(bond.isin, {}),
         }
-        ifrs_rating = ifrs_rating_by_inn.get(issuer_inn) if issuer_inn else None
 
         nominal = bond.nominal
         has_nominal = bool(nominal.currency or nominal.units or nominal.nano)
@@ -93,11 +91,7 @@ def build_screener_bonds(
                     )
                     for agency, record in agency_records.items()
                 },
-                ifrs_rating=CreditRating(
-                    value=ifrs_rating.value, prediction=ifrs_rating.prediction
-                )
-                if ifrs_rating
-                else None,
+                ifrs_rating=ifrs_rating_by_inn.get(issuer_inn) if issuer_inn else None,
                 face_value=money_to_float(nominal) if has_nominal else None,
                 currency=nominal.currency if has_nominal else bond.currency,
                 sector=bond.sector,

@@ -17,7 +17,6 @@ from russian_bonds._entities.account_operation import AccountOperation
 from russian_bonds._entities.bond import Bond
 from russian_bonds._entities.bond_cash_flow import BondCashFlow
 from russian_bonds._entities.credit_rating import CreditRating
-from russian_bonds._entities.ifrs_rating import IfrsRating
 from russian_bonds._entities.screener_bond import ScreenerBond
 from russian_bonds._stateless_computations.is_foreign_currency_candidate import (
     is_foreign_currency_candidate,
@@ -99,7 +98,7 @@ async def get_screener_bonds(
             http_client,
         ),
         fetch_ifrs_rating_by_inn=partial(
-            fetch_brotli_json, _IFRS_RATINGS_URL, dict[str, IfrsRating], http_client
+            fetch_brotli_json, _IFRS_RATINGS_URL, dict[str, CreditRating], http_client
         ),
     )
 

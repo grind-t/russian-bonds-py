@@ -10,7 +10,7 @@ from syrupy.extensions.json import JSONSnapshotExtension
 from t_tech.invest import Bond, _grpc_helpers
 from t_tech.invest.grpc import instruments_pb2
 
-from russian_bonds._entities.ifrs_rating import IfrsRating
+from russian_bonds._entities.credit_rating import CreditRating
 from russian_bonds._stateless_computations.build_screener_bonds import (
     build_screener_bonds,
 )
@@ -150,7 +150,7 @@ CBR_RATINGS_BY_INN: dict[str, dict[KraCode, RatingItem]] = {
     },
 }
 
-IFRS_RATING_BY_INN = TypeAdapter(dict[str, IfrsRating]).validate_python(
+IFRS_RATING_BY_INN = TypeAdapter(dict[str, CreditRating]).validate_python(
     {"7700000001": {"value": 17, "outlook": "STA"}}
 )
 
