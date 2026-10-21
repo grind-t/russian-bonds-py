@@ -1,11 +1,11 @@
 from datetime import UTC, date, datetime
 
+from cbr_ratings import KraCode, RatingItem
 from moex import MoexBond, MoexBondMarketData, MoexBondMarketYield, MoexSecurity
 from t_tech.invest import Bond as TInvestBond
 
-from russian_bonds._entities.cbr_ratings import CbrRatings
 from russian_bonds._entities.credit_rating import CreditRating
-from russian_bonds._entities.ifrs_ratings import IfrsRatings
+from russian_bonds._entities.ifrs_rating import IfrsRating
 from russian_bonds._entities.screener_bond import ScreenerBond
 from russian_bonds._stateless_computations.money_to_float import money_to_float
 
@@ -20,9 +20,9 @@ def build_screener_bonds(
     moex_bonds: list[MoexBond],
     moex_market_data: list[MoexBondMarketData],
     moex_market_yields: list[MoexBondMarketYield],
-    bond_ratings: CbrRatings,
-    issuer_ratings: CbrRatings,
-    ifrs_ratings: IfrsRatings,
+    cbr_ratings_by_isin: dict[str, dict[KraCode, RatingItem]],
+    cbr_ratings_by_inn: dict[str, dict[KraCode, RatingItem]],
+    ifrs_rating_by_inn: dict[str, IfrsRating],
 ) -> tuple[list[ScreenerBond], list[str]]:
     """Returns the bonds and the isins of the bonds missing from moex."""
     moex_security_by_isin = {v.isin: v for v in moex_securities}
@@ -70,10 +70,10 @@ def build_screener_bonds(
         # the whole bond record wins over the issuer one, so a bond without
         # a prediction does not borrow the issuer's
         agency_records = {
-            **(issuer_ratings.get(issuer_inn, {}) if issuer_inn else {}),
-            **bond_ratings.get(bond.isin, {}),
+            **(cbr_ratings_by_inn.get(issuer_inn, {}) if issuer_inn else {}),
+            **cbr_ratings_by_isin.get(bond.isin, {}),
         }
-        ifrs_rating = ifrs_ratings.get(issuer_inn) if issuer_inn else None
+        ifrs_rating = ifrs_rating_by_inn.get(issuer_inn) if issuer_inn else None
 
         nominal = bond.nominal
         has_nominal = bool(nominal.currency or nominal.units or nominal.nano)

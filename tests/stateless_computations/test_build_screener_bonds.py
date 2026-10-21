@@ -2,7 +2,7 @@ from datetime import date
 from typing import Any
 
 import pytest
-from cbr_ratings import Prediction, RatingItem
+from cbr_ratings import KraCode, Prediction, RatingItem
 from google.protobuf import json_format
 from moex import MoexBond, MoexBondMarketData, MoexBondMarketYield, MoexSecurity
 from pydantic import TypeAdapter
@@ -10,8 +10,7 @@ from syrupy.extensions.json import JSONSnapshotExtension
 from t_tech.invest import Bond, _grpc_helpers
 from t_tech.invest.grpc import instruments_pb2
 
-from russian_bonds._entities.cbr_ratings import CbrRatings
-from russian_bonds._entities.ifrs_ratings import IfrsRatings
+from russian_bonds._entities.ifrs_rating import IfrsRating
 from russian_bonds._stateless_computations.build_screener_bonds import (
     build_screener_bonds,
 )
@@ -136,11 +135,11 @@ MOEX_MARKET_YIELDS = [
     ),
 ]
 
-BOND_RATINGS: CbrRatings = {
+CBR_RATINGS_BY_ISIN: dict[str, dict[KraCode, RatingItem]] = {
     "PUT_OFFER": {"AKRA": rating_item("AA-", None)},
 }
 
-ISSUER_RATINGS: CbrRatings = {
+CBR_RATINGS_BY_INN: dict[str, dict[KraCode, RatingItem]] = {
     "7700000001": {
         "AKRA": rating_item("A", "POS"),
         "EXPERT_RA": rating_item("A+", "STA"),
@@ -151,7 +150,7 @@ ISSUER_RATINGS: CbrRatings = {
     },
 }
 
-IFRS_RATINGS = TypeAdapter(IfrsRatings).validate_python(
+IFRS_RATING_BY_INN = TypeAdapter(dict[str, IfrsRating]).validate_python(
     {"7700000001": {"value": 17, "outlook": "STA"}}
 )
 
@@ -168,9 +167,9 @@ def build():
         moex_bonds=MOEX_BONDS,
         moex_market_data=MOEX_MARKET_DATA,
         moex_market_yields=MOEX_MARKET_YIELDS,
-        bond_ratings=BOND_RATINGS,
-        issuer_ratings=ISSUER_RATINGS,
-        ifrs_ratings=IFRS_RATINGS,
+        cbr_ratings_by_isin=CBR_RATINGS_BY_ISIN,
+        cbr_ratings_by_inn=CBR_RATINGS_BY_INN,
+        ifrs_rating_by_inn=IFRS_RATING_BY_INN,
     )
 
 

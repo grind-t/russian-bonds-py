@@ -2,6 +2,7 @@ from datetime import datetime
 from functools import partial
 
 import httpx
+from cbr_ratings import KraCode, RatingItem
 from moex import (
     get_moex_bond_amortizations,
     get_moex_bond_securities,
@@ -15,9 +16,8 @@ from russian_bonds._entities.account_bond_history import AccountBondHistory
 from russian_bonds._entities.account_operation import AccountOperation
 from russian_bonds._entities.bond import Bond
 from russian_bonds._entities.bond_cash_flow import BondCashFlow
-from russian_bonds._entities.cbr_ratings import CbrRatings
 from russian_bonds._entities.credit_rating import CreditRating
-from russian_bonds._entities.ifrs_ratings import IfrsRatings
+from russian_bonds._entities.ifrs_rating import IfrsRating
 from russian_bonds._entities.screener_bond import ScreenerBond
 from russian_bonds._stateless_computations.quantity_delta import BUY_TYPES, SELL_TYPES
 from russian_bonds._stateless_effects.fetch_bond import fetch_bond
@@ -82,14 +82,20 @@ async def get_screener_bonds(
         fetch_moex_market_yields=partial(
             get_moex_bonds_market_yield, client=http_client
         ),
-        fetch_bond_ratings=partial(
-            fetch_brotli_json, _BOND_RATINGS_URL, CbrRatings, http_client
+        fetch_cbr_ratings_by_isin=partial(
+            fetch_brotli_json,
+            _BOND_RATINGS_URL,
+            dict[str, dict[KraCode, RatingItem]],
+            http_client,
         ),
-        fetch_issuer_ratings=partial(
-            fetch_brotli_json, _ISSUER_RATINGS_URL, CbrRatings, http_client
+        fetch_cbr_ratings_by_inn=partial(
+            fetch_brotli_json,
+            _ISSUER_RATINGS_URL,
+            dict[str, dict[KraCode, RatingItem]],
+            http_client,
         ),
-        fetch_ifrs_ratings=partial(
-            fetch_brotli_json, _IFRS_RATINGS_URL, IfrsRatings, http_client
+        fetch_ifrs_rating_by_inn=partial(
+            fetch_brotli_json, _IFRS_RATINGS_URL, dict[str, IfrsRating], http_client
         ),
     )
 
