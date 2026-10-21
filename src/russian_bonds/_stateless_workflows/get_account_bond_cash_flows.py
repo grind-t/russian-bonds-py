@@ -10,7 +10,6 @@ from russian_bonds._entities.account_bond_history import AccountBondHistory
 from russian_bonds._entities.account_operation import AccountOperation
 from russian_bonds._entities.bond import Bond
 from russian_bonds._entities.bond_cash_flow import BondCashFlow
-from russian_bonds._entities.bond_instrument_type import BOND_INSTRUMENT_TYPE
 from russian_bonds._entities.t_invest_operation import TInvestOperation
 from russian_bonds._stateless_computations.group_operations_by_ticker import (
     group_operations_by_ticker,
@@ -55,7 +54,7 @@ async def get_account_bond_cash_flows(
     virtual_operations = [
         to_virtual_account_operation(pos, now)
         for pos in positions
-        if pos.instrument_type == BOND_INSTRUMENT_TYPE
+        if pos.instrument_type == "bond"
     ]
     by_ticker = group_operations_by_ticker(account_operations + virtual_operations)
     bonds = await asyncio.gather(*(fetch_bond(ticker) for ticker in by_ticker))
@@ -74,7 +73,7 @@ async def _to_account_operations(
     executed_operations = [
         op
         for op in reversed(operations)
-        if op.instrument_type == BOND_INSTRUMENT_TYPE
+        if op.instrument_type == "bond"
         and op.state == OperationState.OPERATION_STATE_EXECUTED
     ]
     # sequential requests to spare moex
