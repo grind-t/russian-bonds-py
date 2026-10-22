@@ -83,60 +83,6 @@
     ]
   },
   {
-    "principle": "D-013: Express rules as specifications once they are described or recombined",
-    "severity": "major",
-    "category": "Design principles",
-    "description": "Specification pattern: a business rule becomes a named, composable predicate object that answers whether a candidate satisfies it and carries its own description, and a selection is a list of such rules. Apply it only when a rule lives beyond a single boolean check: its text is shown to people, the reason a candidate failed is reported, or the same rules are recombined into several selections. A lone condition or a filter used once stays a plain predicate, since wrapping it adds indirection without a second consumer (YAGNI). Related terms: rules as data, declarative filtering, predicate combinators; the antipattern it fights is a rule duplicated between code and prose, or a family of near-identical filter functions.",
-    "hierarchy": [
-      [
-        "Computer Science",
-        "Software engineering",
-        "Software design",
-        "Domain-driven design",
-        "Specification pattern (Evans and Fowler, Specifications, 2003)"
-      ],
-      [
-        "Computer Science",
-        "Programming paradigms",
-        "Declarative programming",
-        "Predicates as first-class values (Backus, Can Programming Be Liberated from the von Neumann Style?, 1978)"
-      ],
-      [
-        "Computer Science",
-        "Software engineering",
-        "Single source of truth",
-        "Don't repeat yourself (Hunt and Thomas, The Pragmatic Programmer, 1999)"
-      ],
-      [
-        "Computer Science",
-        "Software engineering",
-        "Software design",
-        "Simplicity",
-        "You aren't gonna need it (Beck, Extreme Programming Explained, 1999)"
-      ]
-    ],
-    "violations": [
-      {
-        "description": "The screener criteria are hard-coded conditions spread across a chain of functions: the common filters take the minimum yield as a parameter, each currency screener wraps them with its own checks, and the floater yield threshold is an early return after asserts. The criteria cannot be listed, reused one by one or reported as the reason a bond was rejected.",
-        "locations": [
-          "src/russian_bonds/_stateless_computations/fits_common_screener_filters.py:12",
-          "src/russian_bonds/_stateless_computations/is_rub_candidate.py:15",
-          "src/russian_bonds/_stateless_computations/is_foreign_currency_candidate.py:11"
-        ]
-      },
-      {
-        "description": "The dashboard restates every criterion in hand-written captions, and the copy has already drifted: the ruble caption promises a yield from 15.5% while the code requires 15%. Any threshold change has to be made twice and nothing catches a mismatch.",
-        "locations": [
-          "dashboard.py:244",
-          "dashboard.py:245",
-          "dashboard.py:261",
-          "dashboard.py:262",
-          "src/russian_bonds/_stateless_computations/is_rub_candidate.py:9"
-        ]
-      }
-    ]
-  },
-  {
     "principle": "D-003: Don't represent money as binary floating point",
     "severity": "minor",
     "category": "Design principles",
