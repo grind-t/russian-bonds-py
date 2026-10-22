@@ -12,12 +12,9 @@ from russian_bonds._stateless_computations.screening.default_maturity_criterion 
 _MIN_YTM = 15.0
 # floaters pay off only if rates stay high, so a longer one needs a higher yield
 _FLOATER_YTM_PER_DAY = 0.00275
-_MAX_ISSUER_INVESTMENT = 100_000
 
 
-def default_rub_screener(
-    bond: ScreenerBond, issuer_investment: float, today: date
-) -> bool:
+def default_rub_screener(bond: ScreenerBond, today: date) -> bool:
     if (
         bond.currency != "rub"
         or not default_maturity_criterion(bond, today)
@@ -28,8 +25,7 @@ def default_rub_screener(
     ):
         return False
     assert bond.maturity_date is not None
-    if bond.is_floater:
-        days = (bond.maturity_date - today).days
-        if bond.ytm < _MIN_YTM + days * _FLOATER_YTM_PER_DAY:
-            return False
-    return issuer_investment < _MAX_ISSUER_INVESTMENT
+    if not bond.is_floater:
+        return True
+    days = (bond.maturity_date - today).days
+    return bond.ytm >= _MIN_YTM + days * _FLOATER_YTM_PER_DAY

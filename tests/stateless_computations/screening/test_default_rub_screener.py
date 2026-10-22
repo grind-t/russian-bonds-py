@@ -27,13 +27,7 @@ def test_rub_candidate(subtests):
     }
     for name, (fields, expected) in cases.items():
         with subtests.test(name):
-            assert default_rub_screener(screener_bond(**fields), 0, TODAY) is expected
-
-
-def test_rub_candidate_issuer_investment_limit():
-    bond = screener_bond()
-    assert default_rub_screener(bond, 99_999.99, TODAY)
-    assert not default_rub_screener(bond, 100_000, TODAY)
+            assert default_rub_screener(screener_bond(**fields), TODAY) is expected
 
 
 def test_ratings(subtests):
@@ -93,4 +87,4 @@ def test_ratings(subtests):
     }
     for name, (ratings, expected) in cases.items():
         with subtests.test(name):
-            assert default_rub_screener(screener_bond(**ratings), 0, TODAY) is expected
+            assert default_rub_screener(screener_bond(**ratings), TODAY) is expected

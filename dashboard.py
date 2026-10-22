@@ -242,17 +242,10 @@ today = datetime.now(UTC).date()
 with rub_tab:
     st.caption(
         "Рублёвые облигации без оферты, погашение через 3 месяца – 2 года, "
-        "доходность от 15.5% (у флоатеров выше с ростом срока), "
-        "вложения в эмитента до 100 000 ₽, надёжный рейтинг."
+        "доходность от 15.5% (у флоатеров выше с ростом срока), надёжный рейтинг."
     )
     screener_table(
-        [
-            bond
-            for bond in screener_bonds
-            if default_rub_screener(
-                bond, issuer_investments.get(bond.issuer_inn or "", 0.0), today
-            )
-        ],
+        [bond for bond in screener_bonds if default_rub_screener(bond, today)],
         issuer_investments,
     )
 
