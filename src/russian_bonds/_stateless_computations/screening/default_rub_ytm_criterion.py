@@ -10,7 +10,7 @@ _MIN_YTM = 15.0
 _FLOATER_YTM_PER_DAY = 0.00275
 
 
-def default_ytm_criterion(bond: ScreenerBond, today: date) -> bool:
+def default_rub_ytm_criterion(bond: ScreenerBond, today: date) -> bool:
     if bond.ytm is None:
         return False
     if not bond.is_floater:
