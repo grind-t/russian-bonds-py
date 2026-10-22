@@ -22,24 +22,19 @@ def build_screener_bonds(
     cbr_ratings_by_isin: dict[str, dict[KraCode, RatingItem]],
     cbr_ratings_by_inn: dict[str, dict[KraCode, RatingItem]],
     ifrs_rating_by_inn: dict[str, CreditRating],
-) -> tuple[list[ScreenerBond], list[str]]:
-    """Returns the bonds and the isins of the bonds missing from moex."""
+) -> list[ScreenerBond]:
     moex_security_by_isin = {v.isin: v for v in moex_securities}
     moex_bond_by_secid_board = _by_secid_board(moex_bonds)
     market_data_by_secid_board = _by_secid_board(moex_market_data)
     market_yield_by_secid_board = _by_secid_board(moex_market_yields)
 
     result: list[ScreenerBond] = []
-    missing_moex_isins: list[str] = []
     for bond in t_invest_bonds:
         if not bond.buy_available_flag or not bond.api_trade_available_flag:
             continue
 
         moex_security = moex_security_by_isin.get(bond.isin)
         if moex_security is None:
-            is_spb_exchange = bond.class_code.startswith(("SPB", "PS"))
-            if not is_spb_exchange:
-                missing_moex_isins.append(bond.isin)
             continue
 
         key = (moex_security.secid, moex_security.primary_boardid)
@@ -103,7 +98,7 @@ def build_screener_bonds(
             )
         )
 
-    return result, missing_moex_isins
+    return result
 
 
 def _by_secid_board[T: MoexBond | MoexBondMarketData | MoexBondMarketYield](

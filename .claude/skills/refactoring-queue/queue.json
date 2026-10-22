@@ -129,8 +129,8 @@
           "src/russian_bonds/_entities/screener_bond.py:15",
           "src/russian_bonds/_entities/screener_bond.py:16",
           "src/russian_bonds/_entities/screener_bond.py:21",
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:95",
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:122",
+          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:90",
+          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:117",
           "src/russian_bonds/__init__.py:72"
         ]
       },
@@ -187,7 +187,7 @@
       {
         "description": "The yield fallback chain uses `or`, so a real zero yield is treated as a missing one and replaced by the next source.",
         "locations": [
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:59"
+          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:54"
         ]
       }
     ]
@@ -219,8 +219,8 @@
           "src/russian_bonds/_stateless_computations/build_issuer_investments.py:13",
           "src/russian_bonds/_stateless_computations/build_issuer_investments.py:14",
           "src/russian_bonds/_stateless_computations/build_issuer_investments.py:15",
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:35",
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:43"
+          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:33",
+          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:38"
         ]
       }
     ]
@@ -438,7 +438,7 @@
           "src/russian_bonds/_stateless_computations/is_reliable_rating.py:10",
           "src/russian_bonds/_stateless_computations/is_reliable_rating.py:11",
           "src/russian_bonds/_stateless_computations/fits_common_screener_filters.py:33",
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:87"
+          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:82"
         ]
       }
     ]

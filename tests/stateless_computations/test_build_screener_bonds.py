@@ -99,9 +99,7 @@ T_INVEST_BONDS = [
     t_invest_bond("OTHER_BOARD", riskLevel="RISK_LEVEL_UNSPECIFIED"),
     # skipped: not available to buy
     t_invest_bond("NOT_BUYABLE", buyAvailableFlag=False),
-    # skipped silently: spb exchange
-    t_invest_bond("SPB_ONLY", classCode="SPBBND"),
-    # skipped and reported: missing moex data
+    # skipped: missing moex data
     t_invest_bond("NO_MOEX"),
 ]
 
@@ -174,10 +172,5 @@ def build():
 
 
 def test_screener_bonds(snapshot):
-    bonds, _ = build()
+    bonds = build()
     assert [bond.model_dump(mode="json") for bond in bonds] == snapshot
-
-
-def test_reports_bonds_missing_from_moex():
-    _, missing_moex_isins = build()
-    assert missing_moex_isins == ["NO_MOEX"]

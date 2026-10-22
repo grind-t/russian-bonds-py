@@ -1,5 +1,4 @@
 import asyncio
-import logging
 from collections.abc import Callable, Coroutine
 from typing import Any
 
@@ -12,8 +11,6 @@ from russian_bonds._entities.screener_bond import ScreenerBond
 from russian_bonds._stateless_computations.build_screener_bonds import (
     build_screener_bonds,
 )
-
-_logger = logging.getLogger(__name__)
 
 # coroutines rather than awaitables, as task groups require
 type _Fetch[T] = Callable[[], Coroutine[Any, Any, T]]
@@ -40,7 +37,7 @@ async def get_screener_bonds(
         cbr_ratings_by_isin = tg.create_task(fetch_cbr_ratings_by_isin())
         cbr_ratings_by_inn = tg.create_task(fetch_cbr_ratings_by_inn())
         ifrs_rating_by_inn = tg.create_task(fetch_ifrs_rating_by_inn())
-    bonds, missing_moex_isins = build_screener_bonds(
+    return build_screener_bonds(
         t_invest_bonds=t_invest_bonds.result().instruments,
         moex_securities=moex_securities.result(),
         moex_bonds=moex_bonds.result(),
@@ -50,6 +47,3 @@ async def get_screener_bonds(
         cbr_ratings_by_inn=cbr_ratings_by_inn.result(),
         ifrs_rating_by_inn=ifrs_rating_by_inn.result(),
     )
-    for isin in missing_moex_isins:
-        _logger.warning("Missing moex data for bond %s", isin)
-    return bonds
