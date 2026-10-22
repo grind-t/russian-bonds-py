@@ -15,7 +15,9 @@ _FLOATER_YTM_PER_DAY = 0.00275
 _MAX_ISSUER_INVESTMENT = 100_000
 
 
-def is_rub_candidate(bond: ScreenerBond, issuer_investment: float, today: date) -> bool:
+def default_rub_screener(
+    bond: ScreenerBond, issuer_investment: float, today: date
+) -> bool:
     if (
         bond.currency != "rub"
         or not default_maturity_criterion(bond, today)

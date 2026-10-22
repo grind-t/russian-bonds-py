@@ -19,10 +19,12 @@ from russian_bonds._entities.cash_flow import CashFlow
 from russian_bonds._entities.credit_rating import CreditRating
 from russian_bonds._entities.rub_money import RubMoney
 from russian_bonds._entities.screener_bond import ScreenerBond
+from russian_bonds._stateless_computations.default_rub_screener import (
+    default_rub_screener,
+)
 from russian_bonds._stateless_computations.is_foreign_currency_candidate import (
     is_foreign_currency_candidate,
 )
-from russian_bonds._stateless_computations.is_rub_candidate import is_rub_candidate
 from russian_bonds._stateless_computations.quantity_delta import BUY_TYPES, SELL_TYPES
 from russian_bonds._stateless_effects.fetch_account_positions import (
     fetch_account_positions,
@@ -112,9 +114,9 @@ __all__ = [
     "CreditRating",
     "RubMoney",
     "ScreenerBond",
+    "default_rub_screener",
     "get_account_cash_flows",
     "get_issuer_investments",
     "get_screener_bonds",
     "is_foreign_currency_candidate",
-    "is_rub_candidate",
 ]

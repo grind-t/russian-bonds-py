@@ -12,11 +12,11 @@ from russian_bonds import (
     CashFlow,
     CreditRating,
     ScreenerBond,
+    default_rub_screener,
     get_account_cash_flows,
     get_issuer_investments,
     get_screener_bonds,
     is_foreign_currency_candidate,
-    is_rub_candidate,
 )
 
 PERIOD = timedelta(days=365)
@@ -249,7 +249,7 @@ with rub_tab:
         [
             bond
             for bond in screener_bonds
-            if is_rub_candidate(
+            if default_rub_screener(
                 bond, issuer_investments.get(bond.issuer_inn or "", 0.0), today
             )
         ],
