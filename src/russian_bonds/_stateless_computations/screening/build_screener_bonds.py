@@ -50,7 +50,6 @@ def build_screener_bonds(
             or _t_invest_date(bond.call_date) is not None
         )
         md, my, mb = market_data, market_yield, moex_bond
-        # `or` chain mirrors the TS version, so a zero yield falls through
         ytm = (
             (md.YIELDTOOFFER if md and has_offer else None)
             or (my.EFFECTIVEYIELD if my and is_ofz and is_floater else None)
