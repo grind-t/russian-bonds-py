@@ -1,8 +1,11 @@
 from datetime import date
 
 from russian_bonds._entities.screener_bond import ScreenerBond
-from russian_bonds._stateless_computations.fits_common_screener_filters import (
-    fits_common_screener_filters,
+from russian_bonds._stateless_computations.default_agency_rating_criterion import (
+    default_agency_rating_criterion,
+)
+from russian_bonds._stateless_computations.default_maturity_criterion import (
+    default_maturity_criterion,
 )
 
 # ytm in percent
@@ -13,11 +16,15 @@ _MAX_ISSUER_INVESTMENT = 100_000
 
 
 def is_rub_candidate(bond: ScreenerBond, issuer_investment: float, today: date) -> bool:
-    if bond.currency != "rub" or not fits_common_screener_filters(
-        bond, _MIN_YTM, today
+    if (
+        bond.currency != "rub"
+        or not default_maturity_criterion(bond, today)
+        or bond.ytm is None
+        or bond.ytm < _MIN_YTM
+        or bond.has_offer
+        or not default_agency_rating_criterion(bond)
     ):
         return False
-    assert bond.ytm is not None
     assert bond.maturity_date is not None
     if bond.is_floater:
         days = (bond.maturity_date - today).days
