@@ -19,13 +19,13 @@ from russian_bonds._entities.cash_flow import CashFlow
 from russian_bonds._entities.credit_rating import CreditRating
 from russian_bonds._entities.rub_money import RubMoney
 from russian_bonds._entities.screener_bond import ScreenerBond
-from russian_bonds._stateless_computations.default_foreign_currency_screener import (
+from russian_bonds._stateless_computations.quantity_delta import BUY_TYPES, SELL_TYPES
+from russian_bonds._stateless_computations.screening.default_foreign_currency_screener import (
     default_foreign_currency_screener,
 )
-from russian_bonds._stateless_computations.default_rub_screener import (
+from russian_bonds._stateless_computations.screening.default_rub_screener import (
     default_rub_screener,
 )
-from russian_bonds._stateless_computations.quantity_delta import BUY_TYPES, SELL_TYPES
 from russian_bonds._stateless_effects.fetch_account_positions import (
     fetch_account_positions,
 )

@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from factories import TODAY, screener_bond
 
-from russian_bonds._stateless_computations.default_foreign_currency_screener import (
+from russian_bonds._stateless_computations.screening.default_foreign_currency_screener import (
     default_foreign_currency_screener,
 )
 

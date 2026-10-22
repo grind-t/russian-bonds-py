@@ -8,7 +8,7 @@ from t_tech.invest import BondsResponse
 
 from russian_bonds._entities.credit_rating import CreditRating
 from russian_bonds._entities.screener_bond import ScreenerBond
-from russian_bonds._stateless_computations.build_screener_bonds import (
+from russian_bonds._stateless_computations.screening.build_screener_bonds import (
     build_screener_bonds,
 )
 

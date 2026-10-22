@@ -1,10 +1,10 @@
 from datetime import date
 
 from russian_bonds._entities.screener_bond import ScreenerBond
-from russian_bonds._stateless_computations.default_agency_rating_criterion import (
+from russian_bonds._stateless_computations.screening.default_agency_rating_criterion import (
     default_agency_rating_criterion,
 )
-from russian_bonds._stateless_computations.default_maturity_criterion import (
+from russian_bonds._stateless_computations.screening.default_maturity_criterion import (
     default_maturity_criterion,
 )
 

@@ -45,7 +45,7 @@
         "locations": [
           "dashboard.py:243",
           "dashboard.py:260",
-          "src/russian_bonds/_stateless_computations/default_rub_screener.py:9"
+          "src/russian_bonds/_stateless_computations/screening/default_rub_screener.py:9"
         ]
       }
     ]
@@ -75,8 +75,8 @@
         "description": "The common screener filters prove that the maturity date and the yield are present but return a bool, so the callers re-establish it with asserts that the type checker cannot verify.",
         "locations": [
           "src/russian_bonds/_stateless_computations/fits_common_screener_filters.py:12",
-          "src/russian_bonds/_stateless_computations/default_rub_screener.py:20",
-          "src/russian_bonds/_stateless_computations/default_rub_screener.py:21",
+          "src/russian_bonds/_stateless_computations/screening/default_rub_screener.py:20",
+          "src/russian_bonds/_stateless_computations/screening/default_rub_screener.py:21",
           "dashboard.py:100"
         ]
       }
@@ -129,8 +129,8 @@
           "src/russian_bonds/_entities/screener_bond.py:15",
           "src/russian_bonds/_entities/screener_bond.py:16",
           "src/russian_bonds/_entities/screener_bond.py:21",
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:90",
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:117",
+          "src/russian_bonds/_stateless_computations/screening/build_screener_bonds.py:90",
+          "src/russian_bonds/_stateless_computations/screening/build_screener_bonds.py:117",
           "src/russian_bonds/__init__.py:72"
         ]
       },
@@ -187,7 +187,7 @@
       {
         "description": "The yield fallback chain uses `or`, so a real zero yield is treated as a missing one and replaced by the next source.",
         "locations": [
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:54"
+          "src/russian_bonds/_stateless_computations/screening/build_screener_bonds.py:54"
         ]
       }
     ]
@@ -219,8 +219,8 @@
           "src/russian_bonds/_stateless_computations/build_issuer_investments.py:13",
           "src/russian_bonds/_stateless_computations/build_issuer_investments.py:14",
           "src/russian_bonds/_stateless_computations/build_issuer_investments.py:15",
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:33",
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:38"
+          "src/russian_bonds/_stateless_computations/screening/build_screener_bonds.py:33",
+          "src/russian_bonds/_stateless_computations/screening/build_screener_bonds.py:38"
         ]
       }
     ]
@@ -300,8 +300,8 @@
       {
         "description": "Tests build SDK bonds through the same private helpers.",
         "locations": [
-          "tests/stateless_computations/test_build_screener_bonds.py:10",
-          "tests/stateless_computations/test_build_screener_bonds.py:37"
+          "tests/stateless_computations/screening/test_build_screener_bonds.py:10",
+          "tests/stateless_computations/screening/test_build_screener_bonds.py:37"
         ]
       }
     ]
@@ -367,8 +367,8 @@
           "src/russian_bonds/_entities/screener_bond.py:22",
           "src/russian_bonds/_entities/bond.py:7",
           "src/russian_bonds/_entities/bond_cash_flow.py:15",
-          "src/russian_bonds/_stateless_computations/default_foreign_currency_screener.py:12",
-          "src/russian_bonds/_stateless_computations/default_rub_screener.py:16",
+          "src/russian_bonds/_stateless_computations/screening/default_foreign_currency_screener.py:12",
+          "src/russian_bonds/_stateless_computations/screening/default_rub_screener.py:16",
           "dashboard.py:132"
         ]
       },
@@ -384,8 +384,8 @@
         "description": "Yields are bare floats in percent while the tax rate and XIRR are fractions, so the unit lives only in comments and display formats, and mixing the two is not caught.",
         "locations": [
           "src/russian_bonds/_entities/screener_bond.py:13",
-          "src/russian_bonds/_stateless_computations/default_rub_screener.py:8",
-          "src/russian_bonds/_stateless_computations/default_foreign_currency_screener.py:8",
+          "src/russian_bonds/_stateless_computations/screening/default_rub_screener.py:8",
+          "src/russian_bonds/_stateless_computations/screening/default_foreign_currency_screener.py:8",
           "src/russian_bonds/_stateless_computations/fits_common_screener_filters.py:15",
           "dashboard.py:23",
           "dashboard.py:152"
@@ -438,7 +438,7 @@
           "src/russian_bonds/_stateless_computations/is_reliable_rating.py:10",
           "src/russian_bonds/_stateless_computations/is_reliable_rating.py:11",
           "src/russian_bonds/_stateless_computations/fits_common_screener_filters.py:33",
-          "src/russian_bonds/_stateless_computations/build_screener_bonds.py:82"
+          "src/russian_bonds/_stateless_computations/screening/build_screener_bonds.py:82"
         ]
       }
     ]

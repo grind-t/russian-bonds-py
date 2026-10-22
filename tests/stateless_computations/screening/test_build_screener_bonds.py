@@ -11,7 +11,7 @@ from t_tech.invest import Bond, _grpc_helpers
 from t_tech.invest.grpc import instruments_pb2
 
 from russian_bonds._entities.credit_rating import CreditRating
-from russian_bonds._stateless_computations.build_screener_bonds import (
+from russian_bonds._stateless_computations.screening.build_screener_bonds import (
     build_screener_bonds,
 )
 

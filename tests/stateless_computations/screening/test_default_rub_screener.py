@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from factories import TODAY, agency, ifrs, screener_bond
 
-from russian_bonds._stateless_computations.default_rub_screener import (
+from russian_bonds._stateless_computations.screening.default_rub_screener import (
     default_rub_screener,
 )
 
