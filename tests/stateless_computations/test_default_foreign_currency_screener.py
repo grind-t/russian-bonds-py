@@ -2,8 +2,8 @@ from datetime import timedelta
 
 from factories import TODAY, screener_bond
 
-from russian_bonds._stateless_computations.is_foreign_currency_candidate import (
-    is_foreign_currency_candidate,
+from russian_bonds._stateless_computations.default_foreign_currency_screener import (
+    default_foreign_currency_screener,
 )
 
 
@@ -21,6 +21,6 @@ def test_foreign_currency_candidate(subtests):
     for name, (fields, expected) in cases.items():
         with subtests.test(name):
             assert (
-                is_foreign_currency_candidate(screener_bond(**fields), TODAY)
+                default_foreign_currency_screener(screener_bond(**fields), TODAY)
                 is expected
             )

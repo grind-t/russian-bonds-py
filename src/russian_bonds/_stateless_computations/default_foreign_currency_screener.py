@@ -11,7 +11,7 @@ from russian_bonds._stateless_computations.default_maturity_criterion import (
 _MIN_YTM = 7.0  # percent
 
 
-def is_foreign_currency_candidate(bond: ScreenerBond, today: date) -> bool:
+def default_foreign_currency_screener(bond: ScreenerBond, today: date) -> bool:
     return (
         bond.currency != "rub"
         and default_maturity_criterion(bond, today)

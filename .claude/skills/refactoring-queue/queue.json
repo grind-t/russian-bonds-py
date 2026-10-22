@@ -367,7 +367,7 @@
           "src/russian_bonds/_entities/screener_bond.py:22",
           "src/russian_bonds/_entities/bond.py:7",
           "src/russian_bonds/_entities/bond_cash_flow.py:15",
-          "src/russian_bonds/_stateless_computations/is_foreign_currency_candidate.py:12",
+          "src/russian_bonds/_stateless_computations/default_foreign_currency_screener.py:12",
           "src/russian_bonds/_stateless_computations/default_rub_screener.py:16",
           "dashboard.py:132"
         ]
@@ -385,7 +385,7 @@
         "locations": [
           "src/russian_bonds/_entities/screener_bond.py:13",
           "src/russian_bonds/_stateless_computations/default_rub_screener.py:8",
-          "src/russian_bonds/_stateless_computations/is_foreign_currency_candidate.py:8",
+          "src/russian_bonds/_stateless_computations/default_foreign_currency_screener.py:8",
           "src/russian_bonds/_stateless_computations/fits_common_screener_filters.py:15",
           "dashboard.py:23",
           "dashboard.py:152"

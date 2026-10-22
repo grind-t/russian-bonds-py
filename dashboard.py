@@ -12,11 +12,11 @@ from russian_bonds import (
     CashFlow,
     CreditRating,
     ScreenerBond,
+    default_foreign_currency_screener,
     default_rub_screener,
     get_account_cash_flows,
     get_issuer_investments,
     get_screener_bonds,
-    is_foreign_currency_candidate,
 )
 
 PERIOD = timedelta(days=365)
@@ -262,5 +262,9 @@ with foreign_currency_tab:
         "доходность от 7%, надёжный рейтинг."
     )
     screener_table(
-        [bond for bond in screener_bonds if is_foreign_currency_candidate(bond, today)]
+        [
+            bond
+            for bond in screener_bonds
+            if default_foreign_currency_screener(bond, today)
+        ]
     )
