@@ -81,7 +81,10 @@ select = [
     "E", "F", "I", "UP", "B", "SIM", "RUF", "PT", "N",
     "C4", "PIE", "PERF", "FURB", "PTH", "T20", "ANN", "ASYNC", "DTZ", "TID",
 ]
-ignore = ["RUF001"]  # allow Cyrillic in strings
+ignore = [
+    "RUF001",  # allow Cyrillic in strings
+    "E501",  # ruff format wraps code, but deep import paths cannot be wrapped
+]
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
