@@ -1,9 +1,9 @@
-from russian_bonds._entities.portfolio_bond_position import PortfolioBondPosition
+from russian_bonds._entities.account_position import AccountPosition
 from russian_bonds._entities.screener_bond import ScreenerBond
 
 
 def build_issuer_investments(
-    *, positions: list[PortfolioBondPosition], bonds: list[ScreenerBond]
+    *, positions: list[AccountPosition], bonds: list[ScreenerBond]
 ) -> dict[str, float]:
     """Rubles invested in each issuer."""
     issuer_inn_by_isin = {bond.isin: bond.issuer_inn for bond in bonds}

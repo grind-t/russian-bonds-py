@@ -3,12 +3,12 @@ from datetime import datetime
 from t_tech.invest import OperationType
 
 from russian_bonds._entities.account_operation import AccountOperation
-from russian_bonds._entities.portfolio_bond_position import PortfolioBondPosition
+from russian_bonds._entities.account_position import AccountPosition
 from russian_bonds._entities.rub_money import RubMoney
 
 
 def to_virtual_account_operation(
-    position: PortfolioBondPosition, now: datetime
+    position: AccountPosition, now: datetime
 ) -> AccountOperation:
     """Sells an open position at the market price to close its history."""
     price = position.current_price.amount + position.current_nkd.amount

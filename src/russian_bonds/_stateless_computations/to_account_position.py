@@ -1,13 +1,13 @@
 from t_tech.invest import PortfolioPosition
 from t_tech.invest.utils import quotation_to_decimal
 
-from russian_bonds._entities.portfolio_bond_position import PortfolioBondPosition
+from russian_bonds._entities.account_position import AccountPosition
 from russian_bonds._stateless_computations.to_rub_money import to_rub_money
 
 
-def to_portfolio_bond_position(position: PortfolioPosition) -> PortfolioBondPosition:
+def to_account_position(position: PortfolioPosition) -> AccountPosition:
     # validation rejects a fractional quantity
-    return PortfolioBondPosition.model_validate(
+    return AccountPosition.model_validate(
         {
             "ticker": position.ticker,
             "quantity": quotation_to_decimal(position.quantity),

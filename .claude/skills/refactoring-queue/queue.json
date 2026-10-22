@@ -259,7 +259,7 @@
           "src/russian_bonds/_entities/account_operation.py:9",
           "src/russian_bonds/_entities/bond.py:4",
           "src/russian_bonds/_entities/credit_rating.py:5",
-          "src/russian_bonds/_entities/portfolio_bond_position.py:6",
+          "src/russian_bonds/_entities/account_position.py:6",
           "src/russian_bonds/_entities/rub_money.py:6",
           "src/russian_bonds/_entities/screener_bond.py:9"
         ]

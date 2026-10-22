@@ -1,4 +1,4 @@
-from russian_bonds._entities.portfolio_bond_position import PortfolioBondPosition
+from russian_bonds._entities.account_position import AccountPosition
 from russian_bonds._entities.rub_money import RubMoney
 from russian_bonds._entities.screener_bond import ScreenerBond
 from russian_bonds._stateless_computations.build_issuer_investments import (
@@ -11,9 +11,9 @@ def _bond(isin: str, issuer_inn: str | None) -> ScreenerBond:
     return ScreenerBond.model_construct(isin=isin, issuer_inn=issuer_inn)
 
 
-def position(ticker: str, quantity: int, price: float) -> PortfolioBondPosition:
+def position(ticker: str, quantity: int, price: float) -> AccountPosition:
     # only the fields the issuer investments read
-    return PortfolioBondPosition.model_construct(
+    return AccountPosition.model_construct(
         ticker=ticker, quantity=quantity, average_price=RubMoney(amount=price)
     )
 

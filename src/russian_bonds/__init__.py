@@ -24,11 +24,11 @@ from russian_bonds._stateless_computations.is_foreign_currency_candidate import 
 )
 from russian_bonds._stateless_computations.is_rub_candidate import is_rub_candidate
 from russian_bonds._stateless_computations.quantity_delta import BUY_TYPES, SELL_TYPES
+from russian_bonds._stateless_effects.fetch_account_positions import (
+    fetch_account_positions,
+)
 from russian_bonds._stateless_effects.fetch_bond import fetch_bond
 from russian_bonds._stateless_effects.fetch_brotli_json import fetch_brotli_json
-from russian_bonds._stateless_effects.fetch_portfolio_bond_positions import (
-    fetch_portfolio_bond_positions,
-)
 from russian_bonds._stateless_effects.fetch_t_invest_operations import (
     fetch_t_invest_operations,
 )
@@ -57,9 +57,7 @@ async def get_account_cash_flows(
         account_id,
         from_,
         fetch_t_invest_operations=partial(fetch_t_invest_operations, t_invest_client),
-        fetch_portfolio_bond_positions=partial(
-            fetch_portfolio_bond_positions, t_invest_client
-        ),
+        fetch_account_positions=partial(fetch_account_positions, t_invest_client),
         fetch_amortizations=partial(get_moex_bond_amortizations, client=moex_client),
         fetch_bond=partial(fetch_bond, client=moex_client),
     )
@@ -71,9 +69,7 @@ async def get_issuer_investments(
     return await _get_issuer_investments(
         account_id,
         bonds,
-        fetch_portfolio_bond_positions=partial(
-            fetch_portfolio_bond_positions, t_invest_client
-        ),
+        fetch_account_positions=partial(fetch_account_positions, t_invest_client),
     )
 
 

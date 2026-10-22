@@ -8,9 +8,9 @@ from t_tech.invest import OperationState
 
 from russian_bonds._entities.account_bond_history import AccountBondHistory
 from russian_bonds._entities.account_operation import AccountOperation
+from russian_bonds._entities.account_position import AccountPosition
 from russian_bonds._entities.bond import Bond
 from russian_bonds._entities.cash_flow import CashFlow
-from russian_bonds._entities.portfolio_bond_position import PortfolioBondPosition
 from russian_bonds._entities.t_invest_operation import TInvestOperation
 from russian_bonds._stateless_computations.group_operations_by_ticker import (
     group_operations_by_ticker,
@@ -40,15 +40,13 @@ async def get_account_cash_flows(
     fetch_t_invest_operations: Callable[
         [str, datetime | None], Awaitable[list[TInvestOperation]]
     ],
-    fetch_portfolio_bond_positions: Callable[
-        [str], Awaitable[list[PortfolioBondPosition]]
-    ],
+    fetch_account_positions: Callable[[str], Awaitable[list[AccountPosition]]],
     fetch_amortizations: _FetchAmortizations,
     fetch_bond: Callable[[str], Awaitable[Bond]],
 ) -> list[CashFlow]:
     t_invest_operations, positions = await asyncio.gather(
         fetch_t_invest_operations(account_id, from_),
-        fetch_portfolio_bond_positions(account_id),
+        fetch_account_positions(account_id),
     )
     account_operations = await _to_account_operations(
         t_invest_operations, fetch_amortizations
