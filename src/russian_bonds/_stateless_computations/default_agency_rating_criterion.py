@@ -1,6 +1,11 @@
 from russian_bonds._entities.credit_rating import CreditRating
 from russian_bonds._entities.screener_bond import ScreenerBond
 
+# rating values are indexes on the cbr_ratings scale, from D = 0 to AAA = 23
+_A_PLUS = 19
+_BBB_PLUS = 16
+_BBB = 15
+
 
 def default_agency_rating_criterion(bond: ScreenerBond) -> bool:
     # an ifrs or a t-invest rating alone is enough, but a poor ifrs one rules
@@ -20,7 +25,7 @@ def _is_reliable_rating(rating: CreditRating) -> bool:
     if rating.value is None:
         return False
     return (
-        rating.value > 18
-        or (rating.value > 15 and rating.prediction in (None, "STA", "POS"))
-        or (rating.value > 14 and rating.prediction in (None, "POS"))
+        rating.value >= _A_PLUS
+        or (rating.value >= _BBB_PLUS and rating.prediction in (None, "STA", "POS"))
+        or (rating.value >= _BBB and rating.prediction in (None, "POS"))
     )
