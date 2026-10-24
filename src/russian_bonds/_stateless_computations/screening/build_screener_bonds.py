@@ -1,4 +1,4 @@
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 
 from cbr_ratings import KraCode, RatingItem
 from moex import MoexBond, MoexBondMarketData, MoexBondMarketYield, MoexSecurity
@@ -10,6 +10,7 @@ from russian_bonds._stateless_computations.money_to_float import money_to_float
 
 # the SDK returns an epoch timestamp instead of a missing date
 _EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
+_BP_PER_PERCENT = 100
 
 
 def build_screener_bonds(
@@ -76,6 +77,16 @@ def build_screener_bonds(
                 name=bond.name,
                 maturity_date=_t_invest_date(bond.maturity_date),
                 ytm=ytm,
+                g_spread=(
+                    my.GSPREADBP / _BP_PER_PERCENT
+                    if my and my.GSPREADBP is not None and not is_floater
+                    else None
+                ),
+                duration=(
+                    timedelta(days=my.DURATION)
+                    if my and my.DURATION is not None and not is_floater
+                    else None
+                ),
                 last_price=_price(md.LAST if md else None, mb),
                 best_ask_price=_price(md.OFFER if md else None, mb),
                 t_invest_rating=3 - bond.risk_level if bond.risk_level >= 1 else None,

@@ -23,7 +23,7 @@ from russian_bonds import (
 PERIOD = timedelta(days=365)
 TAX_RATE = 0.13
 MIN_HOLDING_DAYS = 60
-DAYS_PER_YEAR = 365.25
+YEAR = timedelta(days=365.25)
 
 
 def http_client() -> httpx.AsyncClient:
@@ -126,15 +126,15 @@ def screener_table(
                     }
                 ),
                 "YTM": bond.ytm,
+                "G-спред, п.п.": bond.g_spread,
+                "Дюрация, лет": None if bond.duration is None else bond.duration / YEAR,
                 "Последняя цена": bond.last_price,
                 "Лучшее предложение": bond.best_ask_price,
                 "Валюта": bond.currency.upper(),
                 "Флоатер": bond.is_floater,
                 "Амортизация": bond.has_amortization,
                 "Для квалов": bond.is_for_qualified_investors,
-                "До погашения, лет": round(
-                    (bond.maturity_date - today).days / DAYS_PER_YEAR, 2
-                )
+                "До погашения, лет": round((bond.maturity_date - today) / YEAR, 2)
                 if bond.maturity_date
                 else None,
                 "T-Invest": bond.t_invest_rating,
@@ -149,6 +149,8 @@ def screener_table(
         ],
         column_config={
             "YTM": st.column_config.NumberColumn(format="%.2f%%"),
+            "G-спред, п.п.": st.column_config.NumberColumn(format="%.2f"),
+            "Дюрация, лет": st.column_config.NumberColumn(format="%.2f"),
             "Последняя цена": st.column_config.NumberColumn(format="%.2f"),
             "Лучшее предложение": st.column_config.NumberColumn(format="%.2f"),
         },

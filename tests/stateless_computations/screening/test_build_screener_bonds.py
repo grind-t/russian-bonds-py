@@ -127,10 +127,18 @@ MOEX_MARKET_DATA = [
     market_data("OTHER_BOARD", board="TQIR", YIELD=30.0),
 ]
 
+
+def market_yield(secid: str, **fields) -> MoexBondMarketYield:
+    defaults = {"EFFECTIVEYIELD": None, "GSPREADBP": None, "DURATION": None}
+    return MoexBondMarketYield.model_construct(
+        SECID=secid, BOARDID="TQCB", **defaults | fields
+    )
+
+
 MOEX_MARKET_YIELDS = [
-    MoexBondMarketYield.model_construct(
-        SECID="OFZ_FLOAT", BOARDID="TQCB", EFFECTIVEYIELD=16.1
-    ),
+    # floater: moex spread and duration are dropped
+    market_yield("OFZ_FLOAT", EFFECTIVEYIELD=16.1, GSPREADBP=-1550, DURATION=950),
+    market_yield("PUT_OFFER", GSPREADBP=215, DURATION=730),
 ]
 
 CBR_RATINGS_BY_ISIN: dict[str, dict[KraCode, RatingItem]] = {

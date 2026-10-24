@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from cbr_ratings import KraCode
 from pydantic import BaseModel
@@ -11,6 +11,11 @@ class ScreenerBond(BaseModel):
     name: str
     maturity_date: date | None
     ytm: float | None
+    # over the ofz curve at the same duration, in the units of ytm;
+    # None for floaters, whose coupons moex does not forecast
+    g_spread: float | None
+    # None for floaters
+    duration: timedelta | None
     # in the face value currency, None without trades or quotes
     last_price: float | None
     best_ask_price: float | None
