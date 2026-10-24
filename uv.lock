@@ -307,15 +307,15 @@ wheels = [
 
 [[package]]
 name = "grind-t-moex"
-version = "0.1.0"
+version = "0.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/82/a1/9f196f357c424c80c6268701a9ed6a2ea2a413c15400ad093ccabec6a8b6/grind_t_moex-0.1.0.tar.gz", hash = "sha256:bd4ea6888b8231e9d0a806d9d3ec1928805af1685ca687f3b088085d15643e21", size = 8633, upload-time = "2026-09-30T12:26:01.237Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8d/bf/affb4ba6aacdd5017b53361cff73f1de8bbb465bb41d48e4ef119c4619f0/grind_t_moex-0.1.1.tar.gz", hash = "sha256:650cf7295078e4d5e2e9e55392d20464eff20d7bd0910a296ad4ced66309dcb9", size = 8629, upload-time = "2026-10-24T19:05:27.802Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b7/09/1cef6fe520f5495e936084bd9e05cea3f451c85a9acc69bfb05e15aafdeb/grind_t_moex-0.1.0-py3-none-any.whl", hash = "sha256:df6f5489d1ac0952255fe371c3d087d57ab65bb39444ad6be768b56ea2b29319", size = 14785, upload-time = "2026-09-30T12:25:59.494Z" },
+    { url = "https://files.pythonhosted.org/packages/c1/fc/6bbd7886ec5f924df6b99dd4ac3399cf45404fbc34b512533e0611d99a82/grind_t_moex-0.1.1-py3-none-any.whl", hash = "sha256:b2983c7b5feaf5afbf72a964693c3dc4f145afc2cba9dd0787c9a1d588bd10cf", size = 14787, upload-time = "2026-10-24T19:05:26.478Z" },
 ]
 
 [[package]]
