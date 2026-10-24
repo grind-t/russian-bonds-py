@@ -14,7 +14,7 @@ def to_bought_bond_cash_flows(history: AccountBondHistory) -> list[CashFlow]:
             operation_name=op.name,
             description=op.description,
             type=op.type,
-            payment=op.payment.amount,
+            payment=op.payment.float_amount,
             face_unit=history.bond.face_unit,
             date=op.date,
             virtual=op.virtual,

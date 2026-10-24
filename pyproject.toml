@@ -99,7 +99,7 @@ ban-relative-imports = "all"
 extra-paths = ["tests"]
 
 [tool.vulture]
-ignore_decorators = ["@model_validator"]
+ignore_decorators = ["@model_validator", "@field_serializer"]
 # public fields of returned entities that only library consumers read
 ignore_names = ["face_value", "operation_name"]
 

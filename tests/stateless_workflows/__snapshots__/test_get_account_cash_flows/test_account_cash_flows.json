@@ -9267,7 +9267,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 3134.4900000000007,
+    "payment": 3134.49,
     "ticker": "RU000A10B1X2",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -27670,7 +27670,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "CNY",
     "operation_name": "Продажа",
-    "payment": 89522.80380000001,
+    "payment": 89522.8038,
     "ticker": "RU000A10CTH9",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -30453,7 +30453,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 27867.510000000002,
+    "payment": 27867.51,
     "ticker": "RU000A104362",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -31685,7 +31685,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 7271.389999999999,
+    "payment": 7271.39,
     "ticker": "RU000A10B0U0",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -32180,7 +32180,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 81133.59999999999,
+    "payment": 81133.6,
     "ticker": "RU000A10DYC8",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -32796,7 +32796,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 99077.00000000001,
+    "payment": 99077.0,
     "ticker": "RU000A10EJQ7",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -33357,7 +33357,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 19754.219999999998,
+    "payment": 19754.22,
     "ticker": "RU000A108AL4",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -33544,7 +33544,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 111815.99999999999,
+    "payment": 111816.0,
     "ticker": "RU000A105CM4",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -34215,7 +34215,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 105905.09999999999,
+    "payment": 105905.1,
     "ticker": "RU000A108CC9",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -34655,7 +34655,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 22546.199999999997,
+    "payment": 22546.2,
     "ticker": "RU000A104Y15",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -34754,7 +34754,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 20598.800000000003,
+    "payment": 20598.8,
     "ticker": "RU000A10BG13",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -35480,7 +35480,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 17988.480000000003,
+    "payment": 17988.48,
     "ticker": "RU000A10B7W1",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -35953,7 +35953,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "SUR",
     "operation_name": "Продажа",
-    "payment": 95132.40000000001,
+    "payment": 95132.4,
     "ticker": "RU000A10ASC6",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true
@@ -36679,7 +36679,7 @@
     "description": "Виртуальная продажа по рыночной цене",
     "face_unit": "USD",
     "operation_name": "Продажа",
-    "payment": 84143.43500000001,
+    "payment": 84143.435,
     "ticker": "RU000A10B3Z3",
     "type": "OPERATION_TYPE_SELL",
     "virtual": true

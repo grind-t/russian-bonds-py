@@ -1,4 +1,5 @@
 from datetime import UTC, datetime, timedelta
+from decimal import Decimal
 
 from factories import account_operation, bond
 from t_tech.invest import OperationType
@@ -39,7 +40,7 @@ def _history(*operations: AccountOperation) -> AccountBondHistory:
     return AccountBondHistory(bond=bond(), operations=list(operations))
 
 
-def _adjusted(history: AccountBondHistory) -> dict[str, tuple[float, int]]:
+def _adjusted(history: AccountBondHistory) -> dict[str, tuple[Decimal, int]]:
     adjusted = without_initial_bonds(history)
     assert adjusted.initial_quantity == 0
     return {op.id: (op.payment.amount, op.quantity_delta) for op in adjusted.operations}

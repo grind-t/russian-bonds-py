@@ -13,6 +13,6 @@ def build_issuer_investments(
         issuer_inn = issuer_inn_by_isin.get(pos.ticker)
         if issuer_inn is None:
             continue
-        investment = pos.quantity * pos.average_price.amount
+        investment = pos.quantity * pos.average_price.float_amount
         result[issuer_inn] = result.get(issuer_inn, 0.0) + investment
     return result

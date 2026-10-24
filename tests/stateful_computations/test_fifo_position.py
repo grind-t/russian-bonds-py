@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from fractions import Fraction
 
 import pytest
 from t_tech.invest import OperationType
@@ -26,7 +27,7 @@ COUPON = _Op(OperationType.OPERATION_TYPE_COUPON)
 def test_buy_is_kept():
     position = FifoPosition(initial=10)
     assert position.apply(_buy(5)) == 1.0
-    assert position == FifoPosition(initial=10, bought=5, bought_share=5 / 15)
+    assert position == FifoPosition(initial=10, bought=5, bought_share=Fraction(5, 15))
 
 
 def test_sell_consumes_initial_bonds_first():
@@ -38,7 +39,7 @@ def test_sell_consumes_initial_bonds_first():
 
 def test_sell_across_initial_and_bought_bonds():
     position = FifoPosition(initial=10, bought=10)
-    assert position.apply(_sell(15)) == 5 / 15
+    assert position.apply(_sell(15)) == Fraction(5, 15)
     assert position.initial == 0
     assert position.bought == 5
 
@@ -61,9 +62,9 @@ def test_payment_without_bought_bonds_is_dropped():
 
 
 def test_payment_does_not_change_position():
-    position = FifoPosition(initial=10, bought=10, bought_share=0.5)
+    position = FifoPosition(initial=10, bought=10, bought_share=Fraction(1, 2))
     position.apply(COUPON)
-    assert position == FifoPosition(initial=10, bought=10, bought_share=0.5)
+    assert position == FifoPosition(initial=10, bought=10, bought_share=Fraction(1, 2))
 
 
 def test_bought_share_carries_over_after_close():
@@ -76,7 +77,7 @@ def test_bought_share_carries_over_after_close():
 
 
 def test_partial_repayment_keeps_bought_share():
-    position = FifoPosition(initial=10, bought=10, bought_share=0.5)
+    position = FifoPosition(initial=10, bought=10, bought_share=Fraction(1, 2))
     repayment = _Op(OperationType.OPERATION_TYPE_BOND_REPAYMENT)
     assert position.apply(repayment) == 0.5
 

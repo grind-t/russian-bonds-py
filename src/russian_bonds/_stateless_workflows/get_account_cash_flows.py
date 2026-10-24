@@ -90,5 +90,5 @@ async def _fill_missing_quantity(
         raise ValueError(f"No final amortization for {op.ticker}")
     # the payment is in rubles even for currency bonds
     op.quantity_done = quantity_by_payment(
-        to_rub_money(op.payment).amount, final_amortization_rub
+        to_rub_money(op.payment).float_amount, final_amortization_rub
     )

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from fractions import Fraction
 from typing import Protocol
 
 from t_tech.invest import OperationType
@@ -34,9 +35,9 @@ class FifoPosition:
     initial: int
     bought: int = 0
     # carries over to payments after the position is closed
-    bought_share: float = 0.0
+    bought_share: Fraction = Fraction(0)
 
-    def apply(self, operation: _Operation) -> float:
+    def apply(self, operation: _Operation) -> Fraction:
         """Applies an operation and returns the fraction of it to keep."""
         ensure(
             operation.type in _SUPPORTED_TYPES,
@@ -49,14 +50,14 @@ class FifoPosition:
             return self.bought_share
         if quantity_delta > 0:
             self.bought += quantity_delta
-            fraction = 1.0
+            fraction = Fraction(1)
         else:
             abs_delta = -quantity_delta
             initial_sold = min(self.initial, abs_delta)
             bought_sold = abs_delta - initial_sold
             self.initial -= initial_sold
             self.bought -= bought_sold
-            fraction = bought_sold / abs_delta
+            fraction = Fraction(bought_sold, abs_delta)
         if (total := self.initial + self.bought) > 0:
-            self.bought_share = self.bought / total
+            self.bought_share = Fraction(self.bought, total)
         return fraction
