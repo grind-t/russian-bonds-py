@@ -240,20 +240,12 @@ screener_bonds, issuer_investments = load_screener()
 today = datetime.now(UTC).date()
 
 with rub_tab:
-    st.caption(
-        "Рублёвые облигации без оферты, погашение через 3 месяца – 2 года, "
-        "доходность от 15% (у флоатеров выше с ростом срока), надёжный рейтинг."
-    )
     screener_table(
         [bond for bond in screener_bonds if default_rub_screener(bond, today)],
         issuer_investments,
     )
 
 with foreign_currency_tab:
-    st.caption(
-        "Валютные облигации без оферты, погашение через 3 месяца – 2 года, "
-        "доходность от 7%, надёжный рейтинг."
-    )
     screener_table(
         [
             bond

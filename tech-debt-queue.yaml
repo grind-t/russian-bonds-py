@@ -4,18 +4,6 @@
   defect_characteristic: Flexibility
   defect_subcharacteristic: Installability
 
-- defect_description: Код опирается на приватные внутренности SDK. Используются `_grpc_helpers` и прямой вызов `operations.stub`, а схема OperationItem расширяется наследованием.
-  defect_location: src/russian_bonds/_entities/t_invest_operation.py, src/russian_bonds/_stateless_effects/fetch_t_invest_operations.py
-  defect_type: Insider Trading (Fowler, Refactoring, 2nd ed.)
-  defect_characteristic: Flexibility
-  defect_subcharacteristic: Adaptability
-
-- defect_description: Подписи вкладок дашборда вручную повторяют пороги скринеров (15%, 7%, 3 месяца – 2 года). Они уже расходились, это чинил коммит 20b6e8a.
-  defect_location: dashboard.py:244-256, src/russian_bonds/_stateless_computations/screening/default_rub_ytm_criterion.py, src/russian_bonds/_stateless_computations/screening/default_foreign_currency_screener.py, src/russian_bonds/_stateless_computations/screening/default_maturity_criterion.py
-  defect_type: DRY (Hunt & Thomas, The Pragmatic Programmer)
-  defect_characteristic: Maintainability
-  defect_subcharacteristic: Modifiability
-
 - defect_description: Доменная логика живёт в UI-скрипте и не покрыта тестами. Это XIRR по валютам и облигациям, налог только с прибыли, фильтр по сроку владения и сортировка эмитентов по лучшей YTM.
   defect_location: dashboard.py:75-77, dashboard.py:95-113, dashboard.py:181-231
   defect_type: Smart UI anti-pattern (Evans, Domain-Driven Design, 2003, ch. 4)
@@ -69,3 +57,9 @@
   defect_type: Duplicated Code (Fowler, Refactoring, 2nd ed.)
   defect_characteristic: Maintainability
   defect_subcharacteristic: Modifiability
+
+- defect_description: Код опирается на приватные внутренности SDK. Используются `_grpc_helpers` и прямой вызов `operations.stub`, а схема OperationItem расширяется наследованием.
+  defect_location: src/russian_bonds/_entities/t_invest_operation.py, src/russian_bonds/_stateless_effects/fetch_t_invest_operations.py
+  defect_type: Insider Trading (Fowler, Refactoring, 2nd ed.)
+  defect_characteristic: Flexibility
+  defect_subcharacteristic: Adaptability
