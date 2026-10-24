@@ -6,10 +6,10 @@ paths:
 
 # Naming principles
 
-N-001: Name says exactly what the code does
+NAMING-001: Name says exactly what the code does
 
-N-002: One word per concept
+NAMING-002: One word per concept
 
-N-003: Readable at the call site
+NAMING-003: Readable at the call site
 
-N-004: Don't add gratuitous context
+NAMING-004: Don't add gratuitous context

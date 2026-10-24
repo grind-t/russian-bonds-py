@@ -6,6 +6,6 @@ paths:
 
 # Design principles
 
-D-001: Generalize hidden duplication
+DESIGN-001: Generalize hidden duplication
 
-D-002: Make illegal states unrepresentable
+DESIGN-002: Make illegal states unrepresentable
