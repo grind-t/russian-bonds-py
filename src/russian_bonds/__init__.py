@@ -20,11 +20,11 @@ from russian_bonds._entities.credit_rating import CreditRating
 from russian_bonds._entities.rub_money import RubMoney
 from russian_bonds._entities.screener_bond import ScreenerBond
 from russian_bonds._stateless_computations.quantity_delta import BUY_TYPES, SELL_TYPES
-from russian_bonds._stateless_computations.screening.default_foreign_currency_screener import (
-    default_foreign_currency_screener,
+from russian_bonds._stateless_computations.screening.default_rub_fixed_screener import (
+    default_rub_fixed_screener,
 )
-from russian_bonds._stateless_computations.screening.default_rub_screener import (
-    default_rub_screener,
+from russian_bonds._stateless_computations.screening.default_rub_floater_screener import (
+    default_rub_floater_screener,
 )
 from russian_bonds._stateless_computations.screening.g_spread_excess import (
     g_spread_excess,
@@ -117,8 +117,8 @@ __all__ = [
     "CreditRating",
     "RubMoney",
     "ScreenerBond",
-    "default_foreign_currency_screener",
-    "default_rub_screener",
+    "default_rub_fixed_screener",
+    "default_rub_floater_screener",
     "g_spread_excess",
     "get_account_cash_flows",
     "get_issuer_investments",

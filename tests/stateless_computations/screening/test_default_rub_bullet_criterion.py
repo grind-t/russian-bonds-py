@@ -2,32 +2,27 @@ from datetime import timedelta
 
 from factories import TODAY, agency, ifrs, screener_bond
 
-from russian_bonds._stateless_computations.screening.default_rub_screener import (
-    default_rub_screener,
+from russian_bonds._stateless_computations.screening.default_rub_bullet_criterion import (
+    default_rub_bullet_criterion,
 )
 
 
-def test_rub_candidate(subtests):
-    floater = {"is_floater": True, "maturity_date": TODAY + timedelta(400)}
+def test_rub_bullet(subtests):
     cases = {
-        "fits all filters": ({}, True),
+        "fits all conditions": ({}, True),
         "non-ruble currency": ({"currency": "usd"}, False),
-        "ytm at minimum": ({"ytm": 15.0}, True),
-        "ytm below minimum": ({"ytm": 14.9}, False),
-        "no ytm": ({"ytm": None}, False),
         "has offer": ({"has_offer": True}, False),
+        "has amortization": ({"has_amortization": True}, False),
         "no maturity date": ({"maturity_date": None}, False),
         "matures too soon": ({"maturity_date": TODAY + timedelta(days=91)}, False),
         "matures soon enough": ({"maturity_date": TODAY + timedelta(days=92)}, True),
         "matures late enough": ({"maturity_date": TODAY + timedelta(days=729)}, True),
         "matures too late": ({"maturity_date": TODAY + timedelta(days=730)}, False),
-        # a floater maturing in 400 days needs 15 + 400 * 0.00275 = 16.1
-        "floater ytm at minimum": (floater | {"ytm": 16.1}, True),
-        "floater ytm below minimum": (floater | {"ytm": 16.0}, False),
     }
     for name, (fields, expected) in cases.items():
         with subtests.test(name):
-            assert default_rub_screener(screener_bond(**fields), TODAY) is expected
+            bond = screener_bond(**fields)
+            assert default_rub_bullet_criterion(bond, TODAY) is expected
 
 
 def test_ratings(subtests):
@@ -87,4 +82,7 @@ def test_ratings(subtests):
     }
     for name, (ratings, expected) in cases.items():
         with subtests.test(name):
-            assert default_rub_screener(screener_bond(**ratings), TODAY) is expected
+            assert (
+                default_rub_bullet_criterion(screener_bond(**ratings), TODAY)
+                is expected
+            )

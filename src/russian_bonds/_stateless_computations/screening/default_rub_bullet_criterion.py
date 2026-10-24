@@ -8,15 +8,14 @@ from russian_bonds._stateless_computations.screening.default_maturity_criterion 
     default_maturity_criterion,
 )
 
-_MIN_YTM = 7.0  # percent
 
-
-def default_foreign_currency_screener(bond: ScreenerBond, today: date) -> bool:
+def default_rub_bullet_criterion(bond: ScreenerBond, today: date) -> bool:
+    # a bullet bond repays the whole face value at maturity: no amortization,
+    # no offer
     return (
-        bond.currency != "rub"
+        bond.currency == "rub"
         and default_maturity_criterion(bond, today)
-        and bond.ytm is not None
-        and bond.ytm >= _MIN_YTM
+        and not bond.has_amortization
         and not bond.has_offer
         and default_agency_rating_criterion(bond)
     )

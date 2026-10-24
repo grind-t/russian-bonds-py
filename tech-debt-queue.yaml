@@ -10,12 +10,6 @@
   defect_characteristic: Maintainability
   defect_subcharacteristic: Analysability
 
-- defect_description: Рублёвый и валютный скринеры повторяют одну цепочку: валюта, срок, YTM, оферта, рейтинг. Проверку YTM в рублёвом вынесли в отдельный критерий, а в валютном она осталась внутри, со своим `_MIN_YTM`.
-  defect_location: src/russian_bonds/_stateless_computations/screening/default_rub_screener.py, src/russian_bonds/_stateless_computations/screening/default_foreign_currency_screener.py
-  defect_type: Duplicated Code (Fowler, Refactoring, 2nd ed.)
-  defect_characteristic: Maintainability
-  defect_subcharacteristic: Modifiability
-
 - defect_description: Доменные понятия хранятся в примитивных типах. Валюта называется то `face_unit` ("RUB" из MOEX), то `currency` ("rub" из T-Invest), поэтому дашборд вынужден вызывать `.upper()`. Отсутствие родительской операции обозначается пустой строкой в `parent_operation_id`.
   defect_location: src/russian_bonds/_entities/bond.py, src/russian_bonds/_entities/cash_flow.py, src/russian_bonds/_entities/screener_bond.py, src/russian_bonds/_entities/account_operation.py, dashboard.py:133
   defect_type: Primitive Obsession (Fowler, Refactoring, 2nd ed.)

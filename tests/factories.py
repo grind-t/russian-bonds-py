@@ -43,7 +43,7 @@ def ifrs(value: int, prediction: Prediction | None = None) -> dict[str, Any]:
 
 
 def screener_bond(**fields) -> ScreenerBond:
-    # a bond that fits the ruble screener, so each test breaks one condition
+    # a bond that fits the ruble fixed screener, so each test breaks one condition
     defaults = {
         "isin": "RU000A000001",
         "name": "Облигация",
