@@ -15,6 +15,7 @@ from russian_bonds import (
     ScreenerBond,
     default_foreign_currency_screener,
     default_rub_screener,
+    g_spread_excess,
     get_account_cash_flows,
     get_issuer_investments,
     get_screener_bonds,
@@ -101,6 +102,8 @@ def screener_table(
     bonds: list[ScreenerBond],
     today: date,
     issuer_investments: dict[str, float] | None = None,
+    # by isin; without it the table leaves out the g-spread columns
+    spread_excess: dict[str, float] | None = None,
 ) -> None:
     # issuers by their best yield, so bonds of one issuer stay together;
     # a bond without an issuer inn is an issuer of its own
@@ -126,7 +129,15 @@ def screener_table(
                     }
                 ),
                 "YTM": bond.ytm,
-                "G-спред, п.п.": bond.g_spread,
+                "YTM по предложению": bond.ask_ytm,
+                **(
+                    {}
+                    if spread_excess is None
+                    else {
+                        "G-спред, п.п.": bond.g_spread,
+                        "Спред к медиане рейтинга, п.п.": spread_excess.get(bond.isin),
+                    }
+                ),
                 "Дюрация, лет": None if bond.duration is None else bond.duration / YEAR,
                 "Последняя цена": bond.last_price,
                 "Лучшее предложение": bond.best_ask_price,
@@ -149,7 +160,11 @@ def screener_table(
         ],
         column_config={
             "YTM": st.column_config.NumberColumn(format="%.2f%%"),
+            "YTM по предложению": st.column_config.NumberColumn(format="%.2f%%"),
             "G-спред, п.п.": st.column_config.NumberColumn(format="%.2f"),
+            "Спред к медиане рейтинга, п.п.": st.column_config.NumberColumn(
+                format="%+.2f"
+            ),
             "Дюрация, лет": st.column_config.NumberColumn(format="%.2f"),
             "Последняя цена": st.column_config.NumberColumn(format="%.2f"),
             "Лучшее предложение": st.column_config.NumberColumn(format="%.2f"),
@@ -237,12 +252,15 @@ with portfolio_tab:
 
 screener_bonds, issuer_investments = load_screener()
 today = datetime.now(UTC).date()
+# peers come from the whole market, as the screener filters cut low spreads
+spread_excess = g_spread_excess(screener_bonds)
 
 with rub_tab:
     screener_table(
         [bond for bond in screener_bonds if default_rub_screener(bond, today)],
         today,
-        issuer_investments,
+        issuer_investments=issuer_investments,
+        spread_excess=spread_excess,
     )
 
 with foreign_currency_tab:

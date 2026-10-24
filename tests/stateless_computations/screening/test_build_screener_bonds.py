@@ -53,6 +53,7 @@ def moex_bond(secid: str, board: str = "TQCB", **fields) -> MoexBond:
         "PUTOPTIONDATE": None,
         "YIELDATPREVWAPRICE": None,
         "FACEVALUE": 1000.0,
+        "ACCRUEDINT": 0.0,
     }
     return MoexBond.model_construct(SECID=secid, BOARDID=board, **defaults | fields)
 
@@ -114,7 +115,7 @@ MOEX_SECURITIES = [
 
 MOEX_BONDS = [
     moex_bond("OFZ_FLOAT", YIELDATPREVWAPRICE=14.0),
-    moex_bond("PUT_OFFER", PUTOPTIONDATE=date(2027, 3, 1)),
+    moex_bond("PUT_OFFER", PUTOPTIONDATE=date(2027, 3, 1), ACCRUEDINT=5.0),
     moex_bond("CALL_OFFER"),
     moex_bond("PREV_YIELD", YIELDATPREVWAPRICE=21.5),
     moex_bond("OTHER_BOARD", board="TQIR", YIELDATPREVWAPRICE=30.0),
@@ -129,7 +130,12 @@ MOEX_MARKET_DATA = [
 
 
 def market_yield(secid: str, **fields) -> MoexBondMarketYield:
-    defaults = {"EFFECTIVEYIELD": None, "GSPREADBP": None, "DURATION": None}
+    defaults: dict[str, Any] = {
+        "PRICE": 100.0,
+        "EFFECTIVEYIELD": None,
+        "GSPREADBP": None,
+        "DURATION": None,
+    }
     return MoexBondMarketYield.model_construct(
         SECID=secid, BOARDID="TQCB", **defaults | fields
     )
@@ -138,7 +144,12 @@ def market_yield(secid: str, **fields) -> MoexBondMarketYield:
 MOEX_MARKET_YIELDS = [
     # floater: moex spread and duration are dropped
     market_yield("OFZ_FLOAT", EFFECTIVEYIELD=16.1, GSPREADBP=-1550, DURATION=950),
-    market_yield("PUT_OFFER", GSPREADBP=215, DURATION=730),
+    # ask yield: 19 - (997 - 995) / (995 + 5) * 119 / (730 / 365.25) ≈ 18.88
+    market_yield(
+        "PUT_OFFER", PRICE=99.5, EFFECTIVEYIELD=19.0, GSPREADBP=215, DURATION=730
+    ),
+    # dollar bond: the spread over the ruble curve is dropped, duration stays
+    market_yield("PREV_YIELD", GSPREADBP=-550, DURATION=365),
 ]
 
 CBR_RATINGS_BY_ISIN: dict[str, dict[KraCode, RatingItem]] = {

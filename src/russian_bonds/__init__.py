@@ -26,6 +26,9 @@ from russian_bonds._stateless_computations.screening.default_foreign_currency_sc
 from russian_bonds._stateless_computations.screening.default_rub_screener import (
     default_rub_screener,
 )
+from russian_bonds._stateless_computations.screening.g_spread_excess import (
+    g_spread_excess,
+)
 from russian_bonds._stateless_effects.fetch_account_positions import (
     fetch_account_positions,
 )
@@ -116,6 +119,7 @@ __all__ = [
     "ScreenerBond",
     "default_foreign_currency_screener",
     "default_rub_screener",
+    "g_spread_excess",
     "get_account_cash_flows",
     "get_issuer_investments",
     "get_screener_bonds",

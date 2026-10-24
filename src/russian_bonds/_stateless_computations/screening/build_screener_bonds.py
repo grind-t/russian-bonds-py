@@ -11,6 +11,7 @@ from russian_bonds._stateless_computations.money_to_float import money_to_float
 # the SDK returns an epoch timestamp instead of a missing date
 _EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
 _BP_PER_PERCENT = 100
+_YEAR = timedelta(days=365.25)
 
 
 def build_screener_bonds(
@@ -60,6 +61,24 @@ def build_screener_bonds(
             or None
         )
 
+        nominal = bond.nominal
+        has_nominal = bool(nominal.currency or nominal.units or nominal.nano)
+        currency = nominal.currency if has_nominal else bond.currency
+
+        # moex does not forecast floater coupons, so their spread and duration
+        # are off; the spread is over the ruble ofz curve, so only ruble bonds
+        # have a meaningful one
+        g_spread = (
+            my.GSPREADBP / _BP_PER_PERCENT
+            if my and my.GSPREADBP is not None and not is_floater and currency == "rub"
+            else None
+        )
+        duration = (
+            timedelta(days=my.DURATION)
+            if my and my.DURATION is not None and not is_floater
+            else None
+        )
+
         issuer_inn = moex_security.emitent_inn
         # the whole bond record wins over the issuer one, so a bond without
         # a prediction does not borrow the issuer's
@@ -68,25 +87,15 @@ def build_screener_bonds(
             **cbr_ratings_by_isin.get(bond.isin, {}),
         }
 
-        nominal = bond.nominal
-        has_nominal = bool(nominal.currency or nominal.units or nominal.nano)
-
         result.append(
             ScreenerBond(
                 isin=bond.isin,
                 name=bond.name,
                 maturity_date=_t_invest_date(bond.maturity_date),
                 ytm=ytm,
-                g_spread=(
-                    my.GSPREADBP / _BP_PER_PERCENT
-                    if my and my.GSPREADBP is not None and not is_floater
-                    else None
-                ),
-                duration=(
-                    timedelta(days=my.DURATION)
-                    if my and my.DURATION is not None and not is_floater
-                    else None
-                ),
+                ask_ytm=_ask_ytm(my, md, mb, duration),
+                g_spread=g_spread,
+                duration=duration,
                 last_price=_price(md.LAST if md else None, mb),
                 best_ask_price=_price(md.OFFER if md else None, mb),
                 t_invest_rating=3 - bond.risk_level if bond.risk_level >= 1 else None,
@@ -98,7 +107,7 @@ def build_screener_bonds(
                 },
                 ifrs_rating=ifrs_rating_by_inn.get(issuer_inn) if issuer_inn else None,
                 face_value=money_to_float(nominal) if has_nominal else None,
-                currency=nominal.currency if has_nominal else bond.currency,
+                currency=currency,
                 sector=bond.sector,
                 issuer_inn=issuer_inn,
                 is_floater=is_floater,
@@ -118,6 +127,31 @@ def _by_secid_board[T: MoexBond | MoexBondMarketData | MoexBondMarketYield](
     for row in rows:
         result.setdefault((row.SECID, row.BOARDID), row)  # first match, like find
     return result
+
+
+def _ask_ytm(
+    market_yield: MoexBondMarketYield | None,
+    market_data: MoexBondMarketData | None,
+    moex_bond: MoexBond | None,
+    duration: timedelta | None,
+) -> float | None:
+    # moex computes the yield at its own price; the first-order price-yield
+    # relation moves it to the ask, within hundredths of a percent for a gap
+    # of a couple of percent of the face value
+    if (
+        market_yield is None
+        or market_yield.EFFECTIVEYIELD is None
+        or market_data is None
+        or market_data.OFFER is None
+        or moex_bond is None
+        or not duration
+    ):
+        return None
+    ytm = market_yield.EFFECTIVEYIELD
+    face_value = moex_bond.FACEVALUE
+    dirty_price = market_yield.PRICE * face_value / 100 + moex_bond.ACCRUEDINT
+    price_gap = (market_data.OFFER - market_yield.PRICE) * face_value / 100
+    return ytm - price_gap / dirty_price * (100 + ytm) / (duration / _YEAR)
 
 
 def _price(percent: float | None, moex_bond: MoexBond | None) -> float | None:

@@ -11,8 +11,10 @@ class ScreenerBond(BaseModel):
     name: str
     maturity_date: date | None
     ytm: float | None
+    # at the best ask price, None for floaters and without asks
+    ask_ytm: float | None
     # over the ofz curve at the same duration, in the units of ytm;
-    # None for floaters, whose coupons moex does not forecast
+    # None for floaters and non-ruble bonds
     g_spread: float | None
     # None for floaters
     duration: timedelta | None

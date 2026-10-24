@@ -1,6 +1,7 @@
 [
   {
     "agency_ratings": {},
+    "ask_ytm": null,
     "best_ask_price": null,
     "currency": "rub",
     "duration": null,
@@ -31,6 +32,7 @@
         "value": 19
       }
     },
+    "ask_ytm": 18.880918493150684,
     "best_ask_price": 997.0,
     "currency": "rub",
     "duration": "P2Y",
@@ -55,6 +57,7 @@
   },
   {
     "agency_ratings": {},
+    "ask_ytm": null,
     "best_ask_price": null,
     "currency": "rub",
     "duration": null,
@@ -85,9 +88,10 @@
         "value": 15
       }
     },
+    "ask_ytm": null,
     "best_ask_price": null,
     "currency": "usd",
-    "duration": null,
+    "duration": "P1Y",
     "face_value": null,
     "g_spread": null,
     "has_amortization": false,
@@ -106,6 +110,7 @@
   },
   {
     "agency_ratings": {},
+    "ask_ytm": null,
     "best_ask_price": null,
     "currency": "rub",
     "duration": null,
