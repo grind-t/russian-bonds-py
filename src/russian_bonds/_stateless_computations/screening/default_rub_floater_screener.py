@@ -8,7 +8,7 @@ from russian_bonds._stateless_computations.screening.default_rub_bullet_criterio
 # ytm in percent
 _MIN_YTM = 15.0
 # floaters pay off only if rates stay high, so a longer one needs a higher yield
-_YTM_PER_DAY = 0.00275
+_YTM_PER_DAY = 0.0022
 
 
 def default_rub_floater_screener(bond: ScreenerBond, today: date) -> bool:
