@@ -353,7 +353,7 @@ requires-dist = [
     { name = "brotli", specifier = ">=1.2.0" },
     { name = "grind-t-cbr-ratings", specifier = ">=0.1.1" },
     { name = "grind-t-moex", specifier = ">=0.1.0" },
-    { name = "grind-t-toolkit", specifier = ">=0.1.0" },
+    { name = "grind-t-toolkit", specifier = ">=0.2.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "pydantic", specifier = ">=2" },
     { name = "t-tech-investments", path = "vendor/t_tech_investments-1.51.0-py3-none-any.whl" },
@@ -377,11 +377,11 @@ dev = [
 
 [[package]]
 name = "grind-t-toolkit"
-version = "0.1.0"
+version = "0.2.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b1/5d/2ce1ba41ae946585c41532922a9ad135c7a07d5739acd8a69eaae9c13556/grind_t_toolkit-0.1.0.tar.gz", hash = "sha256:00dbd87b8cb8a02784afeb7790f2f5c1daa5fe9e759a2b4eeca890d990c5b595", size = 1542, upload-time = "2026-10-02T17:34:24.708Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/60/84/5c816a8e8c2968ea04679948c9bcdf566e0532d348207655793cdc5a8217/grind_t_toolkit-0.2.0.tar.gz", hash = "sha256:d4266d1dd0dcd744ea12319e377b4d5651a0b004ecdacdac0ed1ecb9d1cc6566", size = 1821, upload-time = "2026-10-24T16:40:04.998Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3a/7f/e72a7e407631ecdfeb7ddcc1f1062b607db564b03162058a2b4aedf6f53b/grind_t_toolkit-0.1.0-py3-none-any.whl", hash = "sha256:9b8f1f90fc9fc26d85b3fbf8adbdf4de8db6d466ed513b7607e4121ff81ebbc4", size = 2601, upload-time = "2026-10-02T17:34:23.497Z" },
+    { url = "https://files.pythonhosted.org/packages/53/c1/531b12149c869d9daeb0b1af82349721c6cc711f197ec9d207087a7a68c3/grind_t_toolkit-0.2.0-py3-none-any.whl", hash = "sha256:c25eb239e980f00552a269b4edbbbd453247e5d98a628a77c1e58337eeb04854", size = 3343, upload-time = "2026-10-24T16:40:03.587Z" },
 ]
 
 [[package]]

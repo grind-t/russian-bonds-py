@@ -5,6 +5,7 @@ from itertools import chain
 
 from moex import MoexBondAmortization
 from t_tech.invest import OperationState
+from toolkit.array import group_by
 
 from russian_bonds._entities.account_bond_history import AccountBondHistory
 from russian_bonds._entities.account_operation import AccountOperation
@@ -12,9 +13,6 @@ from russian_bonds._entities.account_position import AccountPosition
 from russian_bonds._entities.bond import Bond
 from russian_bonds._entities.cash_flow import CashFlow
 from russian_bonds._entities.t_invest_operation import TInvestOperation
-from russian_bonds._stateless_computations.group_operations_by_ticker import (
-    group_operations_by_ticker,
-)
 from russian_bonds._stateless_computations.quantity_by_payment import (
     quantity_by_payment,
 )
@@ -53,7 +51,7 @@ async def get_account_cash_flows(
     )
     now = datetime.now(UTC)
     virtual_operations = [to_virtual_account_operation(pos, now) for pos in positions]
-    by_ticker = group_operations_by_ticker(account_operations + virtual_operations)
+    by_ticker = group_by(account_operations + virtual_operations, lambda op: op.ticker)
     bonds = await asyncio.gather(*(fetch_bond(ticker) for ticker in by_ticker))
     histories = (
         AccountBondHistory(bond=bond, operations=ops)

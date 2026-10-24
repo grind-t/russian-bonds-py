@@ -7,6 +7,7 @@ import streamlit as st
 from cbr_ratings import KraCode
 from pyxirr import xirr
 from t_tech.invest import AsyncClient
+from toolkit.array import group_by
 
 from russian_bonds import (
     CashFlow,
@@ -177,9 +178,7 @@ with portfolio_tab:
         "Все суммы в рублях, разбивка по валюте номинала."
     )
 
-    by_currency: dict[str, list[CashFlow]] = {}
-    for row in rows:
-        by_currency.setdefault(row.face_unit, []).append(row)
+    by_currency = group_by(rows, lambda row: row.face_unit)
 
     for column, (currency, currency_rows) in zip(
         st.columns(max(len(by_currency), 1)), sorted(by_currency.items()), strict=False
@@ -200,9 +199,7 @@ with portfolio_tab:
         f"После налога {TAX_RATE:.0%}", f"{net:,.2f} ₽".replace(",", " ")
     )
 
-    by_bond: dict[tuple[str, str], list[CashFlow]] = {}
-    for row in rows:
-        by_bond.setdefault((row.bond_name, row.face_unit), []).append(row)
+    by_bond = group_by(rows, lambda row: (row.bond_name, row.face_unit))
 
     bond_xirrs = {
         key: xirr(
