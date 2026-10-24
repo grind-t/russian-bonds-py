@@ -15,7 +15,6 @@ from russian_bonds import (
     ScreenerBond,
     default_rub_fixed_screener,
     default_rub_floater_screener,
-    g_spread_excess,
     get_account_cash_flows,
     get_issuer_investments,
     get_screener_bonds,
@@ -98,13 +97,7 @@ def _ytm_rank(bond: ScreenerBond) -> tuple[bool, float]:
     return bond.ytm is not None, bond.ytm or 0.0
 
 
-def screener_table(
-    bonds: list[ScreenerBond],
-    today: date,
-    issuer_investments: dict[str, float],
-    # by isin; None for floaters, which have no ask yield, spread or duration
-    spread_excess: dict[str, float] | None,
-) -> None:
+def by_issuer_yield(bonds: list[ScreenerBond]) -> list[ScreenerBond]:
     # issuers by their best yield, so bonds of one issuer stay together;
     # a bond without an issuer inn is an issuer of its own
     by_issuer = group_by(bonds, lambda bond: bond.issuer_inn or bond.isin)
@@ -112,56 +105,101 @@ def screener_table(
         sorted(group, key=_ytm_rank, reverse=True) for group in by_issuer.values()
     ]
     issuer_bonds.sort(key=lambda group: _ytm_rank(group[0]), reverse=True)
-    bonds = [bond for group in issuer_bonds for bond in group]
+    return [bond for group in issuer_bonds for bond in group]
+
+
+def identity_columns(
+    bond: ScreenerBond, issuer_investments: dict[str, float]
+) -> dict[str, object]:
+    return {
+        "Наименование": bond.name,
+        "ISIN": bond.isin,
+        "ИНН эмитента": bond.issuer_inn,
+        "Вложено в эмитента, ₽": round(
+            issuer_investments.get(bond.issuer_inn or "", 0.0), 2
+        ),
+    }
+
+
+def fixed_coupon_columns(bond: ScreenerBond) -> dict[str, object]:
+    return {
+        "YTM по предложению": bond.ask_ytm,
+        "G-спред, п.п.": bond.g_spread,
+        "Дюрация, лет": None if bond.duration is None else bond.duration / YEAR,
+    }
+
+
+def price_columns(bond: ScreenerBond) -> dict[str, object]:
+    return {
+        "Последняя цена": bond.last_price,
+        "Лучшее предложение": bond.best_ask_price,
+    }
+
+
+def profile_columns(bond: ScreenerBond, today: date) -> dict[str, object]:
+    # terms, ratings and sector
+    return {
+        "Для квалов": bond.is_for_qualified_investors,
+        "До погашения, лет": round((bond.maturity_date - today) / YEAR, 2)
+        if bond.maturity_date
+        else None,
+        "T-Invest": bond.t_invest_rating,
+        **{
+            label: rating(bond.agency_ratings.get(agency))
+            for agency, label in AGENCY_LABELS.items()
+        },
+        "МСФО": rating(bond.ifrs_rating),
+        "Сектор": bond.sector,
+    }
+
+
+COLUMN_CONFIG = {
+    "YTM": st.column_config.NumberColumn(format="%.2f%%"),
+    "Последняя цена": st.column_config.NumberColumn(format="%.2f"),
+    "Лучшее предложение": st.column_config.NumberColumn(format="%.2f"),
+}
+
+FIXED_COUPON_COLUMN_CONFIG = {
+    "YTM по предложению": st.column_config.NumberColumn(format="%.2f%%"),
+    "G-спред, п.п.": st.column_config.NumberColumn(format="%.2f"),
+    "Дюрация, лет": st.column_config.NumberColumn(format="%.2f"),
+}
+
+
+def fixed_screener_table(
+    bonds: list[ScreenerBond], today: date, issuer_investments: dict[str, float]
+) -> None:
     st.dataframe(
         [
             {
-                "Наименование": bond.name,
-                "ISIN": bond.isin,
-                "ИНН эмитента": bond.issuer_inn,
-                "Вложено в эмитента, ₽": round(
-                    issuer_investments.get(bond.issuer_inn or "", 0.0), 2
-                ),
+                **identity_columns(bond, issuer_investments),
                 "YTM": bond.ytm,
-                **(
-                    {}
-                    if spread_excess is None
-                    else {
-                        "YTM по предложению": bond.ask_ytm,
-                        "G-спред, п.п.": bond.g_spread,
-                        "Спред к медиане рейтинга, п.п.": spread_excess.get(bond.isin),
-                        "Дюрация, лет": None
-                        if bond.duration is None
-                        else bond.duration / YEAR,
-                    }
-                ),
-                "Последняя цена": bond.last_price,
-                "Лучшее предложение": bond.best_ask_price,
-                "Для квалов": bond.is_for_qualified_investors,
-                "До погашения, лет": round((bond.maturity_date - today) / YEAR, 2)
-                if bond.maturity_date
-                else None,
-                "T-Invest": bond.t_invest_rating,
-                **{
-                    label: rating(bond.agency_ratings.get(agency))
-                    for agency, label in AGENCY_LABELS.items()
-                },
-                "МСФО": rating(bond.ifrs_rating),
-                "Сектор": bond.sector,
+                **fixed_coupon_columns(bond),
+                **price_columns(bond),
+                **profile_columns(bond, today),
             }
-            for bond in bonds
+            for bond in by_issuer_yield(bonds)
         ],
-        column_config={
-            "YTM": st.column_config.NumberColumn(format="%.2f%%"),
-            "YTM по предложению": st.column_config.NumberColumn(format="%.2f%%"),
-            "G-спред, п.п.": st.column_config.NumberColumn(format="%.2f"),
-            "Спред к медиане рейтинга, п.п.": st.column_config.NumberColumn(
-                format="%+.2f"
-            ),
-            "Дюрация, лет": st.column_config.NumberColumn(format="%.2f"),
-            "Последняя цена": st.column_config.NumberColumn(format="%.2f"),
-            "Лучшее предложение": st.column_config.NumberColumn(format="%.2f"),
-        },
+        column_config=COLUMN_CONFIG | FIXED_COUPON_COLUMN_CONFIG,
+        hide_index=True,
+    )
+
+
+def floater_screener_table(
+    bonds: list[ScreenerBond], today: date, issuer_investments: dict[str, float]
+) -> None:
+    # floaters have no ask yield, spread or duration
+    st.dataframe(
+        [
+            {
+                **identity_columns(bond, issuer_investments),
+                "YTM": bond.ytm,
+                **price_columns(bond),
+                **profile_columns(bond, today),
+            }
+            for bond in by_issuer_yield(bonds)
+        ],
+        column_config=COLUMN_CONFIG,
         hide_index=True,
     )
 
@@ -243,21 +281,17 @@ with portfolio_tab:
 
 screener_bonds, issuer_investments = load_screener()
 today = datetime.now(UTC).date()
-# peers come from the whole market, as the screener filters cut low spreads
-spread_excess = g_spread_excess(screener_bonds)
 
 with fixed_tab:
-    screener_table(
+    fixed_screener_table(
         [bond for bond in screener_bonds if default_rub_fixed_screener(bond, today)],
         today,
-        issuer_investments=issuer_investments,
-        spread_excess=spread_excess,
+        issuer_investments,
     )
 
 with floater_tab:
-    screener_table(
+    floater_screener_table(
         [bond for bond in screener_bonds if default_rub_floater_screener(bond, today)],
         today,
-        issuer_investments=issuer_investments,
-        spread_excess=None,
+        issuer_investments,
     )
