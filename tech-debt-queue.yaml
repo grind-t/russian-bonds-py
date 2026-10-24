@@ -4,12 +4,6 @@
   defect_characteristic: Flexibility
   defect_subcharacteristic: Installability
 
-- defect_description: Время в workflow берётся из глобального `datetime.now`, хотя остальной ввод-вывод передаётся через порты. Из-за этого тестам нужен time_machine. Скринеры при этом получают `today` параметром.
-  defect_location: src/russian_bonds/_stateless_workflows/get_account_cash_flows.py:55
-  defect_type: Ambient Context (Seemann & van Deursen, Dependency Injection Principles, Practices, and Patterns, 2019)
-  defect_characteristic: Maintainability
-  defect_subcharacteristic: Testability
-
 - defect_description: `_fill_missing_quantity` меняет `quantity_done` у входных TInvestOperation, хотя должна возвращать новое значение.
   defect_location: src/russian_bonds/_stateless_workflows/get_account_cash_flows.py:83-95
   defect_type: Mutable Data (Fowler, Refactoring, 2nd ed.)

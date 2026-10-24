@@ -1,6 +1,6 @@
 import asyncio
 import os
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 import httpx
 import streamlit as st
@@ -98,7 +98,9 @@ def _ytm_rank(bond: ScreenerBond) -> tuple[bool, float]:
 
 
 def screener_table(
-    bonds: list[ScreenerBond], issuer_investments: dict[str, float] | None = None
+    bonds: list[ScreenerBond],
+    today: date,
+    issuer_investments: dict[str, float] | None = None,
 ) -> None:
     # issuers by their best yield, so bonds of one issuer stay together;
     # a bond without an issuer inn is an issuer of its own
@@ -108,7 +110,6 @@ def screener_table(
     ]
     issuer_bonds.sort(key=lambda group: _ytm_rank(group[0]), reverse=True)
     bonds = [bond for group in issuer_bonds for bond in group]
-    today = datetime.now(UTC).date()
     st.dataframe(
         [
             {
@@ -238,6 +239,7 @@ today = datetime.now(UTC).date()
 with rub_tab:
     screener_table(
         [bond for bond in screener_bonds if default_rub_screener(bond, today)],
+        today,
         issuer_investments,
     )
 
@@ -247,5 +249,6 @@ with foreign_currency_tab:
             bond
             for bond in screener_bonds
             if default_foreign_currency_screener(bond, today)
-        ]
+        ],
+        today,
     )
