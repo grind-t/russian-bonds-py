@@ -1,0 +1,71 @@
+- defect_description: Колесо T-Invest SDK исключено из git, хотя pyproject.toml на него ссылается, а комментарий там называет его частью репозитория. После свежего клона `uv sync` не сработает.
+  defect_location: .gitignore, pyproject.toml ([tool.uv.sources])
+  defect_type: The Twelve-Factor App, II. Dependencies
+  defect_characteristic: Flexibility
+  defect_subcharacteristic: Installability
+
+- defect_description: Код опирается на приватные внутренности SDK. Используются `_grpc_helpers` и прямой вызов `operations.stub`, а схема OperationItem расширяется наследованием.
+  defect_location: src/russian_bonds/_entities/t_invest_operation.py, src/russian_bonds/_stateless_effects/fetch_t_invest_operations.py
+  defect_type: Insider Trading (Fowler, Refactoring, 2nd ed.)
+  defect_characteristic: Flexibility
+  defect_subcharacteristic: Adaptability
+
+- defect_description: Подписи вкладок дашборда вручную повторяют пороги скринеров (15%, 7%, 3 месяца – 2 года). Они уже расходились, это чинил коммит 20b6e8a.
+  defect_location: dashboard.py:244-256, src/russian_bonds/_stateless_computations/screening/default_rub_ytm_criterion.py, src/russian_bonds/_stateless_computations/screening/default_foreign_currency_screener.py, src/russian_bonds/_stateless_computations/screening/default_maturity_criterion.py
+  defect_type: DRY (Hunt & Thomas, The Pragmatic Programmer)
+  defect_characteristic: Maintainability
+  defect_subcharacteristic: Modifiability
+
+- defect_description: Доменная логика живёт в UI-скрипте и не покрыта тестами. Это XIRR по валютам и облигациям, налог только с прибыли, фильтр по сроку владения и сортировка эмитентов по лучшей YTM.
+  defect_location: dashboard.py:75-77, dashboard.py:95-113, dashboard.py:181-231
+  defect_type: Smart UI anti-pattern (Evans, Domain-Driven Design, 2003, ch. 4)
+  defect_characteristic: Maintainability
+  defect_subcharacteristic: Testability
+
+- defect_description: Код молча полагается на то, что фильтр уже отработал. `default_rub_ytm_criterion` вызывает `ensure(maturity_date)` в расчёте на вызванный раньше критерий погашения. `screener_table` делает `assert ytm is not None` в расчёте на то, что скринер уже отфильтровал облигации.
+  defect_location: src/russian_bonds/_stateless_computations/screening/default_rub_ytm_criterion.py:16, dashboard.py:101
+  defect_type: G31 Hidden Temporal Couplings (Martin, Clean Code, 2008)
+  defect_characteristic: Reliability
+  defect_subcharacteristic: Faultlessness
+
+- defect_description: Время в workflow берётся из глобального `datetime.now`, хотя остальной ввод-вывод передаётся через порты. Из-за этого тестам нужен time_machine. Скринеры при этом получают `today` параметром.
+  defect_location: src/russian_bonds/_stateless_workflows/get_account_cash_flows.py:55
+  defect_type: Ambient Context (Seemann & van Deursen, Dependency Injection Principles, Practices, and Patterns, 2019)
+  defect_characteristic: Maintainability
+  defect_subcharacteristic: Testability
+
+- defect_description: `_fill_missing_quantity` меняет `quantity_done` у входных TInvestOperation, хотя должна возвращать новое значение.
+  defect_location: src/russian_bonds/_stateless_workflows/get_account_cash_flows.py:83-95
+  defect_type: Mutable Data (Fowler, Refactoring, 2nd ed.)
+  defect_characteristic: Maintainability
+  defect_subcharacteristic: Analysability
+
+- defect_description: Рублёвый и валютный скринеры повторяют одну цепочку: валюта, срок, YTM, оферта, рейтинг. Проверку YTM в рублёвом вынесли в отдельный критерий, а в валютном она осталась внутри, со своим `_MIN_YTM`.
+  defect_location: src/russian_bonds/_stateless_computations/screening/default_rub_screener.py, src/russian_bonds/_stateless_computations/screening/default_foreign_currency_screener.py
+  defect_type: Duplicated Code (Fowler, Refactoring, 2nd ed.)
+  defect_characteristic: Maintainability
+  defect_subcharacteristic: Modifiability
+
+- defect_description: Доменные понятия хранятся в примитивных типах. Валюта называется то `face_unit` ("RUB" из MOEX), то `currency` ("rub" из T-Invest), поэтому дашборд вынужден вызывать `.upper()`. Отсутствие родительской операции обозначается пустой строкой в `parent_operation_id`.
+  defect_location: src/russian_bonds/_entities/bond.py, src/russian_bonds/_entities/cash_flow.py, src/russian_bonds/_entities/screener_bond.py, src/russian_bonds/_entities/account_operation.py, dashboard.py:133
+  defect_type: Primitive Obsession (Fowler, Refactoring, 2nd ed.)
+  defect_characteristic: Maintainability
+  defect_subcharacteristic: Analysability
+
+- defect_description: Публичные функции оформлены по-разному. Один и тот же httpx-клиент называется то `moex_client`, то `http_client`. `get_account_cash_flows` принимает аргументы позиционно, а две соседние функции требуют keyword-only.
+  defect_location: src/russian_bonds/__init__.py:52-104
+  defect_type: Linguistic Antipatterns (Arnaoudova et al., 2013)
+  defect_characteristic: Interaction Capability
+  defect_subcharacteristic: Learnability
+
+- defect_description: Рейтинг T-Invest считается магической формулой `3 - risk_level`. Порог `t_invest_rating > 1` тоже без имени, хотя он означает «только LOW».
+  defect_location: src/russian_bonds/_stateless_computations/screening/build_screener_bonds.py:81, src/russian_bonds/_stateless_computations/screening/default_agency_rating_criterion.py:18
+  defect_type: G25 Replace Magic Numbers with Named Constants (Martin, Clean Code, 2008)
+  defect_characteristic: Maintainability
+  defect_subcharacteristic: Analysability
+
+- defect_description: Дашборд дважды открывает соединение с T-Invest, дважды читает переменные окружения с токеном и счётом и дважды загружает позиции счёта.
+  defect_location: dashboard.py:36-67
+  defect_type: Duplicated Code (Fowler, Refactoring, 2nd ed.)
+  defect_characteristic: Maintainability
+  defect_subcharacteristic: Modifiability
