@@ -8,7 +8,6 @@ from cbr_ratings import KraCode
 from pyxirr import xirr
 from t_tech.invest import AsyncClient
 from toolkit.array import group_by
-from toolkit.boolean import ensure
 
 from russian_bonds import (
     CashFlow,
@@ -93,6 +92,11 @@ def rating(credit_rating: CreditRating | None) -> str:
     return " ".join(str(v) for v in parts if v is not None)
 
 
+def _ytm_rank(bond: ScreenerBond) -> tuple[bool, float]:
+    # bonds without a yield go last
+    return bond.ytm is not None, bond.ytm or 0.0
+
+
 def screener_table(
     bonds: list[ScreenerBond], issuer_investments: dict[str, float] | None = None
 ) -> None:
@@ -100,10 +104,9 @@ def screener_table(
     # a bond without an issuer inn is an issuer of its own
     by_issuer = group_by(bonds, lambda bond: bond.issuer_inn or bond.isin)
     issuer_bonds = [
-        sorted(group, key=lambda bond: ensure(bond.ytm), reverse=True)
-        for group in by_issuer.values()
+        sorted(group, key=_ytm_rank, reverse=True) for group in by_issuer.values()
     ]
-    issuer_bonds.sort(key=lambda group: ensure(group[0].ytm), reverse=True)
+    issuer_bonds.sort(key=lambda group: _ytm_rank(group[0]), reverse=True)
     bonds = [bond for group in issuer_bonds for bond in group]
     today = datetime.now(UTC).date()
     st.dataframe(

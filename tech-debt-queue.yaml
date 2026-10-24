@@ -4,12 +4,6 @@
   defect_characteristic: Flexibility
   defect_subcharacteristic: Installability
 
-- defect_description: Код молча полагается на то, что фильтр уже отработал. `default_rub_ytm_criterion` вызывает `ensure(maturity_date)` в расчёте на вызванный раньше критерий погашения. `screener_table` делает `assert ytm is not None` в расчёте на то, что скринер уже отфильтровал облигации.
-  defect_location: src/russian_bonds/_stateless_computations/screening/default_rub_ytm_criterion.py:16, dashboard.py:101
-  defect_type: G31 Hidden Temporal Couplings (Martin, Clean Code, 2008)
-  defect_characteristic: Reliability
-  defect_subcharacteristic: Faultlessness
-
 - defect_description: Время в workflow берётся из глобального `datetime.now`, хотя остальной ввод-вывод передаётся через порты. Из-за этого тестам нужен time_machine. Скринеры при этом получают `today` параметром.
   defect_location: src/russian_bonds/_stateless_workflows/get_account_cash_flows.py:55
   defect_type: Ambient Context (Seemann & van Deursen, Dependency Injection Principles, Practices, and Patterns, 2019)

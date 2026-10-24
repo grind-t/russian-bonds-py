@@ -1,7 +1,5 @@
 from datetime import date
 
-from toolkit.boolean import ensure
-
 from russian_bonds._entities.screener_bond import ScreenerBond
 
 # ytm in percent
@@ -15,5 +13,7 @@ def default_rub_ytm_criterion(bond: ScreenerBond, today: date) -> bool:
         return False
     if not bond.is_floater:
         return bond.ytm >= _MIN_YTM
-    days = (ensure(bond.maturity_date) - today).days
+    if bond.maturity_date is None:
+        return False
+    days = (bond.maturity_date - today).days
     return bond.ytm >= _MIN_YTM + days * _FLOATER_YTM_PER_DAY
