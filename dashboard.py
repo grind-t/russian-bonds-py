@@ -199,31 +199,33 @@ with portfolio_tab:
         f"После налога {TAX_RATE:.0%}", f"{net:,.2f} ₽".replace(",", " ")
     )
 
-    by_bond = group_by(rows, lambda row: (row.bond_name, row.face_unit))
-
-    bond_xirrs = {
-        key: xirr(
+    held_bonds = [
+        bond_rows
+        for bond_rows in group_by(rows, lambda row: row.ticker).values()
+        if holding_days(bond_rows) >= MIN_HOLDING_DAYS
+    ]
+    bond_xirrs = [
+        xirr(
             [row.date for row in bond_rows],
             [row.payment for row in bond_rows],
             silent=True,
         )
-        for key, bond_rows in by_bond.items()
-    }
+        for bond_rows in held_bonds
+    ]
 
     bond_stats = [
         {
-            "Наименование": name,
+            "Наименование": bond_rows[0].bond_name,
             "Итог, ₽": round(sum(row.payment for row in bond_rows), 2),
-            "XIRR": bond_xirrs[name, currency],
+            "XIRR": bond_xirr,
             "Дней в портфеле": holding_days(bond_rows),
-            "Номинал": currency,
+            "Номинал": bond_rows[0].face_unit,
         }
-        for (name, currency), bond_rows in sorted(
+        for bond_rows, bond_xirr in sorted(
+            zip(held_bonds, bond_xirrs, strict=True),
             # bonds without a solvable XIRR go last
-            by_bond.items(),
-            key=lambda item: (bond_xirrs[item[0]] is None, bond_xirrs[item[0]] or 0.0),
+            key=lambda item: (item[1] is None, item[1] or 0.0),
         )
-        if holding_days(bond_rows) >= MIN_HOLDING_DAYS
     ]
 
     with st.expander(f"Итог по облигациям в портфеле от {MIN_HOLDING_DAYS} дней"):
