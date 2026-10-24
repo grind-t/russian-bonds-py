@@ -4,12 +4,6 @@
   defect_characteristic: Flexibility
   defect_subcharacteristic: Installability
 
-- defect_description: Доменная логика живёт в UI-скрипте и не покрыта тестами. Это XIRR по валютам и облигациям, налог только с прибыли, фильтр по сроку владения и сортировка эмитентов по лучшей YTM.
-  defect_location: dashboard.py:75-77, dashboard.py:95-113, dashboard.py:181-231
-  defect_type: Smart UI anti-pattern (Evans, Domain-Driven Design, 2003, ch. 4)
-  defect_characteristic: Maintainability
-  defect_subcharacteristic: Testability
-
 - defect_description: Код молча полагается на то, что фильтр уже отработал. `default_rub_ytm_criterion` вызывает `ensure(maturity_date)` в расчёте на вызванный раньше критерий погашения. `screener_table` делает `assert ytm is not None` в расчёте на то, что скринер уже отфильтровал облигации.
   defect_location: src/russian_bonds/_stateless_computations/screening/default_rub_ytm_criterion.py:16, dashboard.py:101
   defect_type: G31 Hidden Temporal Couplings (Martin, Clean Code, 2008)
