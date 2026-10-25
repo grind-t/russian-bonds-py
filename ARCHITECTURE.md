@@ -1,8 +1,3 @@
----
-paths:
-  - "src/**"
----
-
 # Architecture principles
 
 Package grid — rows by role, columns by state, over `_entities`
